@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'amv-root',
+  selector: 'amv-members',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  templateUrl: './members.html',
 })
-export class App {}
+export class Members {}

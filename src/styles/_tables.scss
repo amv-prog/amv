@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+.amv-table {
+  width: 100%;
+  margin: 1em 0;
+  background-color: $background1;
+  border-radius: 1em;
+
+  thead {
+    font-weight: bold;
+  }
+
+  th {
+    border-bottom: 1px solid;
+  }
+
+  th,
+  td {
+    padding: 1em;
+    text-align: center;
+  }
+
+  .even {
+    background-color: lightcyan;
+  }
+}

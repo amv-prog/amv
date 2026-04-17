@@ -1,0 +1,20 @@
+@if (members().length) {
+  <table class="amv-table">
+    <thead>
+      <tr>
+        <th scope="col">Prénom</th>
+        <th scope="col">Nom de famille</th>
+      </tr>
+    </thead>
+    @for (member of members(); track member) {
+      <tr [class.even]="$even">
+        <td>{{ member.firstName }}</td>
+        <td>{{ member.lastName }}</td>
+      </tr>
+    }
+  </table>
+} @else {
+  <div>Aucun membre enregistré</div>
+}
+
+<a routerLink="/members/add">Ajouter un membre</a>

@@ -1,0 +1,5 @@
+<form (ngSubmit)="register()" [formGroup]="memberForm">
+  <div><label>Prénom</label><input formControlName="firstName" /></div>
+  <div><label>Nom de famille</label><input formControlName="lastName" /></div>
+  <button>Enregistrer</button>
+</form>
