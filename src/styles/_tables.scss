@@ -3,8 +3,16 @@
 .amv-table {
   width: 100%;
   margin: 1em 0;
-  background-color: $background1;
+  background-color: $c1-light;
   border-radius: 1em;
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: 1em;
+  }
+
+  tr:last-child td:last-child {
+    border-bottom-right-radius: 1em;
+  }
 
   thead {
     font-weight: bold;
@@ -21,6 +29,6 @@
   }
 
   .even {
-    background-color: lightcyan;
+    background-color: $c1-lighter;
   }
 }

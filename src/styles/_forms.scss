@@ -1,0 +1,49 @@
+@use 'variables' as *;
+
+.simple-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  .field {
+    display: flex;
+    flex-direction: row;
+  }
+
+  label {
+    display: flex;
+    width: 10rem;
+    align-items: center;
+  }
+
+  input {
+    display: flex;
+    border-radius: 0.5em;
+    border-color: $c1-lighter;
+    padding: 0.5em;
+
+    &:hover {
+      border-color: $c1-light;
+    }
+
+    &:focus,
+    &:focus-visible {
+      border-color: $c1;
+    }
+  }
+
+  button {
+    display: flex;
+    background-color: $c1-lighter;
+    justify-content: center;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border-color: $c1-light;
+
+    &:focus,
+    &:hover {
+      background-color: $c1-light;
+      border-color: $c1;
+    }
+  }
+}

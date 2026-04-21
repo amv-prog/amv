@@ -1,5 +1,9 @@
-<form (ngSubmit)="register()" [formGroup]="memberForm">
-  <div><label>Prénom</label><input formControlName="firstName" /></div>
-  <div><label>Nom de famille</label><input formControlName="lastName" /></div>
+<form class="simple-form" (ngSubmit)="register()" [formGroup]="memberForm">
+  <div class="field">
+    <label for="fn">Prénom</label><input id="fn" type="text" formControlName="firstName" />
+  </div>
+  <div class="field">
+    <label for="ln">Nom de famille</label><input id="ln" formControlName="lastName" />
+  </div>
   <button>Enregistrer</button>
 </form>

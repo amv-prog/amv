@@ -1,0 +1,18 @@
+@use 'variables' as *;
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  background-color: $c2-light;
+  color: white;
+  min-height: 100vh;
+  width: 15rem;
+  align-items: center;
+  padding-top: 3rem;
+  gap: 1rem;
+
+  .selected-menu {
+    color: $c1-light;
+    font-weight: bold;
+  }
+}
