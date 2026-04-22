@@ -19,31 +19,16 @@
   input {
     display: flex;
     border-radius: 0.5em;
-    border-color: $c1-lighter;
+    border-color: $c2-lighter;
     padding: 0.5em;
 
     &:hover {
-      border-color: $c1-light;
+      border-color: $c2-light;
     }
 
     &:focus,
     &:focus-visible {
-      border-color: $c1;
-    }
-  }
-
-  button {
-    display: flex;
-    background-color: $c1-lighter;
-    justify-content: center;
-    padding: 0.5em;
-    border-radius: 0.5em;
-    border-color: $c1-light;
-
-    &:focus,
-    &:hover {
-      background-color: $c1-light;
-      border-color: $c1;
+      border-color: $c2;
     }
   }
 }

@@ -3,7 +3,7 @@
 .menu {
   display: flex;
   flex-direction: column;
-  background-color: $c2-light;
+  background-color: $c2-dark;
   color: white;
   min-height: 100vh;
   width: 15rem;
@@ -12,7 +12,7 @@
   gap: 1rem;
 
   .selected-menu {
-    color: $c1-light;
+    color: $c2-lighter;
     font-weight: bold;
   }
 }

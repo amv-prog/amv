@@ -1,0 +1,31 @@
+@use 'variables' as *;
+
+@mixin button {
+  font-size: 1rem;
+  display: flex;
+  background-color: $c2-lighter;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 0.5em;
+  border-color: $c2-light;
+
+  &:focus,
+  &:hover {
+    border-color: $c2;
+  }
+
+  &:active {
+    background-color: $c2-light;
+  }
+}
+
+.a-button {
+  @include button;
+}
+
+button {
+  @include button;
+}
