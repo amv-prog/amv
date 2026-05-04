@@ -1,6 +1,7 @@
 @use 'variables' as *;
 
 @mixin button {
+  cursor: pointer;
   font-size: 1rem;
   display: flex;
   background-color: $c2-lighter;
@@ -12,13 +13,27 @@
   border-radius: 0.5em;
   border-color: $c2-light;
 
-  &:focus,
-  &:hover {
+  &:focus:not(:disabled),
+  &:hover:not(:disabled) {
     border-color: $c2;
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: $c2-light;
+  }
+
+  &.invisible {
+    background-color: transparent;
+    border-color: transparent;
+
+    &:focus,
+    &:hover {
+      border-color: $c2;
+    }
+
+    &:active {
+      background-color: $c2-light;
+    }
   }
 }
 

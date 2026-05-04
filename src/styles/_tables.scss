@@ -16,9 +16,6 @@
 
   thead {
     font-weight: bold;
-  }
-
-  th {
     border-bottom: 1px solid;
   }
 
@@ -26,6 +23,7 @@
   td {
     padding: 1em;
     text-align: center;
+    justify-items: center;
   }
 
   .even {

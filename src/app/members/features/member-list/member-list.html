@@ -6,10 +6,20 @@
         <th scope="col">Nom de famille</th>
       </tr>
     </thead>
-    @for (member of members(); track member) {
+    @for (member of members(); track member.id) {
       <tr [class.even]="$even">
         <td>{{ member.firstName }}</td>
         <td>{{ member.lastName }}</td>
+        <td>
+          <a class="a-button invisible" [routerLink]="['/members/edit', member.id]" title="modifier"
+            ><span class="material-symbols-outlined">edit</span></a
+          >
+        </td>
+        <td>
+          <button class="invisible" title="supprimer">
+            <span class="material-symbols-outlined" (click)="removeMember(member)">delete</span>
+          </button>
+        </td>
       </tr>
     }
   </table>
@@ -17,4 +27,6 @@
   <div>Aucun membre enregistré</div>
 }
 
-<a class="a-button" routerLink="/members/add"><span class="material-symbols-outlined">add</span>Ajouter un membre</a>
+<a class="a-button" routerLink="/members/add"
+  ><span class="material-symbols-outlined">add</span>Ajouter un membre</a
+>

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { Member } from '../../models/member';
 import { MemberStore } from '../../stores/member-store';
 
 @Component({
@@ -12,4 +13,7 @@ export class MemberList {
 
   protected readonly members = this.memberStore.members;
 
+  removeMember(member: Member): void {
+    this.memberStore.removeMember(member);
+  }
 }

@@ -1,3 +1,12 @@
+import * as uuid from 'uuid';
+
 export class Member {
-  constructor(public firstName: string, public lastName: string) {}
+  public id: string;
+
+  constructor(
+    public firstName: string,
+    public lastName: string,
+  ) {
+    this.id = uuid.v4();
+  }
 }

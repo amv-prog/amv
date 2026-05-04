@@ -21,4 +21,24 @@ export class MemberStore {
   addMember(member: Member) {
     this.members.update((members) => [...members, member]);
   }
+
+  updateMember(member: Member) {
+    this.members.update((members) => {
+      let index = members.findIndex((m) => m.id === member.id);
+      if (index >= 0) {
+        members.splice(index, 1, member);
+      }
+      return [...members];
+    });
+  }
+
+  removeMember(member: Member) {
+    this.members.update((members) => {
+      let index = members.indexOf(member);
+      if (index >= 0) {
+        members.splice(index, 1);
+      }
+      return [...members];
+    });
+  }
 }

@@ -1,0 +1,24 @@
+<div class="page-center">
+  <h1>
+    @if (!!member()) {
+      Modifier un membre
+    } @else {
+      Ajouter un membre
+    }
+  </h1>
+  <form class="simple-form" (ngSubmit)="register()" [formGroup]="memberForm">
+    <div class="field">
+      <label for="fn">Prénom *</label><input id="fn" type="text" formControlName="firstName" />
+    </div>
+    @if (firstNameCtrl.dirty && firstNameCtrl.hasError('required')) {
+      <div class="field-error">Le prénom est obligatoire</div>
+    }
+    <div class="field">
+      <label for="ln">Nom de famille *</label><input id="ln" formControlName="lastName" />
+    </div>
+    @if (lastNameCtrl.dirty && lastNameCtrl.hasError('required')) {
+      <div class="field-error">Le nom de famille est obligatoire</div>
+    }
+    <button [disabled]="memberForm.invalid">Enregistrer</button>
+  </form>
+</div>
