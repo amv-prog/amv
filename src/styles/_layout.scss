@@ -17,3 +17,13 @@
     font-weight: bold;
   }
 }
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  background-color: $c2-dark;
+  color: $c1-lighter;
+  width: 100%;
+  border-top: 1px solid $c1-dark;
+  padding: 1rem;
+}

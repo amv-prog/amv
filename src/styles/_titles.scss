@@ -1,7 +1,13 @@
 @use 'variables' as *;
 
 h1 {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: $c2;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: $c2;
+}
+
+.subtitle {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: $c2;
 }
