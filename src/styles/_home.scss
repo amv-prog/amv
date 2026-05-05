@@ -1,7 +1,7 @@
 .page-menu {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .page-content {
@@ -9,6 +9,8 @@
   flex-direction: column;
   flex: 1 1 auto;
   padding: 5rem;
+  min-height: 100%;
+  overflow-x: auto;
 }
 
 .page-center {
