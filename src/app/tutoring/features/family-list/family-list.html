@@ -6,6 +6,7 @@
         <tr>
           <th scope="col">Prénom</th>
           <th scope="col">Nom de famille</th>
+          <th scope="col">Téléphone</th>
           <th scope="col">Email</th>
         </tr>
       </thead>
@@ -14,6 +15,7 @@
         <tr class="head selectable trackable" (click)="switchExpanded(familyDisplay)">
           <td></td>
           <td>{{ family.name }}</td>
+          <td></td>
           <td></td>
           <td>
             <a
@@ -53,6 +55,7 @@
             <tr class="trackable" [class.even]="$even">
               <td>{{ member.firstName }}</td>
               <td>{{ member.lastName }}</td>
+              <td>{{ member.phoneNumbers.join(', ') }}</td>
               <td>{{ member.email }}</td>
               <td></td>
               <td>

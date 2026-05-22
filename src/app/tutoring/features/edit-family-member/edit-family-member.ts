@@ -30,11 +30,26 @@ export class EditFamilyMember {
     Validators.email,
   );
 
+  protected readonly phonesArray = this.fb.array(
+    !!this.member() && this.member()!.phoneNumbers.length > 0
+      ? this.member()!.phoneNumbers.map((phoneNumber) => this.fb.control(phoneNumber))
+      : [this.fb.control('')],
+  );
+
   protected readonly memberForm = this.fb.group({
     firstName: this.firstNameCtrl,
     lastName: this.lastNameCtrl,
     email: this.emailCtrl,
+    phones: this.phonesArray,
   });
+
+  addPhone() {
+    this.phonesArray.push(this.fb.control(''));
+  }
+
+  removePhone(index: number) {
+    this.phonesArray.removeAt(index);
+  }
 
   register(): void {
     if (this.memberForm.valid) {
@@ -45,6 +60,7 @@ export class EditFamilyMember {
           firstName: this.firstNameCtrl.value,
           lastName: this.lastNameCtrl.value,
           email: this.emailCtrl.value,
+          phoneNumbers: this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
         };
         this.memberStore.updateFamilyMember(current);
       } else {
@@ -53,7 +69,7 @@ export class EditFamilyMember {
             true,
             this.firstNameCtrl.value,
             this.lastNameCtrl.value,
-            [],
+            this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
             this.emailCtrl.value,
             [],
             undefined,
