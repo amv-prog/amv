@@ -33,6 +33,10 @@ export class FamilyList {
   public removeFamily(family: Family) {
     this.memberStore.removeFamily(family);
   }
+
+  public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {
+    return FamilyStore.sortedFamilyMembers(members);
+  }
 }
 
 class FamilyDisplay {

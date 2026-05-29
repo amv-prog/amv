@@ -6,9 +6,9 @@ export const familyMemberResolver: ResolveFn<boolean> = (route) => {
   const id = route.paramMap.get('memberId')!;
   const memberStore = inject(FamilyStore);
   const family = memberStore.selectedFamily();
-  if (!!family && memberStore.selectedFamilyMember()?.id !== id) {
+  if (!!family && !!id) {
     memberStore.setSelectedFamilyMember(family.members.find((m) => m.id === id));
-  } else if (!family || !id) {
+  } else {
     memberStore.setSelectedFamilyMember(undefined);
   }
   return true;

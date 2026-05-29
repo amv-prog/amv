@@ -49,4 +49,13 @@
       flex: 1 1 auto;
     }
   }
+
+  .arrayInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid $c2-light;
+    border-bottom: 1px solid $c2-light;
+  }
 }

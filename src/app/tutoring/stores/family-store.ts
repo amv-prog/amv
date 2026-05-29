@@ -76,4 +76,8 @@ export class FamilyStore {
   setSelectedFamilyMember(familyMember: RecipientMember | undefined) {
     this.selectedFamilyMember.set(familyMember);
   }
+
+  static sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {
+    return [...members].sort((m1, m2) => Number(m2.isParent) - Number(m1.isParent));
+  }
 }
