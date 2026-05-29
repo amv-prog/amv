@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Toggle } from '../../../shared/components/toggle/toggle';
 import { NavigationService } from '../../../shared/navigation-service';
 import { RecipientMember } from '../../models/recipient-member';
 import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-family-member',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Toggle],
   templateUrl: './edit-family-member.html',
 })
 export class EditFamilyMember {
@@ -17,6 +18,10 @@ export class EditFamilyMember {
   protected readonly family = this.memberStore.selectedFamily;
   protected readonly member = this.memberStore.selectedFamilyMember;
 
+  protected readonly parentCtrl = this.fb.control<'LEFT' | 'RIGHT'>(
+    (this.member()?.isParent ?? true) ? 'LEFT' : 'RIGHT',
+    Validators.required,
+  );
   protected readonly firstNameCtrl = this.fb.control(
     this.member()?.firstName || '',
     Validators.required,
@@ -37,6 +42,7 @@ export class EditFamilyMember {
   );
 
   protected readonly memberForm = this.fb.group({
+    parent: this.parentCtrl,
     firstName: this.firstNameCtrl,
     lastName: this.lastNameCtrl,
     email: this.emailCtrl,
@@ -57,6 +63,7 @@ export class EditFamilyMember {
       if (!!current) {
         current = {
           ...current,
+          isParent: this.parentCtrl.value === 'LEFT',
           firstName: this.firstNameCtrl.value,
           lastName: this.lastNameCtrl.value,
           email: this.emailCtrl.value,
@@ -66,7 +73,7 @@ export class EditFamilyMember {
       } else {
         this.memberStore.updateFamilyMember(
           new RecipientMember(
-            true,
+            this.parentCtrl.value === 'LEFT',
             this.firstNameCtrl.value,
             this.lastNameCtrl.value,
             this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),

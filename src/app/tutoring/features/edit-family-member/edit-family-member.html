@@ -8,8 +8,11 @@
   </h1>
   <form class="simple-form" (ngSubmit)="register()" [formGroup]="memberForm">
     <div class="field">
-      <label for="ln">Nom de famille *</label
-      ><input id="ln" type="text" formControlName="lastName" />
+      <amv-toggle leftLabel="Parent" rightLabel="Enfant" formControlName="parent"></amv-toggle>
+    </div>
+    <div class="field">
+      <label for="ln">Nom de famille *</label>
+      <input id="ln" type="text" formControlName="lastName" />
     </div>
     @if (lastNameCtrl.dirty && lastNameCtrl.hasError('required')) {
       <div class="field-error">Le nom de famille est obligatoire</div>
@@ -32,13 +35,18 @@
           <label for="email">Téléphone {{ $index > 0 ? $index + 1 : '' }}</label>
           <input [id]="$index" type="text" [formControlName]="$index" />
           @if (phonesArray.controls.length > 1) {
-            <button class="invisible small" type="button" (click)="removePhone($index)">
+            <button
+              class="invisible small"
+              type="button"
+              title="supprimer"
+              (click)="removePhone($index)"
+            >
               <span class="material-symbols-outlined">remove</span>
             </button>
           }
         </div>
       }
-      <button class="invisible small" type="button" (click)="addPhone()">
+      <button class="invisible small" type="button" title="Ajouter un numéro" (click)="addPhone()">
         <span class="material-symbols-outlined">add</span>
       </button>
     </div>

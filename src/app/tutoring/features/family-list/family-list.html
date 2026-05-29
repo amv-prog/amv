@@ -4,6 +4,7 @@
     <table class="amv-table">
       <thead>
         <tr>
+          <th scope="col"></th>
           <th scope="col">Prénom</th>
           <th scope="col">Nom de famille</th>
           <th scope="col">Téléphone</th>
@@ -13,6 +14,7 @@
       @for (familyDisplay of familiesToDisplay(); track familyDisplay.family.id) {
         @let family = familyDisplay.family;
         <tr class="head selectable trackable" (click)="switchExpanded(familyDisplay)">
+          <td></td>
           <td></td>
           <td>{{ family.name }}</td>
           <td></td>
@@ -51,8 +53,15 @@
           </td>
         </tr>
         @if (familyDisplay.expanded) {
-          @for (member of family.members; track member.id) {
+          @for (member of sortedFamilyMembers(family.members); track member.id) {
             <tr class="trackable" [class.even]="$even">
+              <td>
+                @if (member.isParent) {
+                  <span class="material-symbols-outlined" title="Parent">person</span>
+                } @else {
+                  <span class="material-symbols-outlined" title="Enfant">child_hat</span>
+                }
+              </td>
               <td>{{ member.firstName }}</td>
               <td>{{ member.lastName }}</td>
               <td>{{ member.phoneNumbers.join(', ') }}</td>

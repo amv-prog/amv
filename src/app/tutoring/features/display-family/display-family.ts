@@ -22,4 +22,8 @@ export class DisplayFamily {
     this.memberStore.removeFamily(this.family()!);
     this.router.navigate(['tutoring', 'family', 'list']);
   }
+
+  public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {
+    return FamilyStore.sortedFamilyMembers(members);
+  }
 }
