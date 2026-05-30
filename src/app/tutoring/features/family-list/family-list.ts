@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Family } from '../../models/family';
@@ -6,7 +7,7 @@ import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-family-list',
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './family-list.html',
 })
 export class FamilyList {

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { RecipientMember } from '../../models/recipient-member';
@@ -5,7 +6,7 @@ import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-display-family',
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './display-family.html',
 })
 export class DisplayFamily {

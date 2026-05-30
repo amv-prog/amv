@@ -26,7 +26,7 @@ Le menu contient des liens vers certaines pages :
 ### Écran
 
 - Les familles sont affichées, avec leur nom, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
-- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
+- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
 - La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
 
@@ -65,7 +65,7 @@ Un formulaire permet d'ajouter une famille en saisissant son nom.
 ## Détail d'une famille
 
 - Le nom de la famille est affichée, avec un bouton permettant la modification
-- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, et l'email de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
+- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email et la date de naissance de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
 - Un bouton permet d'ajouter un membre
 - Un bouton permet de supprimer la famille
 
@@ -91,7 +91,7 @@ Lors du clic sur le bouton, le membre est supprimé du local storage, et la list
 
 ## Ajout d'un membre d'une famille
 
-Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, et ses numéros de téléphone.
+Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone et sa date de naissance.
 
 - Le membre est par défaut un parent
 - Le nom est pré-rempli avec le nom de la famille.
@@ -108,7 +108,7 @@ Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfan
 
 ## Modification d'un membre d'une famille
 
-Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, et ses numéros de téléphone.
+Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone et sa date de naissance.
 
 - Les champs sont initialisés avec leur valeur enregistrée.
 - Le nom et le prénom sont obligatoires.

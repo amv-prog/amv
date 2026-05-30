@@ -16,6 +16,7 @@
             <th scope="col">Nom de famille</th>
             <th scope="col">Téléphone</th>
             <th scope="col">Email</th>
+            <th scope="col">Date de naissance</th>
           </tr>
         </thead>
         @for (member of sortedFamilyMembers(familyValue.members); track member.id) {
@@ -31,6 +32,7 @@
             <td>{{ member.lastName }}</td>
             <td>{{ member.phoneNumbers.join(', ') }}</td>
             <td>{{ member.email }}</td>
+            <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
             <td>
               <a
                 class="a-button invisible"
