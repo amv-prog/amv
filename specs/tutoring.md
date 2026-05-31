@@ -26,7 +26,7 @@ Le menu contient des liens vers certaines pages :
 ### Écran
 
 - Les familles sont affichées, avec leur nom, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
-- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
+- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
 - La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
 
@@ -65,7 +65,7 @@ Un formulaire permet d'ajouter une famille en saisissant son nom.
 ## Détail d'une famille
 
 - Le nom de la famille est affichée, avec un bouton permettant la modification
-- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email et la date de naissance de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
+- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email, la date de naissance et les langues parlées de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
 - Un bouton permet d'ajouter un membre
 - Un bouton permet de supprimer la famille
 
@@ -91,15 +91,15 @@ Lors du clic sur le bouton, le membre est supprimé du local storage, et la list
 
 ## Ajout d'un membre d'une famille
 
-Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone et sa date de naissance.
+Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance et ses langues parlées.
 
 - Le membre est par défaut un parent
 - Le nom est pré-rempli avec le nom de la famille.
 - Les autres champs sont initialement vides.
 - Le nom et le prénom sont obligatoires.
-- L'email et le numéro de téléphone ne sont pas obligatoire.
-- Plusieurs numéros de téléphone peuvent être saisis en appuyant sur le bouton +.
-- Un numéro de téléphone peut être supprimé en appuyant sur -.
+- Les autres champs ne sont pas obligatoire.
+- Plusieurs numéros de téléphone et langues peuvent être saisis en appuyant sur le bouton +.
+- Un numéro de téléphone ou une langue peut être supprimé en appuyant sur -.
 - Si l'un des champs obligatoires est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
   - Si les champs sont valides, le membre est ajouté à sa famille dans le local storage, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
@@ -108,7 +108,7 @@ Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfan
 
 ## Modification d'un membre d'une famille
 
-Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone et sa date de naissance.
+Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance et ses langues parlées.
 
 - Les champs sont initialisés avec leur valeur enregistrée.
 - Le nom et le prénom sont obligatoires.

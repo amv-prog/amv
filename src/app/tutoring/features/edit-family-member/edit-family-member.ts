@@ -45,6 +45,11 @@ export class EditFamilyMember {
   protected readonly birthDateCtrl = this.fb.control(
     this.dateService.stringToDate(this.member()?.birthDate),
   );
+  protected readonly languagesArray = this.fb.array(
+    !!this.member() && this.member()!.languages.length > 0
+      ? this.member()!.languages.map((language) => this.fb.control(language))
+      : [this.fb.control('')],
+  );
 
   protected readonly memberForm = this.fb.group({
     parent: this.parentCtrl,
@@ -53,6 +58,7 @@ export class EditFamilyMember {
     email: this.emailCtrl,
     phones: this.phonesArray,
     birthDate: this.birthDateCtrl,
+    languages: this.languagesArray,
   });
 
   addPhone() {
@@ -61,6 +67,14 @@ export class EditFamilyMember {
 
   removePhone(index: number) {
     this.phonesArray.removeAt(index);
+  }
+
+  addLanguage() {
+    this.languagesArray.push(this.fb.control(''));
+  }
+
+  removeLanguage(index: number) {
+    this.languagesArray.removeAt(index);
   }
 
   register(): void {
@@ -78,6 +92,7 @@ export class EditFamilyMember {
           email: this.emailCtrl.value,
           phoneNumbers: this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
           birthDate: birthDate,
+          languages: this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
         };
         this.memberStore.updateFamilyMember(current);
       } else {
@@ -88,7 +103,7 @@ export class EditFamilyMember {
             this.lastNameCtrl.value,
             this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
             this.emailCtrl.value,
-            [],
+            this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
             birthDate,
           ),
         );
