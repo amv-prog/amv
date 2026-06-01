@@ -1,11 +1,10 @@
 <div class="page-center">
   @if (family(); as familyValue) {
-    <h1>
-      <span>Famille {{ familyValue.name }}</span>
-      <a class="a-button invisible" [routerLink]="['edit']" title="modifier">
-        <span class="material-symbols-outlined">edit</span>
-      </a>
-    </h1>
+    <h1>Famille {{ familyValue.name }}</h1>
+
+    @if (!!familyValue.additionalInfo) {
+      <div>{{ familyValue.additionalInfo }}</div>
+    }
 
     @if (!!familyValue.members.length) {
       <table class="amv-table">
@@ -18,6 +17,7 @@
             <th scope="col">Email</th>
             <th scope="col">Date de naissance</th>
             <th scope="col">Langues parlées</th>
+            <th scope="col">Informations supplémentaires</th>
           </tr>
         </thead>
         @for (member of sortedFamilyMembers(familyValue.members); track member.id) {
@@ -35,6 +35,7 @@
             <td>{{ member.email }}</td>
             <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
             <td>{{ member.languages.join(', ') }}</td>
+            <td [title]="member.additionalInfo">{{ member.additionalInfo | truncate }}</td>
             <td>
               <a
                 class="a-button invisible"
@@ -58,6 +59,7 @@
     }
     <div class="h-panel">
       <a class="a-button" routerLink="member/add"> Ajouter un membre </a>
+      <a class="a-button" [routerLink]="['edit']"> Modifier la famille </a>
       <button type="button" (click)="removeFamily()">Supprimer la famille</button>
     </div>
   } @else {

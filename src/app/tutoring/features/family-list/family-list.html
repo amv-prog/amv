@@ -11,6 +11,7 @@
           <th scope="col">Email</th>
           <th scope="col">Date de naissance</th>
           <th scope="col">Langues parlées</th>
+          <th scope="col">Informations supplémentaires</th>
         </tr>
       </thead>
       @for (familyDisplay of familiesToDisplay(); track familyDisplay.family.id) {
@@ -18,11 +19,12 @@
         <tr class="head selectable trackable" (click)="switchExpanded(familyDisplay)">
           <td></td>
           <td></td>
-          <td>{{ family.name }}</td>
+          <td class="important">{{ family.name }}</td>
           <td></td>
           <td></td>
           <td></td>
           <td></td>
+          <td [title]="family.additionalInfo">{{ family.additionalInfo | truncate }}</td>
           <td>
             <a
               class="a-button invisible"
@@ -72,6 +74,7 @@
               <td>{{ member.email }}</td>
               <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
               <td>{{ member.languages.join(', ') }}</td>
+              <td [title]="member.additionalInfo">{{ member.additionalInfo | truncate }}</td>
               <td></td>
               <td>
                 <a

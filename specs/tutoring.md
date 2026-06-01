@@ -20,13 +20,13 @@ Le menu contient des liens vers certaines pages :
 - L'association permet l'adhésion de familles.
 - Une famille peut être constituée constituée de plusieurs membres.
 - La cotisation est versée pour toute la famille, quel que soit le nombre de membres.
-- Une famille a un nom.
-- Un membre peut être un parent ou un enfant. Il a un nom de famille (qui peut être différent du nom de famille), un prénom, un email et une liste de numéros de téléphone.
+- Une famille a un nom et des informations supplémentaires.
+- Un membre peut être un parent ou un enfant. Il a un nom de famille (qui peut être différent du nom de famille), un prénom, un email, une date de naissance, des langues parlées, une liste de numéros de téléphone et des informations supplémentaires.
 
 ### Écran
 
-- Les familles sont affichées, avec leur nom, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
-- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
+- Les familles sont affichées, avec leur nom, les informations supplémentaires, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
+- Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, informations supplémentaires, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
 - La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
 
@@ -52,7 +52,7 @@ Lors du clic sur le bouton, le membre est supprimé du local storage, et la list
 
 ## Ajout d'une famille
 
-Un formulaire permet d'ajouter une famille en saisissant son nom.
+Un formulaire permet d'ajouter une famille en saisissant son nom et ses informations supplémentaires.
 
 - Le champ est initialement vide.
 - Le nom est obligatoire.
@@ -65,7 +65,7 @@ Un formulaire permet d'ajouter une famille en saisissant son nom.
 ## Détail d'une famille
 
 - Le nom de la famille est affichée, avec un bouton permettant la modification
-- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email, la date de naissance et les langues parlées de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
+- La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email, la date de naissance, les langues parlées et les informations supplémentaires de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
 - Un bouton permet d'ajouter un membre
 - Un bouton permet de supprimer la famille
 
@@ -91,7 +91,7 @@ Lors du clic sur le bouton, le membre est supprimé du local storage, et la list
 
 ## Ajout d'un membre d'une famille
 
-Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance et ses langues parlées.
+Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance, ses langues parlées et ses informations supplémentaires.
 
 - Le membre est par défaut un parent
 - Le nom est pré-rempli avec le nom de la famille.
@@ -108,7 +108,7 @@ Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfan
 
 ## Modification d'un membre d'une famille
 
-Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance et ses langues parlées.
+Un formulaire permet de modifier un membre en saisissant son type (parent ou enfant), son nom, son prénom, son email, ses numéros de téléphone, sa date de naissance, ses langues parlées et ses informations supplémentaires.
 
 - Les champs sont initialisés avec leur valeur enregistrée.
 - Le nom et le prénom sont obligatoires.

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../../shared/navigation-service';
+import { NavigationService } from '../../../shared/services/navigation-service';
 import { Family } from '../../models/family';
 import { FamilyStore } from '../../stores/family-store';
 
@@ -20,20 +20,26 @@ export class EditFamily {
   private readonly fb = inject(NonNullableFormBuilder);
 
   protected readonly nameCtrl = this.fb.control(this.family()?.name || '', Validators.required);
+  protected readonly additionalInfoCtrl = this.fb.control(this.family()?.additionalInfo || '');
 
   protected readonly familyForm = this.fb.group({
     name: this.nameCtrl,
+    additionalInfo: this.additionalInfoCtrl,
   });
 
   register(): void {
     if (this.familyForm.valid) {
       let current = this.family();
       if (!!current) {
-        current = { ...current, name: this.nameCtrl.value };
+        current = {
+          ...current,
+          name: this.nameCtrl.value,
+          additionalInfo: this.additionalInfoCtrl.value?.trim(),
+        };
         this.memberStore.updateFamily(current);
         this.navigationService.back(['tutoring', 'family', current.id]);
       } else {
-        current = new Family(this.nameCtrl.value);
+        current = new Family(this.nameCtrl.value, this.additionalInfoCtrl.value?.trim());
         this.memberStore.addFamily(current);
         this.router.navigate(['tutoring', 'family', current.id]);
       }

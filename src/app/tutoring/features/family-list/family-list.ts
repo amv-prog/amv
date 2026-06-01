@@ -1,13 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TruncatePipe } from '../../../shared/truncate-pipe';
 import { Family } from '../../models/family';
 import { RecipientMember } from '../../models/recipient-member';
 import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-family-list',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TruncatePipe],
   templateUrl: './family-list.html',
 })
 export class FamilyList {

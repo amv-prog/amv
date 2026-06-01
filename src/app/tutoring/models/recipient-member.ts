@@ -13,6 +13,7 @@ export class RecipientMember implements Member {
     public email: string | undefined,
     public languages: string[],
     public birthDate: string | undefined,
+    public additionalInfo: string,
   ) {
     this.id = uuid.v4();
   }

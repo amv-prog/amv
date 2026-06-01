@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import * as packageJson from 'packageJson';
-import { LocalStorageService } from './local-storage-service';
+import { LocalStorageService } from './services/local-storage-service';
 
 @Injectable({
   providedIn: 'root',

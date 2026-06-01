@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Toggle } from '../../../shared/components/toggle/toggle';
-import { DateService } from '../../../shared/date-service';
-import { NavigationService } from '../../../shared/navigation-service';
+import { DateService } from '../../../shared/services/date-service';
+import { NavigationService } from '../../../shared/services/navigation-service';
 import { RecipientMember } from '../../models/recipient-member';
 import { FamilyStore } from '../../stores/family-store';
 
@@ -50,6 +50,7 @@ export class EditFamilyMember {
       ? this.member()!.languages.map((language) => this.fb.control(language))
       : [this.fb.control('')],
   );
+  protected readonly additionalInfoCtrl = this.fb.control(this.member()?.additionalInfo || '');
 
   protected readonly memberForm = this.fb.group({
     parent: this.parentCtrl,
@@ -59,6 +60,7 @@ export class EditFamilyMember {
     phones: this.phonesArray,
     birthDate: this.birthDateCtrl,
     languages: this.languagesArray,
+    additionalInfo: this.additionalInfoCtrl,
   });
 
   addPhone() {
@@ -93,6 +95,7 @@ export class EditFamilyMember {
           phoneNumbers: this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
           birthDate: birthDate,
           languages: this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
+          additionalInfo: this.additionalInfoCtrl.value?.trim(),
         };
         this.memberStore.updateFamilyMember(current);
       } else {
@@ -105,6 +108,7 @@ export class EditFamilyMember {
             this.emailCtrl.value,
             this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
             birthDate,
+            this.additionalInfoCtrl.value?.trim(),
           ),
         );
       }

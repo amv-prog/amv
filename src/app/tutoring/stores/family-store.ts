@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/local-storage-service';
+import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
 

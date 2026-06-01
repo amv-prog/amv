@@ -6,4 +6,5 @@ export interface Member {
   phoneNumbers: string[];
   email: string | undefined;
   languages: string[];
+  additionalInfo: string;
 }

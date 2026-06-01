@@ -7,7 +7,10 @@ export class Family {
   public address: Address | undefined;
   public members: RecipientMember[] = [];
 
-  constructor(public name: string) {
+  constructor(
+    public name: string,
+    public additionalInfo: string,
+  ) {
     this.id = uuid.v4();
   }
 }

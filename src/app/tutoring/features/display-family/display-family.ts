@@ -1,12 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TruncatePipe } from '../../../shared/truncate-pipe';
 import { RecipientMember } from '../../models/recipient-member';
 import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-display-family',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TruncatePipe],
   templateUrl: './display-family.html',
 })
 export class DisplayFamily {
