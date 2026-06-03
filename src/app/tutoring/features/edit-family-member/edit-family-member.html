@@ -29,7 +29,7 @@
     @if (emailCtrl.touched && emailCtrl.hasError('email')) {
       <div class="field-error">L'email saisi n'est pas valide</div>
     }
-    <div class="arrayInputs" formArrayName="phones">
+    <div class="subForm" formArrayName="phones">
       @for (phoneCtrl of phonesArray.controls; track phoneCtrl) {
         <div class="field">
           <label [for]="$index">Téléphone {{ $index > 0 ? $index + 1 : '' }}</label>
@@ -56,7 +56,7 @@
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </div>
-    <div class="arrayInputs" formArrayName="languages">
+    <div class="subForm" formArrayName="languages">
       @for (languageCtrl of languagesArray.controls; track languageCtrl) {
         <div class="field">
           <label [for]="$index">Langue parlée {{ $index > 0 ? $index + 1 : '' }}</label>

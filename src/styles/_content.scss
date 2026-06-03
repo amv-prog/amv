@@ -3,3 +3,17 @@
   flex-direction: row;
   gap: 1rem;
 }
+
+.h-panel-large {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}

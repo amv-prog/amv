@@ -13,6 +13,10 @@
     @if (nameCtrl.dirty && nameCtrl.hasError('required')) {
       <div class="field-error">Le nom est obligatoire</div>
     }
+    <div class="subForm">
+      <div class="highlight">Adresse</div>
+      <amv-address-form [address]="family()?.address"></amv-address-form>
+    </div>
     <div class="field">
       <label for="info">Informations supplémentaires</label
       ><textarea id="info" formControlName="additionalInfo"> </textarea>

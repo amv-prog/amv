@@ -1,16 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AfterViewChecked, Component, inject, viewChild } from '@angular/core';
+import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AddressForm } from '../../../shared/components/address-form/address-form';
 import { NavigationService } from '../../../shared/services/navigation-service';
 import { Family } from '../../models/family';
 import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-family',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, AddressForm],
   templateUrl: './edit-family.html',
 })
-export class EditFamily {
+export class EditFamily implements AfterViewChecked {
+  readonly addressForm = viewChild.required<AddressForm>(AddressForm);
+
   private readonly router = inject(Router);
   private readonly memberStore = inject(FamilyStore);
   private readonly navigationService = inject(NavigationService);
@@ -25,7 +28,12 @@ export class EditFamily {
   protected readonly familyForm = this.fb.group({
     name: this.nameCtrl,
     additionalInfo: this.additionalInfoCtrl,
+    address: this.fb.array<FormGroup>([]),
   });
+
+  ngAfterViewChecked(): void {
+    this.familyForm.controls.address.push(this.addressForm().getFormGroup());
+  }
 
   register(): void {
     if (this.familyForm.valid) {
@@ -35,11 +43,16 @@ export class EditFamily {
           ...current,
           name: this.nameCtrl.value,
           additionalInfo: this.additionalInfoCtrl.value?.trim(),
+          address: this.addressForm().getAddress(),
         };
         this.memberStore.updateFamily(current);
         this.navigationService.back(['tutoring', 'family', current.id]);
       } else {
-        current = new Family(this.nameCtrl.value, this.additionalInfoCtrl.value?.trim());
+        current = new Family(
+          this.nameCtrl.value,
+          this.additionalInfoCtrl.value?.trim(),
+          this.addressForm().getAddress(),
+        );
         this.memberStore.addFamily(current);
         this.router.navigate(['tutoring', 'family', current.id]);
       }

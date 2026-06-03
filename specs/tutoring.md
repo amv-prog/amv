@@ -52,21 +52,37 @@ Lors du clic sur le bouton, le membre est supprimé du local storage, et la list
 
 ## Ajout d'une famille
 
-Un formulaire permet d'ajouter une famille en saisissant son nom et ses informations supplémentaires.
+Un formulaire permet d'ajouter une famille en saisissant son nom, son adresse, et ses informations supplémentaires.
 
-- Le champ est initialement vide.
+- Les champs sont initialement vides.
 - Le nom est obligatoire.
 - Si le nom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Si un champ de l'adresse n'est pas vide, la rue, le code postal et la ville sont obligatoires. Des messages d'erreurs s'affichent si le champ a été touché et n'est pas valide.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
   - Si le formulaire est valide, la famille est ajoutée au local storage, et l'utilisateur est redirigé sur la page de détail de la famille.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
-- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des familles à défaut.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la page de la famille à défaut.
+
+## Modifier une famille
+
+Un formulaire permet de modifier une famille en saisissant son nom, son adresse, et ses informations supplémentaires.
+
+- Les champs sont renseignés avec leur valeur enregistrée.
+- Le nom est obligatoire.
+- Si le nom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Si un champ de l'adresse n'est pas vide, la rue, le code postal et la ville sont obligatoires. Des messages d'erreurs s'affichent si le champ a été touché et n'est pas valide.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, la famille est modifiée dans le local storage, et l'utilisateur est redirigé sur la page de détail de la famille.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la page de la famille à défaut.
 
 ## Détail d'une famille
 
-- Le nom de la famille est affichée, avec un bouton permettant la modification
+- Le nom de la famille est affichée, avec un bouton permettant la modification.
+- L'adresse et les informations supplémentaires de la famille sont affichées.
 - La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email, la date de naissance, les langues parlées et les informations supplémentaires de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
 - Un bouton permet d'ajouter un membre
+- Un bouton permet de modifier la famille
 - Un bouton permet de supprimer la famille
 
 ### Modifier la famille
