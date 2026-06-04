@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DateService } from '../../../shared/services/date-service';
 import { TruncatePipe } from '../../../shared/truncate-pipe';
 import { Family } from '../../models/family';
 import { RecipientMember } from '../../models/recipient-member';
@@ -38,6 +39,10 @@ export class FamilyList {
 
   public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {
     return FamilyStore.sortedFamilyMembers(members);
+  }
+
+  public isContributionValid(family: Family) {
+    return DateService.compareDays(family.contributionValidity, new Date()) >= 0;
   }
 }
 

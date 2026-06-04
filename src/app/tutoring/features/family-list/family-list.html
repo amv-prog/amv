@@ -17,7 +17,20 @@
       @for (familyDisplay of familiesToDisplay(); track familyDisplay.family.id) {
         @let family = familyDisplay.family;
         <tr class="head selectable trackable" (click)="switchExpanded(familyDisplay)">
-          <td></td>
+          <td>
+            @if (isContributionValid(family)) {
+              <span
+                class="material-symbols-outlined success icon-white-bg"
+                title="Cotisation validée"
+              >
+                check_circle
+              </span>
+            } @else {
+              <span class="material-symbols-outlined error icon-white-bg" title="Pas de cotisation">
+                error
+              </span>
+            }
+          </td>
           <td></td>
           <td class="important">{{ family.name }}</td>
           <td></td>

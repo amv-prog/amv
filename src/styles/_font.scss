@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 html {
   font-size: 16px;
   font-family: 'Roboto', 'Verdana', 'Helvetica', 'Arial', sans-serif;
@@ -5,4 +7,12 @@ html {
 
 @mixin small {
   font: var(--mat-sys-body-medium);
+}
+
+.error {
+  color: $error;
+}
+
+.success {
+  color: $success;
 }

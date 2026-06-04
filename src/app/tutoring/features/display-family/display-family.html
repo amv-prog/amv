@@ -3,6 +3,24 @@
     <h1>Famille {{ familyValue.name }}</h1>
 
     <div class="h-panel-large">
+      <div class="section">
+        @if (isContributionValid()) {
+          <div class="h-panel">
+            <span class="material-symbols-outlined success"> check_circle </span>
+            <div>
+              Cotisation validée jusqu'au
+              {{ familyValue.contributionValidity | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <button (click)="openContributionDialog()">Modifier la cotisation</button>
+        } @else {
+          <div class="h-panel">
+            <span class="material-symbols-outlined error"> error </span>
+            <div>Pas de cotisation</div>
+          </div>
+          <button (click)="openContributionDialog()">Valider la cotisation</button>
+        }
+      </div>
       @if (!!familyValue.additionalInfo) {
         <div class="section">{{ familyValue.additionalInfo }}</div>
       }

@@ -43,7 +43,7 @@ export class EditFamilyMember {
       : [this.fb.control('')],
   );
   protected readonly birthDateCtrl = this.fb.control(
-    this.dateService.stringToDate(this.member()?.birthDate),
+    DateService.stringToDate(this.member()?.birthDate),
   );
   protected readonly languagesArray = this.fb.array(
     !!this.member() && this.member()!.languages.length > 0

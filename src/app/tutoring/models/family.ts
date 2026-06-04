@@ -5,6 +5,7 @@ import { RecipientMember } from './recipient-member';
 export class Family {
   public id: string;
   public members: RecipientMember[] = [];
+  public contributionValidity: string | undefined;
 
   constructor(
     public name: string,
