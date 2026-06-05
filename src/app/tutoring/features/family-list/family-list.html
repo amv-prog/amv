@@ -55,17 +55,21 @@
             >
           </td>
           <td>
-            <button class="invisible" title="supprimer" (click)="removeFamily(family)">
+            <button
+              class="invisible"
+              title="supprimer"
+              (click)="validateFamilyRemoval(family, $event)"
+            >
               <span class="material-symbols-outlined"> delete </span>
             </button>
           </td>
           <td>
             @if (familyDisplay.expanded) {
-              <button class="invisible" title="supprimer">
+              <button class="invisible" title="cacher">
                 <span class="material-symbols-outlined">arrow_drop_down</span>
               </button>
             } @else {
-              <button class="invisible" title="supprimer">
+              <button class="invisible" title="afficher">
                 <span class="material-symbols-outlined">arrow_drop_up</span>
               </button>
             }
@@ -101,7 +105,7 @@
                 <button
                   class="invisible"
                   title="supprimer"
-                  (click)="removeFamilyMember(family, member)"
+                  (click)="validateFamilyMemberRemoval(family, member)"
                 >
                   <span class="material-symbols-outlined"> delete </span>
                 </button>

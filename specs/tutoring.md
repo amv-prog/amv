@@ -40,7 +40,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer une famille
 
-Lors du clic sur le bouton, la famille est supprimé du local storage, ainsi que tous ses membres, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé du local storage, ainsi que tous ses membres, et la liste est mise à jour.
 
 ### Modifier un membre
 
@@ -48,7 +48,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer un membre
 
-Lors du clic sur le bouton, le membre est supprimé du local storage, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le membre est supprimé du local storage, et la liste est mise à jour.
 
 ## Ajout d'une famille
 
@@ -92,7 +92,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer la famille
 
-Lors du clic sur le bouton, la famille est supprimé du local storage, ainsi que tous ses membres, et l'utilisateur est redirigé vers la liste des familles.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé du local storage, ainsi que tous ses membres, et l'utilisateur est redirigé vers la liste des familles.
 
 ### Ajouter un membre
 

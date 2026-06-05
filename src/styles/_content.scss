@@ -24,4 +24,18 @@
   padding: 1rem;
   background-color: white;
   border-radius: 1rem;
+
+  .content {
+    margin: 2rem 0;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    button {
+      flex: 1 1 auto;
+    }
+  }
 }

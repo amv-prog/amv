@@ -11,6 +11,7 @@ export class NavigationService {
   private history: string[] = [];
 
   constructor() {
+    this.history.push(this.router.url);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.history.push(event.urlAfterRedirects);
