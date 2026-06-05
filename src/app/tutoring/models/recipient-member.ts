@@ -12,7 +12,8 @@ export class RecipientMember implements Member {
     public phoneNumbers: string[],
     public email: string | undefined,
     public languages: string[],
-    public birthDate: Date | undefined,
+    public birthDate: string | undefined,
+    public additionalInfo: string,
   ) {
     this.id = uuid.v4();
   }

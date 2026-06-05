@@ -1,12 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DateService } from '../../../shared/services/date-service';
+import { TruncatePipe } from '../../../shared/truncate-pipe';
 import { Family } from '../../models/family';
 import { RecipientMember } from '../../models/recipient-member';
 import { FamilyStore } from '../../stores/family-store';
 
 @Component({
   selector: 'amv-family-list',
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe, TruncatePipe],
   templateUrl: './family-list.html',
 })
 export class FamilyList {
@@ -36,6 +39,10 @@ export class FamilyList {
 
   public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {
     return FamilyStore.sortedFamilyMembers(members);
+  }
+
+  public isContributionValid(family: Family) {
+    return DateService.compareDays(family.contributionValidity, new Date()) >= 0;
   }
 }
 

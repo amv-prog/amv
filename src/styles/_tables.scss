@@ -34,8 +34,11 @@
 
   tr.head {
     background-color: $c2-light;
-    font-weight: bold;
     box-shadow: inset 0 0 0 1px $c2;
+  }
+
+  td.important {
+    font-weight: bold;
   }
 
   thead {

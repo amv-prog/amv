@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NavigationService } from '../shared/navigation-service';
+import { NavigationService } from '../shared/services/navigation-service';
 
 @Component({
   selector: 'amv-patch-notes',

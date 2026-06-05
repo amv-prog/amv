@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LocalStorageService {
-
   // Set item in local storage
   setItem(key: string, value: any): void {
     try {
@@ -30,7 +29,7 @@ export class LocalStorageService {
   removeItem(key: string): void {
     localStorage.removeItem(key);
   }
-  
+
   // Clear all local storage
   clear(): void {
     localStorage.clear();

@@ -9,16 +9,35 @@
           <th scope="col">Nom de famille</th>
           <th scope="col">Téléphone</th>
           <th scope="col">Email</th>
+          <th scope="col">Date de naissance</th>
+          <th scope="col">Langues parlées</th>
+          <th scope="col">Informations supplémentaires</th>
         </tr>
       </thead>
       @for (familyDisplay of familiesToDisplay(); track familyDisplay.family.id) {
         @let family = familyDisplay.family;
         <tr class="head selectable trackable" (click)="switchExpanded(familyDisplay)">
+          <td>
+            @if (isContributionValid(family)) {
+              <span
+                class="material-symbols-outlined success icon-white-bg"
+                title="Cotisation validée"
+              >
+                check_circle
+              </span>
+            } @else {
+              <span class="material-symbols-outlined error icon-white-bg" title="Pas de cotisation">
+                error
+              </span>
+            }
+          </td>
+          <td></td>
+          <td class="important">{{ family.name }}</td>
           <td></td>
           <td></td>
-          <td>{{ family.name }}</td>
           <td></td>
           <td></td>
+          <td [title]="family.additionalInfo">{{ family.additionalInfo | truncate }}</td>
           <td>
             <a
               class="a-button invisible"
@@ -66,6 +85,9 @@
               <td>{{ member.lastName }}</td>
               <td>{{ member.phoneNumbers.join(', ') }}</td>
               <td>{{ member.email }}</td>
+              <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ member.languages.join(', ') }}</td>
+              <td [title]="member.additionalInfo">{{ member.additionalInfo | truncate }}</td>
               <td></td>
               <td>
                 <a

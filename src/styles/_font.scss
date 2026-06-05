@@ -1,8 +1,18 @@
+@use 'variables' as *;
+
 html {
   font-size: 16px;
-  font-family: 'Verdana', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Roboto', 'Verdana', 'Helvetica', 'Arial', sans-serif;
 }
 
 @mixin small {
-  font-size: 14px;
+  font: var(--mat-sys-body-medium);
+}
+
+.error {
+  color: $error;
+}
+
+.success {
+  color: $success;
 }

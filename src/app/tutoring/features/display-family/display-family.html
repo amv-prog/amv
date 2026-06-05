@@ -1,11 +1,41 @@
 <div class="page-center">
   @if (family(); as familyValue) {
-    <h1>
-      <span>Famille {{ familyValue.name }}</span>
-      <a class="a-button invisible" [routerLink]="['edit']" title="modifier">
-        <span class="material-symbols-outlined">edit</span>
-      </a>
-    </h1>
+    <h1>Famille {{ familyValue.name }}</h1>
+
+    <div class="h-panel-large">
+      <div class="section">
+        @if (isContributionValid()) {
+          <div class="h-panel">
+            <span class="material-symbols-outlined success"> check_circle </span>
+            <div>
+              Cotisation validée jusqu'au
+              {{ familyValue.contributionValidity | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <button (click)="openContributionDialog()">Modifier la cotisation</button>
+        } @else {
+          <div class="h-panel">
+            <span class="material-symbols-outlined error"> error </span>
+            <div>Pas de cotisation</div>
+          </div>
+          <button (click)="openContributionDialog()">Valider la cotisation</button>
+        }
+      </div>
+      @if (!!familyValue.additionalInfo) {
+        <div class="section">{{ familyValue.additionalInfo }}</div>
+      }
+
+      @if (!!familyValue.address) {
+        @let address = familyValue.address;
+        <div class="section">
+          <div>{{ address.street }}</div>
+          @if (address.additional) {
+            <div>{{ address.additional }}</div>
+          }
+          <div>{{ address.postCode }} {{ address.city }}</div>
+        </div>
+      }
+    </div>
 
     @if (!!familyValue.members.length) {
       <table class="amv-table">
@@ -16,6 +46,9 @@
             <th scope="col">Nom de famille</th>
             <th scope="col">Téléphone</th>
             <th scope="col">Email</th>
+            <th scope="col">Date de naissance</th>
+            <th scope="col">Langues parlées</th>
+            <th scope="col">Informations supplémentaires</th>
           </tr>
         </thead>
         @for (member of sortedFamilyMembers(familyValue.members); track member.id) {
@@ -31,6 +64,9 @@
             <td>{{ member.lastName }}</td>
             <td>{{ member.phoneNumbers.join(', ') }}</td>
             <td>{{ member.email }}</td>
+            <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ member.languages.join(', ') }}</td>
+            <td [title]="member.additionalInfo">{{ member.additionalInfo | truncate }}</td>
             <td>
               <a
                 class="a-button invisible"
@@ -54,6 +90,7 @@
     }
     <div class="h-panel">
       <a class="a-button" routerLink="member/add"> Ajouter un membre </a>
+      <a class="a-button" [routerLink]="['edit']"> Modifier la famille </a>
       <button type="button" (click)="removeFamily()">Supprimer la famille</button>
     </div>
   } @else {

@@ -1,5 +1,5 @@
-import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/local-storage-service';
+import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
 
@@ -11,10 +11,28 @@ export class FamilyStore {
 
   families: WritableSignal<Family[]>;
 
-  selectedFamily: WritableSignal<Family | undefined> = signal<Family | undefined>(undefined);
-  selectedFamilyMember: WritableSignal<RecipientMember | undefined> = signal<
-    RecipientMember | undefined
-  >(undefined);
+  selectedFamilyId: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
+  selectedFamilyMemberId: WritableSignal<string | undefined> = signal<string | undefined>(
+    undefined,
+  );
+
+  selectedFamily = computed(() => {
+    const familyId = this.selectedFamilyId();
+    if (!!familyId) {
+      return this.families().find((f) => f.id === familyId);
+    } else {
+      return undefined;
+    }
+  });
+
+  selectedFamilyMember = computed(() => {
+    const familyMemberId = this.selectedFamilyMemberId();
+    if (!!familyMemberId) {
+      return this.selectedFamily()?.members.find((m) => m.id === familyMemberId);
+    } else {
+      return undefined;
+    }
+  });
 
   constructor() {
     this.families = signal<Family[]>(this.localStorage.getItem<Family[]>('families') || []);
@@ -48,8 +66,8 @@ export class FamilyStore {
     });
   }
 
-  setSelectedFamily(family: Family | undefined) {
-    this.selectedFamily.set(family);
+  setSelectedFamilyId(familyId: string | undefined) {
+    this.selectedFamilyId.set(familyId);
   }
 
   updateFamilyMember(member: RecipientMember) {
@@ -73,8 +91,8 @@ export class FamilyStore {
     this.updateFamily(family);
   }
 
-  setSelectedFamilyMember(familyMember: RecipientMember | undefined) {
-    this.selectedFamilyMember.set(familyMember);
+  setSelectedFamilyMemberId(familyMemberId: string | undefined) {
+    this.selectedFamilyMemberId.set(familyMemberId);
   }
 
   static sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {

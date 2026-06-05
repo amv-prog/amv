@@ -9,6 +9,7 @@
   .field {
     display: flex;
     flex-direction: row;
+    align-items: center;
   }
 
   label {
@@ -22,6 +23,8 @@
     border-radius: 0.5em;
     border-color: $c2-lighter;
     padding: 0.5em;
+    width: 15rem;
+    font: var(--mat-sys-body-medium);
 
     &:hover {
       border-color: $c2-light;
@@ -50,12 +53,34 @@
     }
   }
 
-  .arrayInputs {
+  .subForm {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 0.5rem 0;
     border-top: 1px solid $c2-light;
     border-bottom: 1px solid $c2-light;
+  }
+
+  textarea {
+    display: flex;
+    border-radius: 0.5em;
+    border-width: 2px;
+    border-color: $c2-lighter;
+    padding: 0.5em;
+    width: 15rem;
+    height: 10rem;
+    font: var(--mat-sys-body-medium);
+    resize: none;
+
+    &:hover {
+      border-color: $c2-light;
+    }
+
+    &:focus,
+    &:focus-visible,
+    &:focus-within {
+      border-color: $c2;
+    }
   }
 }

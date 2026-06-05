@@ -29,10 +29,10 @@
     @if (emailCtrl.touched && emailCtrl.hasError('email')) {
       <div class="field-error">L'email saisi n'est pas valide</div>
     }
-    <div class="arrayInputs" formArrayName="phones">
+    <div class="subForm" formArrayName="phones">
       @for (phoneCtrl of phonesArray.controls; track phoneCtrl) {
         <div class="field">
-          <label for="email">Téléphone {{ $index > 0 ? $index + 1 : '' }}</label>
+          <label [for]="$index">Téléphone {{ $index > 0 ? $index + 1 : '' }}</label>
           <input [id]="$index" type="text" [formControlName]="$index" />
           @if (phonesArray.controls.length > 1) {
             <button
@@ -49,6 +49,42 @@
       <button class="invisible small" type="button" title="Ajouter un numéro" (click)="addPhone()">
         <span class="material-symbols-outlined">add</span>
       </button>
+    </div>
+    <div class="field">
+      <label for="bd">Date de naissance</label>
+      <input id="bd" [matDatepicker]="picker" formControlName="birthDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </div>
+    <div class="subForm" formArrayName="languages">
+      @for (languageCtrl of languagesArray.controls; track languageCtrl) {
+        <div class="field">
+          <label [for]="$index">Langue parlée {{ $index > 0 ? $index + 1 : '' }}</label>
+          <input [id]="$index" type="text" [formControlName]="$index" />
+          @if (languagesArray.controls.length > 1) {
+            <button
+              class="invisible small"
+              type="button"
+              title="supprimer"
+              (click)="removeLanguage($index)"
+            >
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+          }
+        </div>
+      }
+      <button
+        class="invisible small"
+        type="button"
+        title="Ajouter une langue"
+        (click)="addLanguage()"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </button>
+    </div>
+    <div class="field">
+      <label for="info">Informations supplémentaires</label
+      ><textarea id="info" formControlName="additionalInfo"> </textarea>
     </div>
     <div class="buttons">
       <button [disabled]="memberForm.invalid">Enregistrer</button>
