@@ -25,7 +25,7 @@ Le menu contient des liens vers certaines pages :
 
 ### Écran
 
-- Les familles sont affichées, avec leur nom, les informations supplémentaires, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
+- Les familles sont affichées, avec l'état de la cotisation, leur nom, les informations supplémentaires, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
 - Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, informations supplémentaires, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
 - La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
@@ -78,12 +78,13 @@ Un formulaire permet de modifier une famille en saisissant son nom, son adresse,
 
 ## Détail d'une famille
 
-- Le nom de la famille est affichée, avec un bouton permettant la modification.
-- L'adresse et les informations supplémentaires de la famille sont affichées.
+- Le nom de la famille est affiché.
+- L'état de la cotisation, l'adresse et les informations supplémentaires de la famille sont affichées.
 - La liste des membres de la famille est affichée, avec le prénom, le nom, le numéro de téléphone, l'email, la date de naissance, les langues parlées et les informations supplémentaires de chaque membre, ainsi qu'un bouton pour modifier et un bouton pour supprimer chaque membre.
 - Un bouton permet d'ajouter un membre
 - Un bouton permet de modifier la famille
 - Un bouton permet de supprimer la famille
+- Un bouton permet de modifier la cotisation
 
 ### Modifier la famille
 
@@ -104,6 +105,11 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 ### Supprimer un membre
 
 Lors du clic sur le bouton, le membre est supprimé du local storage, et la liste est mise à jour.
+
+### Valider / modifier la cotisation
+
+Lors du clic sur le bouton, une popin permet de modifier la date de validité de la cotisation. Il est possible de l'effacer pour supprimer la cotisation.
+Si la famille n'avait pas de cotisation précédente, ou avec une cotisation expirée, le champ est initialisé avec la date de dans 1 an. Sinon il s'agit de la date renseignée.
 
 ## Ajout d'un membre d'une famille
 
