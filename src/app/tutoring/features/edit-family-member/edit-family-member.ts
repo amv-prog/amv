@@ -13,13 +13,13 @@ import { FamilyStore } from '../../stores/family-store';
   templateUrl: './edit-family-member.html',
 })
 export class EditFamilyMember {
-  private readonly memberStore = inject(FamilyStore);
+  private readonly familyStore = inject(FamilyStore);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly navigationService = inject(NavigationService);
   protected readonly dateService = inject(DateService);
 
-  protected readonly family = this.memberStore.selectedFamily;
-  protected readonly member = this.memberStore.selectedFamilyMember;
+  protected readonly family = this.familyStore.selectedFamily;
+  protected readonly member = this.familyStore.selectedFamilyMember;
 
   protected readonly parentCtrl = this.fb.control<'LEFT' | 'RIGHT'>(
     (this.member()?.isParent ?? true) ? 'LEFT' : 'RIGHT',
@@ -97,9 +97,9 @@ export class EditFamilyMember {
           languages: this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
           additionalInfo: this.additionalInfoCtrl.value?.trim(),
         };
-        this.memberStore.updateFamilyMember(current);
+        this.familyStore.updateFamilyMember(current);
       } else {
-        this.memberStore.updateFamilyMember(
+        this.familyStore.updateFamilyMember(
           new RecipientMember(
             this.parentCtrl.value === 'LEFT',
             this.firstNameCtrl.value,

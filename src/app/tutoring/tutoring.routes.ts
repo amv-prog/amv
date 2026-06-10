@@ -2,9 +2,11 @@ import { Routes } from '@angular/router';
 import { DisplayFamily } from './features/display-family/display-family';
 import { EditFamilyMember } from './features/edit-family-member/edit-family-member';
 import { EditFamily } from './features/edit-family/edit-family';
+import { EditVolunteer } from './features/edit-volunteer/edit-volunteer';
 import { FamilyList } from './features/family-list/family-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
+import { volunteerResolver } from './resolvers/volunteer-resolver';
 import { Tutoring } from './tutoring';
 
 export const tutoringRoutes: Routes = [
@@ -35,6 +37,11 @@ export const tutoringRoutes: Routes = [
             component: EditFamilyMember,
           },
         ],
+      },
+      {
+        path: 'volunteer/add',
+        resolve: { volunteer: volunteerResolver },
+        component: EditVolunteer,
       },
     ],
   },

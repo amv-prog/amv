@@ -15,10 +15,10 @@ export class EditFamily implements AfterViewChecked {
   readonly addressForm = viewChild.required<AddressForm>(AddressForm);
 
   private readonly router = inject(Router);
-  private readonly memberStore = inject(FamilyStore);
+  private readonly familyStore = inject(FamilyStore);
   private readonly navigationService = inject(NavigationService);
 
-  protected readonly family = this.memberStore.selectedFamily;
+  protected readonly family = this.familyStore.selectedFamily;
 
   private readonly fb = inject(NonNullableFormBuilder);
 
@@ -45,7 +45,7 @@ export class EditFamily implements AfterViewChecked {
           additionalInfo: this.additionalInfoCtrl.value?.trim(),
           address: this.addressForm().getAddress(),
         };
-        this.memberStore.updateFamily(current);
+        this.familyStore.updateFamily(current);
         this.navigationService.back(['tutoring', 'family', current.id]);
       } else {
         current = new Family(
@@ -53,7 +53,7 @@ export class EditFamily implements AfterViewChecked {
           this.additionalInfoCtrl.value?.trim(),
           this.addressForm().getAddress(),
         );
-        this.memberStore.addFamily(current);
+        this.familyStore.addFamily(current);
         this.router.navigate(['tutoring', 'family', current.id]);
       }
     }

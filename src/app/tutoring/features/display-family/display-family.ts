@@ -17,9 +17,9 @@ import { EditContribution } from '../edit-family/edit-contribution/edit-contribu
 })
 export class DisplayFamily {
   private readonly router = inject(Router);
-  private readonly memberStore = inject(FamilyStore);
+  private readonly familyStore = inject(FamilyStore);
 
-  protected readonly family = this.memberStore.selectedFamily;
+  protected readonly family = this.familyStore.selectedFamily;
 
   private readonly dialog = inject(Dialog);
 
@@ -43,7 +43,7 @@ export class DisplayFamily {
   }
 
   private removeFamilyMember(member: RecipientMember) {
-    this.memberStore.removeFamilyMember(this.family()!, member);
+    this.familyStore.removeFamilyMember(this.family()!, member);
   }
 
   public validateFamilyRemoval() {
@@ -66,7 +66,7 @@ export class DisplayFamily {
   }
 
   private removeFamily() {
-    this.memberStore.removeFamily(this.family()!);
+    this.familyStore.removeFamily(this.family()!);
     this.router.navigate(['tutoring', 'family', 'list']);
   }
 

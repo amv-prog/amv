@@ -18,12 +18,12 @@ import { FamilyStore } from '../../stores/family-store';
 export class FamilyList {
   private readonly router = inject(Router);
 
-  protected readonly memberStore = inject(FamilyStore);
+  protected readonly familyStore = inject(FamilyStore);
 
   private readonly dialog = inject(Dialog);
 
   protected readonly familiesToDisplay = computed(() =>
-    this.memberStore.families().map((f) => new FamilyDisplay(f, true)),
+    this.familyStore.families().map((f) => new FamilyDisplay(f, true)),
   );
 
   public displayFamily(family: Family) {
@@ -50,7 +50,7 @@ export class FamilyList {
   }
 
   private removeFamilyMember(family: Family, member: RecipientMember) {
-    this.memberStore.removeFamilyMember(family, member);
+    this.familyStore.removeFamilyMember(family, member);
   }
 
   public switchExpanded(familyDisplay: FamilyDisplay) {
@@ -78,7 +78,7 @@ export class FamilyList {
   }
 
   private removeFamily(family: Family) {
-    this.memberStore.removeFamily(family);
+    this.familyStore.removeFamily(family);
   }
 
   public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {

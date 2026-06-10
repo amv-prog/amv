@@ -4,7 +4,7 @@ import { FamilyStore } from '../stores/family-store';
 
 export const familyResolver: ResolveFn<boolean> = (route) => {
   const id = route.paramMap.get('familyId')!;
-  const memberStore = inject(FamilyStore);
-  memberStore.setSelectedFamilyId(id);
+  const familyStore = inject(FamilyStore);
+  familyStore.setSelectedFamilyId(id);
   return true;
 };
