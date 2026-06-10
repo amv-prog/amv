@@ -2,6 +2,8 @@ import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { tap } from 'rxjs';
+import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../shared/services/date-service';
 import { TruncatePipe } from '../../../shared/truncate-pipe';
 import { RecipientMember } from '../../models/recipient-member';
@@ -15,18 +17,56 @@ import { EditContribution } from '../edit-family/edit-contribution/edit-contribu
 })
 export class DisplayFamily {
   private readonly router = inject(Router);
-  private readonly memberStore = inject(FamilyStore);
+  private readonly familyStore = inject(FamilyStore);
 
-  protected readonly family = this.memberStore.selectedFamily;
+  protected readonly family = this.familyStore.selectedFamily;
 
   private readonly dialog = inject(Dialog);
 
-  public removeFamilyMember(member: RecipientMember) {
-    this.memberStore.removeFamilyMember(this.family()!, member);
+  public validateFamilyMemberRemoval(member: RecipientMember) {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer ${member.firstName} ${member.lastName} ?`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeFamilyMember(member);
+          }
+        }),
+      )
+      .subscribe();
   }
 
-  public removeFamily() {
-    this.memberStore.removeFamily(this.family()!);
+  private removeFamilyMember(member: RecipientMember) {
+    this.familyStore.removeFamilyMember(this.family()!, member);
+  }
+
+  public validateFamilyRemoval() {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer la famille ${this.family()!.name}, ainsi que tous ses membres ?`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeFamily();
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private removeFamily() {
+    this.familyStore.removeFamily(this.family()!);
     this.router.navigate(['tutoring', 'family', 'list']);
   }
 

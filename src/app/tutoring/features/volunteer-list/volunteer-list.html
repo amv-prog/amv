@@ -1,0 +1,57 @@
+<div class="page-center">
+  <h1>Liste des bénévoles</h1>
+  @if (volunteers().length) {
+    <table class="amv-table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Prénom</th>
+          <th scope="col">Nom de famille</th>
+          <th scope="col">Téléphone</th>
+          <th scope="col">Email</th>
+          <th scope="col">Langues parlées</th>
+          <th scope="col">Informations supplémentaires</th>
+        </tr>
+      </thead>
+      @for (volunteer of volunteers(); track volunteer.id) {
+        <tr class="trackable" [class.even]="$even">
+          <td>
+            @if (volunteer.isTutor) {
+              <span class="material-symbols-outlined" title="Tuteur">person_text</span>
+            } @else {
+              <span class="material-symbols-outlined" title="Bénévole">person</span>
+            }
+          </td>
+          <td>{{ volunteer.firstName }}</td>
+          <td>{{ volunteer.lastName }}</td>
+          <td>{{ volunteer.phoneNumbers.join(', ') }}</td>
+          <td>{{ volunteer.email }}</td>
+          <td>{{ volunteer.languages.join(', ') }}</td>
+          <td [title]="volunteer.additionalInfo">{{ volunteer.additionalInfo | truncate }}</td>
+          <td></td>
+          <td>
+            <a
+              class="a-button invisible"
+              [routerLink]="['/tutoring/volunteer', volunteer.id, 'edit']"
+              title="modifier"
+              ><span class="material-symbols-outlined">edit</span></a
+            >
+          </td>
+          <td>
+            <button
+              class="invisible"
+              title="supprimer"
+              (click)="validateVolunteerRemoval(volunteer)"
+            >
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </td>
+          <td></td>
+        </tr>
+      }
+    </table>
+  } @else {
+    <div class="table-message">Aucun bénévole enregistré</div>
+  }
+  <a class="a-button" routerLink="/tutoring/volunteer/add"> Ajouter un bénévole </a>
+</div>

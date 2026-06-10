@@ -77,7 +77,9 @@
             </td>
             <td>
               <button class="invisible" title="supprimer">
-                <span class="material-symbols-outlined" (click)="removeFamilyMember(member)"
+                <span
+                  class="material-symbols-outlined"
+                  (click)="validateFamilyMemberRemoval(member)"
                   >delete</span
                 >
               </button>
@@ -91,7 +93,7 @@
     <div class="h-panel">
       <a class="a-button" routerLink="member/add"> Ajouter un membre </a>
       <a class="a-button" [routerLink]="['edit']"> Modifier la famille </a>
-      <button type="button" (click)="removeFamily()">Supprimer la famille</button>
+      <button type="button" (click)="validateFamilyRemoval()">Supprimer la famille</button>
     </div>
   } @else {
     <div>Famille non trouvée</div>
