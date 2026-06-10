@@ -89,7 +89,7 @@ export class EditVolunteer {
           additionalInfo: this.additionalInfoCtrl.value?.trim(),
         };
         this.volunteerStore.updateVolunteer(current);
-        this.navigationService.back(['tutoring', 'volunteer', current.id]);
+        this.navigationService.back(['tutoring', 'volunteer', 'list']);
       } else {
         current = new VolunteerMember(
           this.tutorCtrl.value === 'LEFT',
@@ -101,12 +101,12 @@ export class EditVolunteer {
           this.additionalInfoCtrl.value?.trim(),
         );
         this.volunteerStore.addVolunteer(current);
-        this.router.navigate(['tutoring', 'volunteer', current.id]);
+        this.router.navigate(['tutoring', 'volunteer', 'list']);
       }
     }
   }
 
   cancel() {
-    this.navigationService.back(['tutoring', 'volunteer', this.volunteer()?.id ?? 'list']);
+    this.navigationService.back(['tutoring', 'volunteer', 'list']);
   }
 }

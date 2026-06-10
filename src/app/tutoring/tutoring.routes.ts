@@ -4,6 +4,7 @@ import { EditFamilyMember } from './features/edit-family-member/edit-family-memb
 import { EditFamily } from './features/edit-family/edit-family';
 import { EditVolunteer } from './features/edit-volunteer/edit-volunteer';
 import { FamilyList } from './features/family-list/family-list';
+import { VolunteerList } from './features/volunteer-list/volunteer-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';
@@ -40,6 +41,12 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'volunteer/add',
+        resolve: { volunteer: volunteerResolver },
+        component: EditVolunteer,
+      },
+      { path: 'volunteer/list', component: VolunteerList },
+      {
+        path: 'volunteer/:volunteerId/edit',
         resolve: { volunteer: volunteerResolver },
         component: EditVolunteer,
       },

@@ -1,6 +1,6 @@
 <div class="page-center">
+  <h1>Liste des familles adhérentes</h1>
   @if (familiesToDisplay().length) {
-    <h1>Liste des familles adhérentes</h1>
     <table class="amv-table">
       <thead>
         <tr>
@@ -116,8 +116,8 @@
         }
       }
     </table>
-    <a class="a-button" routerLink="/tutoring/family/add"> Ajouter une famille </a>
   } @else {
     <div class="table-message">Aucune famille enregistrée</div>
   }
+  <a class="a-button" routerLink="/tutoring/family/add"> Ajouter une famille </a>
 </div>

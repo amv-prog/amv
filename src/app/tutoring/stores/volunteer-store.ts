@@ -48,4 +48,14 @@ export class VolunteerStore {
       return [...volunteers];
     });
   }
+
+  removeVolunteer(volunteer: VolunteerMember) {
+    this.volunteers.update((volunteers) => {
+      let index = volunteers.indexOf(volunteer);
+      if (index >= 0) {
+        volunteers.splice(index, 1);
+      }
+      return [...volunteers];
+    });
+  }
 }
