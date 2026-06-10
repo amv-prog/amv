@@ -11,7 +11,7 @@ La page est constitué d'un menu à gauche, et du contenu à droite. Si le conte
 Le menu contient des liens vers certaines pages :
 
 - Liste des familles
-- Ajouter une famille
+- Liste des bénévoles
 
 ## Liste des familles
 
@@ -29,6 +29,7 @@ Le menu contient des liens vers certaines pages :
 - Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, informations supplémentaires, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
 - La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
+- Un bouton permet d'ajouter une famille
 
 ### Détail d'une famille
 
@@ -49,6 +50,10 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 ### Supprimer un membre
 
 Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le membre est supprimé du local storage, et la liste est mise à jour.
+
+### Ajout d'une famille
+
+Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'une famille.
 
 ## Ajout d'une famille
 
@@ -139,3 +144,46 @@ Un formulaire permet de modifier un membre en saisissant son type (parent ou enf
   - Si les champs sont valides, le membre est modifié dans le local storage, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur le détail de la famille à défaut.
+
+## Liste des bénévoles
+
+- Les bénévoles sont affichés, avec l'info de tuteur, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
+- La liste des bénévoles est stockée et récupérée dans le local storage.
+- Un bouton permet d'ajouter un bénévole.
+
+### Modifier un bénévole
+
+Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modification d'un bénévole.
+
+### Supprimer un bénévole
+
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le bénévole est supprimé du local storage, et la liste est mise à jour.
+
+### Ajout d'un bénévole
+
+Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'un bénévole.
+
+## Ajout d'un bénévole
+
+Un formulaire permet d'ajouter un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+
+- Le bénévole est un tuteur par défaut.
+- Les champs sont initialement vides.
+- Le nom et le prénom sont obligatoires.
+- Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
+
+## Modification d'un bénévole
+
+Un formulaire permet de modifier un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+
+- Les champs sont initié avec les valeurs enregistrées du bénévole.
+- Le nom et le prénom sont obligatoires.
+- Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
