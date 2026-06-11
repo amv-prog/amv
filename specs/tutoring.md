@@ -147,7 +147,7 @@ Un formulaire permet de modifier un membre en saisissant son type (parent ou enf
 
 ## Liste des bénévoles
 
-- Les bénévoles sont affichés, avec l'info de tuteur, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
+- Les bénévoles sont affichés, avec l'info d'encadrant, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
 - La liste des bénévoles est stockée et récupérée dans le local storage.
 - Un bouton permet d'ajouter un bénévole.
 
@@ -165,9 +165,9 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ## Ajout d'un bénévole
 
-Un formulaire permet d'ajouter un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
 
-- Le bénévole est un tuteur par défaut.
+- Le bénévole est un encadrant par défaut.
 - Les champs sont initialement vides.
 - Le nom et le prénom sont obligatoires.
 - Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
@@ -178,7 +178,7 @@ Un formulaire permet d'ajouter un bénévole en saisissant s'il est tuteur ou no
 
 ## Modification d'un bénévole
 
-Un formulaire permet de modifier un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
 
 - Les champs sont initié avec les valeurs enregistrées du bénévole.
 - Le nom et le prénom sont obligatoires.
