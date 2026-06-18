@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { DisplayFamily } from './features/display-family/display-family';
-import { EditFamilyMember } from './features/edit-family-member/edit-family-member';
-import { EditFamily } from './features/edit-family/edit-family';
-import { EditVolunteer } from './features/edit-volunteer/edit-volunteer';
-import { FamilyList } from './features/family-list/family-list';
-import { VolunteerList } from './features/volunteer-list/volunteer-list';
+import { DisplayFamily } from './features/family/display-family/display-family';
+import { EditFamilyMember } from './features/family/edit-family-member/edit-family-member';
+import { EditFamily } from './features/family/edit-family/edit-family';
+import { FamilyList } from './features/family/family-list/family-list';
+import { EditVolunteer } from './features/volunteer/edit-volunteer/edit-volunteer';
+import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';

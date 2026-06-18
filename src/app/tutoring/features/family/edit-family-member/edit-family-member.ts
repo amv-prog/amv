@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Toggle } from '../../../shared/components/toggle/toggle';
-import { DateService } from '../../../shared/services/date-service';
-import { NavigationService } from '../../../shared/services/navigation-service';
-import { RecipientMember } from '../../models/recipient-member';
-import { FamilyStore } from '../../stores/family-store';
+import { Toggle } from '../../../../shared/components/toggle/toggle';
+import { DateService } from '../../../../shared/services/date-service';
+import { NavigationService } from '../../../../shared/services/navigation-service';
+import { RecipientMember } from '../../../models/recipient-member';
+import { FamilyStore } from '../../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-family-member',

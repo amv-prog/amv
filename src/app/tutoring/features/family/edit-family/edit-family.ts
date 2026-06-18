@@ -1,10 +1,10 @@
 import { AfterViewChecked, Component, inject, viewChild } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AddressForm } from '../../../shared/components/address-form/address-form';
-import { NavigationService } from '../../../shared/services/navigation-service';
-import { Family } from '../../models/family';
-import { FamilyStore } from '../../stores/family-store';
+import { AddressForm } from '../../../../shared/components/address-form/address-form';
+import { NavigationService } from '../../../../shared/services/navigation-service';
+import { Family } from '../../../models/family';
+import { FamilyStore } from '../../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-family',
