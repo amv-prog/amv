@@ -21,6 +21,15 @@ export class VolunteerStore {
     }
   });
 
+  tutorsMap = computed(() => {
+    const volunteers = this.volunteers();
+    return new Map(
+      volunteers
+        .filter((volunteer) => volunteer.isTutor)
+        .map((volunteer) => [volunteer.id, volunteer]),
+    );
+  });
+
   constructor() {
     this.volunteers = signal<VolunteerMember[]>(
       this.localStorage.getItem<VolunteerMember[]>('volunteers') || [],

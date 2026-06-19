@@ -3,6 +3,7 @@ import { DisplayFamily } from './features/family/display-family/display-family';
 import { EditFamilyMember } from './features/family/edit-family-member/edit-family-member';
 import { EditFamily } from './features/family/edit-family/edit-family';
 import { FamilyList } from './features/family/family-list/family-list';
+import { EditLesson } from './features/lesson/edit-lesson/edit-lesson';
 import { EditVolunteer } from './features/volunteer/edit-volunteer/edit-volunteer';
 import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
@@ -49,6 +50,10 @@ export const tutoringRoutes: Routes = [
         path: 'volunteer/:volunteerId/edit',
         resolve: { volunteer: volunteerResolver },
         component: EditVolunteer,
+      },
+      {
+        path: 'lesson/add',
+        component: EditLesson,
       },
     ],
   },

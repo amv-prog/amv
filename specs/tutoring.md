@@ -187,3 +187,17 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant 
   - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
+
+## Ajout d'un cours
+
+Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, le jour et l'heure, la date de début, et la date de fin.
+
+- L'élève, l'encadrant, le jour, l'heure, et la date de début sont obligatoires.
+- La date de début est initialisée avec la date du jour.
+- L'élève est choisi parmi une liste déroulante de l'ensemble des enfants enregistrés.
+- L'encadrant est choisi parmi une liste déroulante de l'ensemble des encadrants.
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, le cours est ajouté au local storage, et l'utilisateur est redirigé sur la liste des cours.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.

@@ -16,6 +16,17 @@ export class FamilyStore {
     undefined,
   );
 
+  childrenMap = computed(() => {
+    const families = this.families();
+    return new Map(
+      families.flatMap((family) =>
+        family.members
+          .filter((member) => !member.isParent)
+          .map((member) => [member.id, { member, family }]),
+      ),
+    );
+  });
+
   selectedFamily = computed(() => {
     const familyId = this.selectedFamilyId();
     if (!!familyId) {
