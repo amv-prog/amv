@@ -5,6 +5,7 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { SignalToggle } from '../../../../shared/components/signal-toggle/signal-toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
 import { Family } from '../../../models/family';
@@ -17,7 +18,14 @@ import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-edit-lesson',
-  imports: [FormField, FormRoot, MatDatepickerInput, MatDatepickerToggle, MatDatepicker],
+  imports: [
+    FormField,
+    FormRoot,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatDatepicker,
+    SignalToggle,
+  ],
   templateUrl: './edit-lesson.html',
 })
 export class EditLesson {
@@ -54,6 +62,7 @@ export class EditLesson {
     tutor: string;
     dayOfWeek: string;
     time: string;
+    place: 'LEFT' | 'RIGHT';
     startDate: Date;
     endDate: Date | null;
   }>;
@@ -64,6 +73,7 @@ export class EditLesson {
       tutor: string;
       dayOfWeek: string;
       time: string;
+      place: 'LEFT' | 'RIGHT';
       startDate: Date;
       endDate: Date | null;
     },
@@ -80,6 +90,7 @@ export class EditLesson {
       tutor: '',
       dayOfWeek: '',
       time: '',
+      place: 'LEFT',
       startDate: today,
       endDate: null,
     });
@@ -103,17 +114,15 @@ export class EditLesson {
   }
 
   public displayStudentName(student: { member: RecipientMember; family: Family }): string {
-    const displayedFamilyName =
-      student.member.lastName === student.family.name ? '' : ` (${student.family.name})`;
-    return `${student.member.firstName} ${student.member.lastName}${displayedFamilyName}`;
+    return LessonStore.displayStudentName(student);
   }
 
   public displayTutorName(volunteer: VolunteerMember): string {
-    return `${volunteer.firstName} ${volunteer.lastName}`;
+    return LessonStore.displayTutorName(volunteer);
   }
 
   public cancel() {
-    this.navigationService.back(['tutoring']);
+    this.navigationService.back(['tutoring', 'lesson', 'list']);
   }
 
   private register(): void {
@@ -122,6 +131,7 @@ export class EditLesson {
       let startDate = this.dateService.formatDate(this.lessonFormData().startDate);
       const formEndDate = this.lessonFormData().endDate;
       let endDate = formEndDate ? this.dateService.formatDate(formEndDate) : undefined;
+      const place = this.lessonFormData().place === 'LEFT' ? 'ASSOCIATION' : 'HOME';
 
       this.lessonStore.addLesson(
         new Lesson(
@@ -129,11 +139,12 @@ export class EditLesson {
           formData.tutor,
           Number(formData.dayOfWeek),
           formData.time,
+          place,
           startDate!,
           endDate,
         ),
       );
-      this.navigationService.back(['tutoring']);
+      this.navigationService.back(['tutoring', 'lesson', 'list']);
     }
   }
 }

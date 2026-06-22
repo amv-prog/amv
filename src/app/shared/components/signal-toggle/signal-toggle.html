@@ -1,0 +1,17 @@
+@let v = value();
+
+<div class="toggle_container">
+  @if (!!leftLabel()) {
+    <div [class.selected]="v === 'LEFT'">{{ leftLabel() }}</div>
+  }
+  <div class="toggle_icon" (click)="toggleValue()">
+    @if (v === 'LEFT') {
+      <span class="material-symbols-outlined">toggle_off</span>
+    } @else {
+      <span class="material-symbols-outlined">toggle_on</span>
+    }
+  </div>
+  @if (!!rightLabel()) {
+    <div [class.selected]="v === 'RIGHT'">{{ rightLabel() }}</div>
+  }
+</div>

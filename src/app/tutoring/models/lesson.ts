@@ -4,10 +4,11 @@ export class Lesson {
   public id: string;
 
   constructor(
-    public tutorId: string,
     public studentId: string,
+    public tutorId: string,
     public dayOfWeek: number,
     public time: string,
+    public place: 'ASSOCIATION' | 'HOME',
     public startDate: string,
     public endDate?: string,
   ) {

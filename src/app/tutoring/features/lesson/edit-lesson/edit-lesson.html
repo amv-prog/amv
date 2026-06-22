@@ -66,6 +66,15 @@
     }
 
     <div class="field">
+      <div class="label">Lieu *</div>
+      <amv-signal-toggle
+        leftLabel="Local"
+        rightLabel="Domicile"
+        [formField]="lessonForm.place"
+      ></amv-signal-toggle>
+    </div>
+
+    <div class="field">
       <label for="startDate">Date de début *</label>
       <input id="startDate" [matDatepicker]="pickerStart" [formField]="lessonForm.startDate" />
       <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
