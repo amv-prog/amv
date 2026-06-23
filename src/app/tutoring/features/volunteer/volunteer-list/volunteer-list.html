@@ -17,7 +17,7 @@
         <tr class="trackable" [class.even]="$even">
           <td>
             @if (volunteer.isTutor) {
-              <span class="material-symbols-outlined" title="Tuteur">person_text</span>
+              <span class="material-symbols-outlined" title="Encadrant">person_text</span>
             } @else {
               <span class="material-symbols-outlined" title="Bénévole">person</span>
             }
@@ -28,7 +28,6 @@
           <td>{{ volunteer.email }}</td>
           <td>{{ volunteer.languages.join(', ') }}</td>
           <td [title]="volunteer.additionalInfo">{{ volunteer.additionalInfo | truncate }}</td>
-          <td></td>
           <td>
             <a
               class="a-button invisible"
@@ -46,7 +45,6 @@
               <span class="material-symbols-outlined"> delete </span>
             </button>
           </td>
-          <td></td>
         </tr>
       }
     </table>

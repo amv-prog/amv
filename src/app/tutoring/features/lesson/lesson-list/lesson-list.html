@@ -1,0 +1,57 @@
+<div class="page-center">
+  <h1>Liste des cours</h1>
+  @if (lessonsToDisplay().length) {
+    <table class="amv-table">
+      <thead>
+        <tr>
+          <th scope="col">Élève</th>
+          <th scope="col">Encadrant</th>
+          <th scope="col">Jour et heure</th>
+          <th scope="col">Lieu</th>
+          <th scope="col">Date de début</th>
+          <th scope="col">Date de fin</th>
+        </tr>
+      </thead>
+      @for (lessonDisplay of lessonsToDisplay(); track lessonDisplay.lesson.id) {
+        @let lesson = lessonDisplay.lesson;
+        @let student = lessonDisplay.student;
+        @let tutor = lessonDisplay.tutor;
+        <tr [class.even]="$even">
+          <td>{{ displayStudentName(student) }}</td>
+          <td>{{ displayTutorName(tutor) }}</td>
+          <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
+          <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
+          <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <a
+              class="a-button invisible"
+              [routerLink]="['/tutoring/lesson', lesson.id, 'edit']"
+              title="modifier"
+              ><span class="material-symbols-outlined">edit</span></a
+            >
+          </td>
+          <td>
+            @if (canStopLesson(lesson)) {
+              <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
+                <span class="material-symbols-outlined"> stop_circle </span>
+              </button>
+            } @else {
+              <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
+                <span class="material-symbols-outlined"> play_circle </span>
+              </button>
+            }
+          </td>
+          <td>
+            <button class="invisible" title="supprimer" (click)="validateLessonRemoval(lesson)">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </td>
+        </tr>
+      }
+    </table>
+  } @else {
+    <div class="table-message">Aucune cours enregistré</div>
+  }
+  <a class="a-button" routerLink="/tutoring/lesson/add"> Ajouter un cours </a>
+</div>

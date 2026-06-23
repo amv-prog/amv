@@ -16,6 +16,17 @@ export class FamilyStore {
     undefined,
   );
 
+  childrenMap = computed(() => {
+    const families = this.families();
+    return new Map(
+      families.flatMap((family) =>
+        family.members
+          .filter((member) => !member.isParent)
+          .map((member) => [member.id, { member, family }]),
+      ),
+    );
+  });
+
   selectedFamily = computed(() => {
     const familyId = this.selectedFamilyId();
     if (!!familyId) {
@@ -50,7 +61,7 @@ export class FamilyStore {
     this.families.update((families) => {
       let index = families.findIndex((f) => f.id === family.id);
       if (index >= 0) {
-        families.splice(index, 1, family);
+        families.splice(index, 1, { ...family });
       }
       return [...families];
     });
@@ -75,7 +86,7 @@ export class FamilyStore {
     if (!!family) {
       let mIndex = family.members.findIndex((m) => m.id === member.id);
       if (mIndex >= 0) {
-        family?.members.splice(mIndex, 1, member);
+        family?.members.splice(mIndex, 1, { ...member });
       } else {
         family?.members.push(member);
       }

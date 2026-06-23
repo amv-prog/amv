@@ -3,11 +3,11 @@ import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { tap } from 'rxjs';
-import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
-import { DateService } from '../../../shared/services/date-service';
-import { TruncatePipe } from '../../../shared/truncate-pipe';
-import { RecipientMember } from '../../models/recipient-member';
-import { FamilyStore } from '../../stores/family-store';
+import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { DateService } from '../../../../shared/services/date-service';
+import { TruncatePipe } from '../../../../shared/truncate-pipe';
+import { RecipientMember } from '../../../models/recipient-member';
+import { FamilyStore } from '../../../stores/family-store';
 import { EditContribution } from '../edit-family/edit-contribution/edit-contribution';
 
 @Component({

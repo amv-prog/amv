@@ -11,8 +11,8 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { DateService } from '../../../../shared/services/date-service';
-import { FamilyStore } from '../../../stores/family-store';
+import { DateService } from '../../../../../shared/services/date-service';
+import { FamilyStore } from '../../../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-contribution',

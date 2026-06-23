@@ -1,12 +1,15 @@
 import { Routes } from '@angular/router';
-import { DisplayFamily } from './features/display-family/display-family';
-import { EditFamilyMember } from './features/edit-family-member/edit-family-member';
-import { EditFamily } from './features/edit-family/edit-family';
-import { EditVolunteer } from './features/edit-volunteer/edit-volunteer';
-import { FamilyList } from './features/family-list/family-list';
-import { VolunteerList } from './features/volunteer-list/volunteer-list';
+import { DisplayFamily } from './features/family/display-family/display-family';
+import { EditFamilyMember } from './features/family/edit-family-member/edit-family-member';
+import { EditFamily } from './features/family/edit-family/edit-family';
+import { FamilyList } from './features/family/family-list/family-list';
+import { EditLesson } from './features/lesson/edit-lesson/edit-lesson';
+import { LessonList } from './features/lesson/lesson-list/lesson-list';
+import { EditVolunteer } from './features/volunteer/edit-volunteer/edit-volunteer';
+import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
+import { lessonResolver } from './resolvers/lesson-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';
 import { Tutoring } from './tutoring';
 
@@ -49,6 +52,20 @@ export const tutoringRoutes: Routes = [
         path: 'volunteer/:volunteerId/edit',
         resolve: { volunteer: volunteerResolver },
         component: EditVolunteer,
+      },
+      {
+        path: 'lesson/add',
+        resolve: { lesson: lessonResolver },
+        component: EditLesson,
+      },
+      {
+        path: 'lesson/list',
+        component: LessonList,
+      },
+      {
+        path: 'lesson/:lessonId/edit',
+        resolve: { lesson: lessonResolver },
+        component: EditLesson,
       },
     ],
   },

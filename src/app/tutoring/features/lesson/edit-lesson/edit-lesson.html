@@ -1,0 +1,108 @@
+<div class="page-center">
+  <h1>Ajouter un cours</h1>
+  <form class="simple-form" [formRoot]="lessonForm">
+    <div class="field">
+      <label for="student">Élève *</label>
+      <select id="student" [formField]="lessonForm.student">
+        <option value="">-- Sélectionner un élève --</option>
+        @for (student of sortedStudents(); track student.member.id) {
+          <option [value]="student.member.id">
+            {{ student.displayName }}
+          </option>
+        }
+      </select>
+    </div>
+    @let student = lessonForm.student();
+    @if (student.dirty() && !student.valid()) {
+      @for (error of student.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="field">
+      <label for="tutor">Encadrant *</label>
+      <select id="tutor" [formField]="lessonForm.tutor">
+        <option value="">-- Sélectionner un encadrant --</option>
+        @for (tutor of sortedTutors(); track tutor.id) {
+          <option [value]="tutor.id">
+            {{ tutor.displayName }}
+          </option>
+        }
+      </select>
+    </div>
+    @let tutor = lessonForm.tutor();
+    @if (tutor.dirty() && !tutor.valid()) {
+      @for (error of tutor.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="field">
+      <label for="dayOfWeek">Jour *</label>
+      <select id="dayOfWeek" [formField]="lessonForm.dayOfWeek">
+        <option value="">-- Sélectionner le jour --</option>
+        @for (dayEntry of daysMap; track dayEntry[0]) {
+          <option [value]="dayEntry[0]">
+            {{ dayEntry[1] }}
+          </option>
+        }
+      </select>
+    </div>
+    @let dayOfWeek = lessonForm.dayOfWeek();
+    @if (dayOfWeek.dirty() && !dayOfWeek.valid()) {
+      @for (error of dayOfWeek.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="field">
+      <label for="time">Heure *</label><input id="time" type="text" [formField]="lessonForm.time" />
+    </div>
+    @let time = lessonForm.time();
+    @if (time.dirty() && !time.valid()) {
+      @for (error of time.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="field">
+      <div class="label">Lieu *</div>
+      <amv-signal-toggle
+        leftLabel="Local"
+        rightLabel="Domicile"
+        [formField]="lessonForm.place"
+      ></amv-signal-toggle>
+    </div>
+
+    <div class="field">
+      <label for="startDate">Date de début *</label>
+      <input id="startDate" [matDatepicker]="pickerStart" [formField]="lessonForm.startDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </div>
+    @let startDate = lessonForm.startDate();
+    @if (startDate.dirty() && !startDate.valid()) {
+      @for (error of startDate.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="field">
+      <label for="endDate">Date de fin</label>
+      <input id="endDate" [matDatepicker]="pickerEnd" [formField]="lessonForm.endDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </div>
+    @let endDate = lessonForm.endDate();
+    @if (endDate.dirty() && !endDate.valid()) {
+      @for (error of endDate?.errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+
+    <div class="buttons">
+      <button [disabled]="lessonForm().invalid()">Enregistrer</button>
+      <button class="secondary" type="button" (click)="cancel()">Annuler</button>
+    </div>
+  </form>
+</div>

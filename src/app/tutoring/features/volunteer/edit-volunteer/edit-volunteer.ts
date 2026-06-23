@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Toggle } from '../../../shared/components/toggle/toggle';
-import { NavigationService } from '../../../shared/services/navigation-service';
-import { VolunteerMember } from '../../models/volunteer-member';
-import { VolunteerStore } from '../../stores/volunteer-store';
+import { Toggle } from '../../../../shared/components/toggle/toggle';
+import { NavigationService } from '../../../../shared/services/navigation-service';
+import { VolunteerMember } from '../../../models/volunteer-member';
+import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-edit-volunteer',

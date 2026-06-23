@@ -147,7 +147,7 @@ Un formulaire permet de modifier un membre en saisissant son type (parent ou enf
 
 ## Liste des bénévoles
 
-- Les bénévoles sont affichés, avec l'info de tuteur, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
+- Les bénévoles sont affichés, avec l'info d'encadrant, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
 - La liste des bénévoles est stockée et récupérée dans le local storage.
 - Un bouton permet d'ajouter un bénévole.
 
@@ -165,9 +165,9 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ## Ajout d'un bénévole
 
-Un formulaire permet d'ajouter un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
 
-- Le bénévole est un tuteur par défaut.
+- Le bénévole est un encadrant par défaut.
 - Les champs sont initialement vides.
 - Le nom et le prénom sont obligatoires.
 - Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
@@ -178,7 +178,7 @@ Un formulaire permet d'ajouter un bénévole en saisissant s'il est tuteur ou no
 
 ## Modification d'un bénévole
 
-Un formulaire permet de modifier un bénévole en saisissant s'il est tuteur ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
 
 - Les champs sont initié avec les valeurs enregistrées du bénévole.
 - Le nom et le prénom sont obligatoires.
@@ -187,3 +187,27 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est tuteur ou 
   - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
+
+## Liste des cours
+
+- Les cours sont affichés, avec l'élève, l'encadrant, le jour et l'heure, le lieu, la date de début et la date de fin.
+- La liste des cours est stockée et récupérée dans le local storage.
+- Un bouton permet d'ajouter un cours.
+- Un bouton permet de modifier un cours.
+- Un bouton permet d'arrêter ou reprendre un cours, selon la date de fin.
+- Un bouton permet de supprimer un cours.
+
+## Ajout ou modification d'un cours
+
+Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, le jour et l'heure, le lieu, la date de début, et la date de fin.
+
+- L'élève, l'encadrant, le jour, l'heure, le lieu et la date de début sont obligatoires.
+- La date de début est initialisée avec la date du jour.
+- L'élève est choisi parmi une liste déroulante de l'ensemble des enfants enregistrés.
+- L'encadrant est choisi parmi une liste déroulante de l'ensemble des encadrants.
+- Le lieu est "Local" par défaut
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, le cours est ajouté au local storage (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.

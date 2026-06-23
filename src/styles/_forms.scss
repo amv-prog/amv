@@ -12,18 +12,23 @@
     align-items: center;
   }
 
-  label {
+  label,
+  .label {
     display: flex;
     width: 10rem;
     align-items: center;
   }
 
-  input {
+  input,
+  select,
+  textarea {
     display: flex;
+    box-sizing: border-box;
     border-radius: 0.5em;
+    border-width: 2px;
     border-color: $c2-lighter;
     padding: 0.5em;
-    width: 15rem;
+    width: 20rem;
     font: var(--mat-sys-body-medium);
 
     &:hover {
@@ -31,7 +36,8 @@
     }
 
     &:focus,
-    &:focus-visible {
+    &:focus-visible,
+    &:focus-within {
       border-color: $c2;
     }
   }
@@ -63,24 +69,7 @@
   }
 
   textarea {
-    display: flex;
-    border-radius: 0.5em;
-    border-width: 2px;
-    border-color: $c2-lighter;
-    padding: 0.5em;
-    width: 15rem;
     height: 10rem;
-    font: var(--mat-sys-body-medium);
     resize: none;
-
-    &:hover {
-      border-color: $c2-light;
-    }
-
-    &:focus,
-    &:focus-visible,
-    &:focus-within {
-      border-color: $c2;
-    }
   }
 }
