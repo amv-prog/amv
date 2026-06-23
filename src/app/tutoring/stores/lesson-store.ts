@@ -57,4 +57,14 @@ export class LessonStore {
   setSelectedLessonId(lessonId: string | undefined) {
     this.selectedLessonId.set(lessonId);
   }
+
+  removeLesson(lesson: Lesson) {
+    this.lessons.update((lessons) => {
+      let index = lessons.indexOf(lesson);
+      if (index >= 0) {
+        lessons.splice(index, 1);
+      }
+      return [...lessons];
+    });
+  }
 }

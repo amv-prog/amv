@@ -31,6 +31,22 @@
               ><span class="material-symbols-outlined">edit</span></a
             >
           </td>
+          <td>
+            @if (canStopLesson(lesson)) {
+              <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
+                <span class="material-symbols-outlined"> stop_circle </span>
+              </button>
+            } @else {
+              <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
+                <span class="material-symbols-outlined"> play_circle </span>
+              </button>
+            }
+          </td>
+          <td>
+            <button class="invisible" title="supprimer" (click)="validateLessonRemoval(lesson)">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </td>
         </tr>
       }
     </table>

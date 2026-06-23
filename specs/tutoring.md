@@ -194,6 +194,8 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant 
 - La liste des cours est stockée et récupérée dans le local storage.
 - Un bouton permet d'ajouter un cours.
 - Un bouton permet de modifier un cours.
+- Un bouton permet d'arrêter ou reprendre un cours, selon la date de fin.
+- Un bouton permet de supprimer un cours.
 
 ## Ajout ou modification d'un cours
 

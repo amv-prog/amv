@@ -1,6 +1,9 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { tap } from 'rxjs';
+import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
 import { Lesson } from '../../../models/lesson';
@@ -38,6 +41,8 @@ export class LessonList {
       });
   });
 
+  private readonly dialog = inject(Dialog);
+
   public displayStudentName(
     student: { member: RecipientMember; family: Family } | undefined,
   ): string {
@@ -59,5 +64,42 @@ export class LessonList {
     } else {
       return 1;
     }
+  }
+
+  stopLesson(lesson: Lesson) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this.lessonStore.updateLesson({ ...lesson, endDate: this.dateService.formatDate(today) });
+  }
+
+  reactivateLesson(lesson: Lesson) {
+    this.lessonStore.updateLesson({ ...lesson, endDate: undefined });
+  }
+
+  canStopLesson(lesson: Lesson) {
+    return !lesson.endDate || DateService.stringToDate(lesson.endDate)! > new Date();
+  }
+
+  public validateLessonRemoval(lesson: Lesson) {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer ce cours ? Attention, il n'apparaîtra plus dans l'historique.`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeLesson(lesson);
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private removeLesson(lesson: Lesson) {
+    this.lessonStore.removeLesson(lesson);
   }
 }
