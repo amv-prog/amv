@@ -193,8 +193,9 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant 
 - Les cours sont affichés, avec l'élève, l'encadrant, le jour et l'heure, le lieu, la date de début et la date de fin.
 - La liste des cours est stockée et récupérée dans le local storage.
 - Un bouton permet d'ajouter un cours.
+- Un bouton permet de modifier un cours.
 
-## Ajout d'un cours
+## Ajout ou modification d'un cours
 
 Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, le jour et l'heure, le lieu, la date de début, et la date de fin.
 
@@ -205,6 +206,6 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Le lieu est "Local" par défaut
 - Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, le cours est ajouté au local storage, et l'utilisateur est redirigé sur la liste des cours.
+  - Si le formulaire est valide, le cours est ajouté au local storage (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.

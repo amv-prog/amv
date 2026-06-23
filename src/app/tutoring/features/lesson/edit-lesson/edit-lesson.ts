@@ -57,6 +57,8 @@ export class EditLesson {
       .sort((s1, s2) => s1.displayName.localeCompare(s2.displayName)),
   );
 
+  protected readonly lesson = this.lessonStore.selectedLesson;
+
   private readonly lessonFormData: WritableSignal<{
     student: string;
     tutor: string;
@@ -85,14 +87,16 @@ export class EditLesson {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const initLesson = this.lesson();
+
     this.lessonFormData = signal({
-      student: '',
-      tutor: '',
-      dayOfWeek: '',
-      time: '',
-      place: 'LEFT',
-      startDate: today,
-      endDate: null,
+      student: initLesson?.studentId ?? '',
+      tutor: initLesson?.tutorId ?? '',
+      dayOfWeek: initLesson?.dayOfWeek?.toString() ?? '',
+      time: initLesson?.time ?? '',
+      place: initLesson?.place === 'HOME' ? 'RIGHT' : 'LEFT',
+      startDate: DateService.stringToDate(initLesson?.startDate) ?? today,
+      endDate: DateService.stringToDate(initLesson?.endDate) ?? null,
     });
 
     this.lessonForm = form(
@@ -133,8 +137,22 @@ export class EditLesson {
       let endDate = formEndDate ? this.dateService.formatDate(formEndDate) : undefined;
       const place = this.lessonFormData().place === 'LEFT' ? 'ASSOCIATION' : 'HOME';
 
-      this.lessonStore.addLesson(
-        new Lesson(
+      let current = this.lesson();
+
+      if (!!current) {
+        current = {
+          ...current,
+          studentId: formData.student,
+          tutorId: formData.tutor,
+          dayOfWeek: Number(formData.dayOfWeek),
+          time: formData.time,
+          place: place,
+          startDate: startDate!,
+          endDate: endDate,
+        };
+        this.lessonStore.updateLesson(current);
+      } else {
+        current = new Lesson(
           formData.student,
           formData.tutor,
           Number(formData.dayOfWeek),
@@ -142,8 +160,10 @@ export class EditLesson {
           place,
           startDate!,
           endDate,
-        ),
-      );
+        );
+        this.lessonStore.addLesson(current);
+      }
+
       this.navigationService.back(['tutoring', 'lesson', 'list']);
     }
   }

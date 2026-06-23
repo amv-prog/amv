@@ -23,6 +23,14 @@
           <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
           <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
           <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <a
+              class="a-button invisible"
+              [routerLink]="['/tutoring/lesson', lesson.id, 'edit']"
+              title="modifier"
+              ><span class="material-symbols-outlined">edit</span></a
+            >
+          </td>
         </tr>
       }
     </table>

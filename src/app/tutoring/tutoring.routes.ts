@@ -9,6 +9,7 @@ import { EditVolunteer } from './features/volunteer/edit-volunteer/edit-voluntee
 import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-list';
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
+import { lessonResolver } from './resolvers/lesson-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';
 import { Tutoring } from './tutoring';
 
@@ -54,11 +55,17 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'lesson/add',
+        resolve: { lesson: lessonResolver },
         component: EditLesson,
       },
       {
         path: 'lesson/list',
         component: LessonList,
+      },
+      {
+        path: 'lesson/:lessonId/edit',
+        resolve: { lesson: lessonResolver },
+        component: EditLesson,
       },
     ],
   },

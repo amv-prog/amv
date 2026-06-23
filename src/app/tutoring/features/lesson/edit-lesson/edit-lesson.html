@@ -40,7 +40,7 @@
     <div class="field">
       <label for="dayOfWeek">Jour *</label>
       <select id="dayOfWeek" [formField]="lessonForm.dayOfWeek">
-        <option value="">-- Sélectionner un encadrant --</option>
+        <option value="">-- Sélectionner le jour --</option>
         @for (dayEntry of daysMap; track dayEntry[0]) {
           <option [value]="dayEntry[0]">
             {{ dayEntry[1] }}

@@ -3,6 +3,7 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
+import { Lesson } from '../../../models/lesson';
 import { RecipientMember } from '../../../models/recipient-member';
 import { VolunteerMember } from '../../../models/volunteer-member';
 import { FamilyStore } from '../../../stores/family-store';
@@ -26,12 +27,15 @@ export class LessonList {
     const studentsMap = this.familyStore.childrenMap();
     const tutorsMap = this.volunteerStore.tutorsMap();
 
-    return this.lessonStore.lessons().map((lesson) => {
-      const student = studentsMap.get(lesson.studentId);
-      const tutor = tutorsMap.get(lesson.tutorId);
+    return this.lessonStore
+      .lessons()
+      .sort(this.compareLessons)
+      .map((lesson) => {
+        const student = studentsMap.get(lesson.studentId);
+        const tutor = tutorsMap.get(lesson.tutorId);
 
-      return { lesson, student, tutor };
-    });
+        return { lesson, student, tutor };
+      });
   });
 
   public displayStudentName(
@@ -42,5 +46,18 @@ export class LessonList {
 
   public displayTutorName(volunteer: VolunteerMember | undefined): string {
     return !!volunteer ? LessonStore.displayTutorName(volunteer) : 'Inconnu';
+  }
+
+  private compareLessons(l1: Lesson, l2: Lesson): number {
+    // Sunday is the first day but we want it to be last
+    const d1 = l1.dayOfWeek || 7;
+    const d2 = l2.dayOfWeek || 7;
+    if (d1 === d2) {
+      return l1.time.localeCompare(l2.time);
+    } else if (d1 < d2) {
+      return -1;
+    } else {
+      return 1;
+    }
   }
 }
