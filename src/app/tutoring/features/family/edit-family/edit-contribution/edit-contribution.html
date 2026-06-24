@@ -1,8 +1,8 @@
 <div class="highlight">Paiement de cotisation</div>
-<form class="simple-form" (ngSubmit)="validate()" [formGroup]="contributionForm">
+<form class="simple-form" [formRoot]="contributionForm">
   <div class="field">
     <label for="validity">Valide jusqu'au</label>
-    <input id="validity" [matDatepicker]="picker" formControlName="validity" />
+    <input id="validity" [matDatepicker]="picker" [formField]="contributionForm.validity" />
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </div>

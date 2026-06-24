@@ -1,11 +1,6 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { FieldTree, form, FormField, FormRoot } from '@angular/forms/signals';
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -16,47 +11,56 @@ import { FamilyStore } from '../../../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-contribution',
-  imports: [ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker],
+  imports: [MatDatepickerInput, MatDatepickerToggle, MatDatepicker, FormRoot, FormField],
   templateUrl: './edit-contribution.html',
 })
 export class EditContribution {
   private readonly familyStore = inject(FamilyStore);
   protected readonly family = this.familyStore.selectedFamily;
 
-  private readonly fb = inject(NonNullableFormBuilder);
   protected readonly dateService = inject(DateService);
   protected readonly dialogRef = inject<DialogRef<string>>(DialogRef);
 
-  protected readonly validityCtrl: FormControl<Date | undefined>;
-
-  protected readonly contributionForm: FormGroup<{
-    validity: FormControl<Date | undefined>;
+  private readonly contributionFormData: WritableSignal<{
+    validity: Date | null;
   }>;
+
+  protected readonly contributionForm: FieldTree<
+    {
+      validity: Date | null;
+    },
+    string | number,
+    'writable'
+  >;
 
   constructor() {
     const isValid = DateService.compareDays(this.family()?.contributionValidity, new Date()) >= 0;
     if (isValid) {
-      this.validityCtrl = this.fb.control(
-        DateService.stringToDate(this.family()?.contributionValidity),
-      );
+      this.contributionFormData = signal({
+        validity: DateService.stringToDate(this.family()?.contributionValidity) ?? null,
+      });
     } else {
       const inAYear = new Date();
       inAYear.setHours(0, 0, 0, 0);
       inAYear.setFullYear(inAYear.getFullYear() + 1);
-      this.validityCtrl = this.fb.control(inAYear);
+      this.contributionFormData = signal({
+        validity: inAYear,
+      });
     }
 
-    this.contributionForm = this.fb.group({
-      validity: this.validityCtrl,
+    this.contributionForm = form(this.contributionFormData, {
+      submission: {
+        action: async () => this.validate(),
+        ignoreValidators: 'none',
+      },
     });
   }
 
-  validate(): void {
-    if (this.contributionForm.valid) {
+  private validate(): void {
+    if (this.contributionForm().valid()) {
       let current = this.family()!;
-      let validityDate = this.validityCtrl.value
-        ? this.dateService.formatDate(this.validityCtrl.value)
-        : undefined;
+      let formValidity = this.contributionFormData().validity;
+      let validityDate = formValidity ? this.dateService.formatDate(formValidity) : undefined;
       current = {
         ...current,
         contributionValidity: validityDate,
