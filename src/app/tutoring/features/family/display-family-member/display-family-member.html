@@ -1,0 +1,72 @@
+<div class="page-center">
+  @if (member(); as memberValue) {
+    <h1>{{ member()?.firstName }} {{ member()?.lastName }}</h1>
+
+    <div class="h-panel-large">
+      <div class="section">
+        @if (memberValue.isParent) {
+          <div class="h-panel">
+            <span class="material-symbols-outlined" title="Parent">person</span>
+            <div>Parent</div>
+          </div>
+        } @else {
+          <div class="h-panel">
+            <span class="material-symbols-outlined" title="Enfant">child_hat</span>
+            <div>Enfant</div>
+          </div>
+        }
+
+        @if (!!memberValue.birthDate) {
+          <div>Né.e le {{ memberValue.birthDate | date: 'd MMMM y' }}</div>
+        }
+
+        @if (!!memberValue.languages.length) {
+          <div>Langues parlées : {{ memberValue.languages.join(', ') }}</div>
+        }
+      </div>
+
+      @if (!!memberValue.phoneNumbers.length || !!memberValue.email) {
+        <div class="section">
+          @if (!!memberValue.phoneNumbers.length) {
+            <div>Téléphone : {{ memberValue.phoneNumbers.join(', ') }}</div>
+          }
+
+          @if (!!memberValue.email) {
+            <div>Email : {{ memberValue.email }}</div>
+          }
+        </div>
+      }
+
+      @if (!!memberValue.additionalInfo) {
+        <div class="section">{{ memberValue.additionalInfo }}</div>
+      }
+    </div>
+
+    @if (lessonsToDisplay().length) {
+      <table class="amv-table">
+        <thead>
+          <tr>
+            <th scope="col">Encadrant</th>
+            <th scope="col">Jour et heure</th>
+            <th scope="col">Lieu</th>
+            <th scope="col">Date de début</th>
+            <th scope="col">Date de fin</th>
+          </tr>
+        </thead>
+        @for (lessonDisplay of lessonsToDisplay(); track lessonDisplay.lesson.id) {
+          @let lesson = lessonDisplay.lesson;
+          @let tutor = lessonDisplay.tutor;
+          <tr [class.even]="$even">
+            <td>{{ displayTutorName(tutor) }}</td>
+            <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
+            <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
+            <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+        }
+      </table>
+    }
+  } @else {
+    <div>Famille non trouvée</div>
+  }
+</div>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { DisplayFamilyMember } from './features/family/display-family-member/display-family-member';
 import { DisplayFamily } from './features/family/display-family/display-family';
 import { EditFamilyMember } from './features/family/edit-family-member/edit-family-member';
 import { EditFamily } from './features/family/edit-family/edit-family';
@@ -36,9 +37,15 @@ export const tutoringRoutes: Routes = [
             component: EditFamilyMember,
           },
           {
-            path: 'member/:memberId/edit',
+            path: 'member/:memberId',
             resolve: { member: familyMemberResolver },
-            component: EditFamilyMember,
+            children: [
+              { path: '', component: DisplayFamilyMember },
+              {
+                path: 'edit',
+                component: EditFamilyMember,
+              },
+            ],
           },
         ],
       },
