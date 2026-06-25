@@ -1,124 +1,51 @@
-import { Component, inject, input, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
-import { Address } from '../../models/address';
+import { Component, input } from '@angular/core';
+import { applyWhen, FieldTree, FormField, required, schema } from '@angular/forms/signals';
 
 @Component({
   selector: 'amv-address-form',
-  imports: [ReactiveFormsModule],
+  imports: [FormField],
   templateUrl: './address-form.html',
 })
-export class AddressForm implements OnInit {
-  public readonly address = input<Address | undefined>();
-  private readonly fb = inject(NonNullableFormBuilder);
+export class AddressForm {
+  public readonly addressField = input.required<
+    FieldTree<{
+      street: string;
+      city: string;
+      postCode: string;
+      additional: string;
+    }>
+  >();
 
-  protected readonly streetCtrl = this.fb.control<string | undefined>(undefined);
-  protected readonly cityCtrl = this.fb.control<string | undefined>(undefined);
-  protected readonly postCodeCtrl = this.fb.control<string | undefined>(undefined);
-  protected readonly additionalCtrl = this.fb.control<string | undefined>(undefined);
-
-  protected readonly addressFormGroup = this.fb.group({
-    street: this.streetCtrl,
-    city: this.cityCtrl,
-    postCode: this.postCodeCtrl,
-    additional: this.additionalCtrl,
+  public static addressSchema = schema<{
+    street: string;
+    city: string;
+    postCode: string;
+    additional: string;
+  }>((address) => {
+    {
+      applyWhen(
+        address,
+        (context) => !AddressForm.isAddressNull(context.valueOf(address)),
+        (address) => {
+          required(address.street, { message: 'La rue est obligatoire' });
+          required(address.city, { message: 'La ville est obligatoire' });
+          required(address.postCode, { message: 'Le code postal est obligatoire' });
+        },
+      );
+    }
   });
 
-  constructor() {
-    this.streetCtrl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => {
-          this.updateValidators();
-        }),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
-    this.cityCtrl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => {
-          this.updateValidators();
-        }),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
-    this.postCodeCtrl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => {
-          this.updateValidators();
-        }),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
-    this.additionalCtrl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => {
-          this.updateValidators();
-        }),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
-
-    this.updateValidators();
-  }
-
-  ngOnInit(): void {
-    this.streetCtrl.setValue(this.address()?.street);
-    this.postCodeCtrl.setValue(this.address()?.postCode);
-    this.cityCtrl.setValue(this.address()?.city);
-    this.additionalCtrl.setValue(this.address()?.additional);
-  }
-
-  private isAddressNull(
-    street: string | undefined = this.streetCtrl.value,
-    city: string | undefined = this.cityCtrl.value,
-    postCode: string | undefined = this.postCodeCtrl.value,
-    additional: string | undefined = this.additionalCtrl.value,
-  ) {
-    return !street?.trim() && !city?.trim() && !postCode?.trim() && !additional?.trim();
-  }
-
-  private updateValidators() {
-    if (this.isAddressNull()) {
-      this.streetCtrl.clearValidators();
-      this.cityCtrl.clearValidators();
-      this.postCodeCtrl.clearValidators();
-    } else {
-      this.streetCtrl.setValidators(Validators.required);
-      this.cityCtrl.setValidators(Validators.required);
-      this.postCodeCtrl.setValidators(Validators.required);
-    }
-    this.streetCtrl.updateValueAndValidity();
-    this.cityCtrl.updateValueAndValidity();
-    this.postCodeCtrl.updateValueAndValidity();
-  }
-
-  public getFormGroup(): FormGroup {
-    return this.addressFormGroup;
-  }
-
-  public getAddress(): Address | undefined {
-    if (this.addressFormGroup.valid) {
-      if (this.isAddressNull()) {
-        return undefined;
-      } else {
-        return new Address(
-          this.streetCtrl.value!,
-          this.postCodeCtrl.value!,
-          this.cityCtrl.value!,
-          this.additionalCtrl.value,
-        );
-      }
-    } else {
-      return undefined;
-    }
+  public static isAddressNull(data: {
+    street: string | null;
+    city: string | null;
+    postCode: string | null;
+    additional: string | null;
+  }) {
+    return (
+      !data.street?.trim() &&
+      !data.city?.trim() &&
+      !data.postCode?.trim() &&
+      !data.additional?.trim()
+    );
   }
 }
