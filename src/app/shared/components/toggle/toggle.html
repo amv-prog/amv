@@ -4,7 +4,7 @@
   @if (!!leftLabel()) {
     <div [class.selected]="v === 'LEFT'">{{ leftLabel() }}</div>
   }
-  <div class="toggle_icon" (click)="toggleValueAndPropagateChanges()">
+  <div class="toggle_icon" (click)="toggleValue()">
     @if (v === 'LEFT') {
       <span class="material-symbols-outlined">toggle_off</span>
     } @else {

@@ -1,7 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { SignalToggle } from '../../../../shared/components/signal-toggle/signal-toggle';
+import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
 import { RecipientMember } from '../../../models/recipient-member';
@@ -9,7 +9,7 @@ import { FamilyStore } from '../../../stores/family-store';
 
 @Component({
   selector: 'amv-edit-family-member',
-  imports: [MatDatepickerModule, FormRoot, SignalToggle, FormField],
+  imports: [MatDatepickerModule, FormRoot, Toggle, FormField],
   templateUrl: './edit-family-member.html',
 })
 export class EditFamilyMember {

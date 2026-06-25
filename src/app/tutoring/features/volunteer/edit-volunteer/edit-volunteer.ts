@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { NavigationService } from '../../../../shared/services/navigation-service';
@@ -8,7 +8,7 @@ import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-edit-volunteer',
-  imports: [ReactiveFormsModule, Toggle],
+  imports: [FormRoot, Toggle, FormField],
   templateUrl: './edit-volunteer.html',
 })
 export class EditVolunteer {
@@ -16,89 +16,102 @@ export class EditVolunteer {
 
   protected readonly volunteer = this.volunteerStore.selectedVolunteer;
 
-  private readonly fb = inject(NonNullableFormBuilder);
   private readonly navigationService = inject(NavigationService);
   private readonly router = inject(Router);
 
-  protected readonly firstNameCtrl = this.fb.control(
-    this.volunteer()?.firstName || '',
-    Validators.required,
-  );
-  protected readonly lastNameCtrl = this.fb.control(
-    this.volunteer()?.lastName || '',
-    Validators.required,
-  );
-  protected readonly tutorCtrl = this.fb.control<'LEFT' | 'RIGHT'>(
-    (this.volunteer()?.isTutor ?? true) ? 'LEFT' : 'RIGHT',
-    Validators.required,
-  );
-  protected readonly emailCtrl = this.fb.control(
-    this.volunteer()?.email || undefined,
-    Validators.email,
-  );
-  protected readonly phonesArray = this.fb.array(
-    !!this.volunteer() && this.volunteer()!.phoneNumbers.length > 0
-      ? this.volunteer()!.phoneNumbers.map((phoneNumber) => this.fb.control(phoneNumber))
-      : [this.fb.control('')],
-  );
-  protected readonly languagesArray = this.fb.array(
-    !!this.volunteer() && this.volunteer()!.languages.length > 0
-      ? this.volunteer()!.languages.map((language) => this.fb.control(language))
-      : [this.fb.control('')],
-  );
-  protected readonly additionalInfoCtrl = this.fb.control(this.volunteer()?.additionalInfo || '');
-
-  protected readonly volunteerForm = this.fb.group({
-    tutor: this.tutorCtrl,
-    firstName: this.firstNameCtrl,
-    lastName: this.lastNameCtrl,
-    email: this.emailCtrl,
-    phones: this.phonesArray,
-    languages: this.languagesArray,
-    additionalInfo: this.additionalInfoCtrl,
+  private readonly volunteerFormData: WritableSignal<{
+    tutor: 'LEFT' | 'RIGHT';
+    firstName: string;
+    lastName: string;
+    email: string;
+    phones: string[];
+    languages: string[];
+    additionalInfo: string;
+  }> = signal({
+    tutor: (this.volunteer()?.isTutor ?? true) ? 'LEFT' : 'RIGHT',
+    firstName: this.volunteer()?.firstName || '',
+    lastName: this.volunteer()?.lastName || '',
+    email: this.volunteer()?.email || '',
+    phones:
+      !!this.volunteer() && this.volunteer()!.phoneNumbers.length > 0
+        ? this.volunteer()!.phoneNumbers
+        : [''],
+    languages:
+      !!this.volunteer() && this.volunteer()!.languages.length > 0
+        ? this.volunteer()!.languages
+        : [''],
+    additionalInfo: this.volunteer()?.additionalInfo || '',
   });
 
+  protected readonly volunteerForm = form(
+    this.volunteerFormData,
+    (form) => {
+      required(form.firstName, { message: 'Le prénom est obligatoire' });
+      required(form.lastName, { message: 'Le nom de famille est obligatoire' });
+      email(form.email, { message: "L'email saisi n'est pas valide" });
+    },
+    {
+      submission: {
+        action: async () => this.register(),
+        ignoreValidators: 'none',
+      },
+    },
+  );
+
   addPhone() {
-    this.phonesArray.push(this.fb.control(''));
+    this.volunteerFormData.update((data) => ({
+      ...data,
+      phones: [...data.phones, ''],
+    }));
   }
 
   removePhone(index: number) {
-    this.phonesArray.removeAt(index);
+    this.volunteerFormData.update((data) => ({
+      ...data,
+      phones: [...data.phones.slice(0, index), ...data.phones.slice(index + 1)],
+    }));
   }
 
   addLanguage() {
-    this.languagesArray.push(this.fb.control(''));
+    this.volunteerFormData.update((data) => ({
+      ...data,
+      languages: [...data.languages, ''],
+    }));
   }
 
   removeLanguage(index: number) {
-    this.languagesArray.removeAt(index);
+    this.volunteerFormData.update((data) => ({
+      ...data,
+      languages: [...data.languages.slice(0, index), ...data.languages.slice(index + 1)],
+    }));
   }
 
   register(): void {
-    if (this.volunteerForm.valid) {
+    if (this.volunteerForm().valid()) {
       let current = this.volunteer();
+      const formData = this.volunteerFormData();
       if (!!current) {
         current = {
           ...current,
-          isTutor: this.tutorCtrl.value === 'LEFT',
-          firstName: this.firstNameCtrl.value,
-          lastName: this.lastNameCtrl.value,
-          email: this.emailCtrl.value,
-          phoneNumbers: this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
-          languages: this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
-          additionalInfo: this.additionalInfoCtrl.value?.trim(),
+          isTutor: formData.tutor === 'LEFT',
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email || undefined,
+          phoneNumbers: formData.phones.filter((v) => !!v),
+          languages: formData.languages.filter((v) => !!v),
+          additionalInfo: formData.additionalInfo.trim(),
         };
         this.volunteerStore.updateVolunteer(current);
         this.navigationService.back(['tutoring', 'volunteer', 'list']);
       } else {
         current = new VolunteerMember(
-          this.tutorCtrl.value === 'LEFT',
-          this.firstNameCtrl.value,
-          this.lastNameCtrl.value,
-          this.phonesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
-          this.emailCtrl.value,
-          this.languagesArray.controls.map((ctrl) => ctrl.value).filter((v) => !!v),
-          this.additionalInfoCtrl.value?.trim(),
+          formData.tutor === 'LEFT',
+          formData.firstName,
+          formData.lastName,
+          formData.phones.filter((v) => !!v),
+          formData.email || undefined,
+          formData.languages.filter((v) => !!v),
+          formData.additionalInfo.trim(),
         );
         this.volunteerStore.addVolunteer(current);
         this.router.navigate(['tutoring', 'volunteer', 'list']);

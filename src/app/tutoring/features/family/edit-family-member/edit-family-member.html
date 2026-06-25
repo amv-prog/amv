@@ -8,17 +8,17 @@
   </h1>
   <form class="simple-form" [formRoot]="memberForm">
     <div class="field">
-      <amv-signal-toggle
+      <amv-toggle
         leftLabel="Enfant"
         rightLabel="Parent"
         [formField]="memberForm.parent"
-      ></amv-signal-toggle>
+      ></amv-toggle>
     </div>
 
     @let lastName = memberForm.lastName;
     <div class="field">
       <label for="ln">Nom de famille *</label>
-      <input id="ln" type="text" [formField]="lastName" autocomplete="off" />
+      <input id="ln" type="text" [formField]="lastName" autocomplete="new-lastName" />
     </div>
     @if (lastName().dirty() && lastName().invalid()) {
       @for (error of lastName().errors(); track error.kind) {
@@ -28,8 +28,8 @@
 
     @let firstName = memberForm.firstName;
     <div class="field">
-      <label for="fn">Prénom *</label
-      ><input id="fn" type="text" [formField]="firstName" autocomplete="off" />
+      <label for="fn">Prénom *</label>
+      <input id="fn" type="text" [formField]="firstName" autocomplete="new-firstName" />
     </div>
     @if (firstName().dirty() && firstName().invalid()) {
       @for (error of firstName().errors(); track error.kind) {
@@ -39,8 +39,8 @@
 
     @let email = memberForm.email;
     <div class="field">
-      <label for="email">Email</label
-      ><input id="email" type="text" [formField]="email" autocomplete="off" />
+      <label for="email">Email</label>
+      <input id="email" type="text" [formField]="email" autocomplete="new-email" />
     </div>
     @if (email().touched() && email().invalid()) {
       @for (error of email().errors(); track error.kind) {
@@ -48,11 +48,16 @@
       }
     }
 
-    <div class="subForm">
+    <div class="sub-form">
       @for (phone of memberForm.phones; track phone) {
         <div class="field">
           <label [for]="`phone-${$index}`">Téléphone {{ $index > 0 ? $index + 1 : '' }}</label>
-          <input [id]="`phone-${$index}`" type="text" [formField]="phone" />
+          <input
+            [id]="`phone-${$index}`"
+            type="text"
+            [formField]="phone"
+            autocomplete="new-phone"
+          />
           @if (memberForm.phones.length > 1) {
             <button
               class="invisible small"
@@ -77,7 +82,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </div>
 
-    <div class="subForm">
+    <div class="sub-form">
       @for (language of memberForm.languages; track language) {
         <div class="field">
           <label [for]="`language-${$index}`"

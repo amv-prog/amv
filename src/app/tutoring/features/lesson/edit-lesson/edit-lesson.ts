@@ -5,7 +5,7 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { SignalToggle } from '../../../../shared/components/signal-toggle/signal-toggle';
+import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
 import { Family } from '../../../models/family';
@@ -18,14 +18,7 @@ import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-edit-lesson',
-  imports: [
-    FormField,
-    FormRoot,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatDatepicker,
-    SignalToggle,
-  ],
+  imports: [FormField, FormRoot, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, Toggle],
   templateUrl: './edit-lesson.html',
 })
 export class EditLesson {
