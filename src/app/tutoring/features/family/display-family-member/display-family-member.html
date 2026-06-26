@@ -100,9 +100,9 @@
 
     @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
       <hr />
-      <div class="h-panel top">
+      <div class="h-panel-large">
         @if (!!futureLessonsToDisplay().length) {
-          <div>
+          <div class="section">
             <div class="highlight">Futurs cours prévus</div>
             <table class="amv-table">
               <thead>
@@ -147,7 +147,7 @@
         }
 
         @if (!!pastLessonsToDisplay().length) {
-          <div>
+          <div class="section">
             <div class="highlight">Cours terminés</div>
             <table class="amv-table">
               <thead>
