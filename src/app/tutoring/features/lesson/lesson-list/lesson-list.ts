@@ -26,13 +26,61 @@ export class LessonList {
 
   protected readonly daysMap = this.dateService.daysMap;
 
-  protected readonly lessonsToDisplay = computed(() => {
+  protected readonly currentLessonsToDisplay = computed(() => {
     const studentsMap = this.familyStore.childrenMap();
     const tutorsMap = this.volunteerStore.tutorsMap();
 
     return this.lessonStore
       .lessons()
-      .sort(this.compareLessons)
+      .filter((lesson) => {
+        return !lesson.endDate || DateService.compareDays(lesson.endDate, new Date()) >= 0;
+      })
+      .filter((lesson) => {
+        return DateService.compareDays(lesson.startDate, new Date()) <= 0;
+      })
+      .sort(LessonStore.compareLessonsDays)
+      .map((lesson) => {
+        const student = studentsMap.get(lesson.studentId);
+        const tutor = tutorsMap.get(lesson.tutorId);
+
+        return { lesson, student, tutor };
+      });
+  });
+
+  protected readonly pastLessonsToDisplay = computed(() => {
+    const studentsMap = this.familyStore.childrenMap();
+    const tutorsMap = this.volunteerStore.tutorsMap();
+
+    return this.lessonStore
+      .lessons()
+      .filter((lesson) => {
+        return !!lesson.endDate && DateService.compareDays(lesson.endDate, new Date()) < 0;
+      })
+      .sort(
+        (l1, l2) =>
+          LessonStore.compareLessonsEndDate(l1, l2) || LessonStore.compareLessonsDays(l1, l2),
+      )
+      .map((lesson) => {
+        const student = studentsMap.get(lesson.studentId);
+        const tutor = tutorsMap.get(lesson.tutorId);
+
+        return { lesson, student, tutor };
+      });
+  });
+
+  protected readonly futureLessonsToDisplay = computed(() => {
+    const studentsMap = this.familyStore.childrenMap();
+    const tutorsMap = this.volunteerStore.tutorsMap();
+
+    return this.lessonStore
+      .lessons()
+      .filter((lesson) => {
+        return DateService.compareDays(lesson.startDate, new Date()) > 0;
+      })
+      .sort(
+        (l1, l2) =>
+          LessonStore.compareLessonsStartDate(l1, l2) || LessonStore.compareLessonsDays(l1, l2),
+      )
       .map((lesson) => {
         const student = studentsMap.get(lesson.studentId);
         const tutor = tutorsMap.get(lesson.tutorId);
@@ -51,19 +99,6 @@ export class LessonList {
 
   public displayTutorName(volunteer: VolunteerMember | undefined): string {
     return !!volunteer ? LessonStore.displayTutorName(volunteer) : 'Inconnu';
-  }
-
-  private compareLessons(l1: Lesson, l2: Lesson): number {
-    // Sunday is the first day but we want it to be last
-    const d1 = l1.dayOfWeek || 7;
-    const d2 = l2.dayOfWeek || 7;
-    if (d1 === d2) {
-      return l1.time.localeCompare(l2.time);
-    } else if (d1 < d2) {
-      return -1;
-    } else {
-      return 1;
-    }
   }
 
   stopLesson(lesson: Lesson) {

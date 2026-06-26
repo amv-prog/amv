@@ -211,3 +211,13 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
   - Si le formulaire est valide, le cours est ajouté au local storage (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.
+
+## Détail d'un membre d'une famille
+
+- Le nom et prénom sont affichés.
+- Le type parent ou enfant est affiché, avec l'icone associée.
+- S'ils sont renseignés, la date de naissance, langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- La liste des cours est affichée.
+- Un bouton permet de modifier le membre
+- Un bouton permet de supprimer le membre
+- Un bouton permet de revenir à la famille

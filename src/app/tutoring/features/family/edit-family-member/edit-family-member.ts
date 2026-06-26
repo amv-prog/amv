@@ -1,6 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Router } from '@angular/router';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
@@ -16,6 +17,7 @@ export class EditFamilyMember {
   private readonly familyStore = inject(FamilyStore);
   private readonly navigationService = inject(NavigationService);
   protected readonly dateService = inject(DateService);
+  private readonly router = inject(Router);
 
   protected readonly family = this.familyStore.selectedFamily;
   protected readonly member = this.familyStore.selectedFamilyMember;
@@ -106,21 +108,27 @@ export class EditFamilyMember {
           additionalInfo: formData.additionalInfo.trim(),
         };
         this.familyStore.updateFamilyMember(current);
+        this.navigationService.back([
+          'tutoring',
+          'family',
+          this.family()?.id,
+          'member',
+          current.id,
+        ]);
       } else {
-        this.familyStore.updateFamilyMember(
-          new RecipientMember(
-            formData.parent === 'RIGHT',
-            formData.firstName,
-            formData.lastName,
-            formData.phones.filter((v) => !!v),
-            formData.email || undefined,
-            formData.languages.filter((v) => !!v),
-            birthDate,
-            formData.additionalInfo.trim(),
-          ),
+        current = new RecipientMember(
+          formData.parent === 'RIGHT',
+          formData.firstName,
+          formData.lastName,
+          formData.phones.filter((v) => !!v),
+          formData.email || undefined,
+          formData.languages.filter((v) => !!v),
+          birthDate,
+          formData.additionalInfo.trim(),
         );
+        this.familyStore.updateFamilyMember(current);
+        this.router.navigate(['tutoring', 'family', this.family()?.id, 'member', current.id]);
       }
-      this.navigationService.back(['tutoring', 'family', this.family()?.id]);
     }
   }
 
