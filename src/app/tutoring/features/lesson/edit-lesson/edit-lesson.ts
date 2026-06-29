@@ -1,5 +1,13 @@
 import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
-import { disabled, FieldTree, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import {
+  disabled,
+  FieldTree,
+  form,
+  FormField,
+  FormRoot,
+  required,
+  validate,
+} from '@angular/forms/signals';
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -102,6 +110,16 @@ export class EditLesson {
           required(form.dayOfWeek, { message: 'Veuillez sélectionner le jour de la semaine' }),
           required(form.time, { message: "Veuillez sélectionner l'heure" }),
           required(form.startDate, { message: 'Veuillez sélectionner la date de début' }),
+          validate(form.endDate, (context) => {
+            const startDate = context.valueOf(form.startDate);
+            const endDate = context.value();
+            return !!endDate && DateService.compareDays(startDate, endDate) > 0
+              ? {
+                  kind: 'is-less-than-startdate',
+                  message: 'La date de fin doit être supérieure à la date de début',
+                }
+              : undefined;
+          }),
           disabled(form.student, {
             when: () => {
               console.log('student readonly ' + !!this.member());

@@ -190,12 +190,25 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant 
 
 ## Liste des cours
 
-- Les cours sont affichés, avec l'élève, l'encadrant, le jour et l'heure, le lieu, la date de début et la date de fin.
+- Les cours actuels sont affichés, avec l'élève, l'encadrant, le jour et l'heure, le lieu, la date de début et la date de fin.
 - La liste des cours est stockée et récupérée dans le local storage.
+- Pour chaque cours, un bouton permet de le modifier, un autre de l'arrêter ou le reprendre, selon la date de fin, et un autre de le supprimer
 - Un bouton permet d'ajouter un cours.
-- Un bouton permet de modifier un cours.
-- Un bouton permet d'arrêter ou reprendre un cours, selon la date de fin.
-- Un bouton permet de supprimer un cours.
+- Les listes des cours prévus et terminés sont également affichées
+- Il est possible de modifier, ou supprimer un cours terminé, mais pas d'arrêter ou reprendre un cours prévu
+- Il est possible de modifier, arrêter ou reprendre, ou supprimer un cours terminé
+- Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
+- Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
+- Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
+
+### Modifier un cours
+
+Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modification d'un cours.
+
+### Arrêter ou reprendre un cours
+
+- Si la date de fin est absente, ou supérieure à la date du jour, le bouton permet d'arrêter le cours. Au clic, la date de fin est mise à la date du jour
+- Si la date de fin est inférieure ou égale à la date du jour, le bouton permet de reprendre le cours. Au clic, la date de fin est supprimée
 
 ## Ajout ou modification d'un cours
 
@@ -211,13 +224,20 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
   - Si le formulaire est valide, le cours est ajouté au local storage (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.
+- Si l'utilisateur vient de la page de l'élève, ce dernier n'est pas modifiable
+- Si l'utilisateur vient de la page de l'encadrant, ce dernier n'est pas modifiable
 
 ## Détail d'un membre d'une famille
 
 - Le nom et prénom sont affichés.
 - Le type parent ou enfant est affiché, avec l'icone associée.
 - S'ils sont renseignés, la date de naissance, langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
-- La liste des cours est affichée.
+- La liste des cours actuels est affichée.
+- Un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le membre
 - Un bouton permet de supprimer le membre
 - Un bouton permet de revenir à la famille
+- Les listes des cours prévus et terminés sont affichées
+- Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
+- Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
+- Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
