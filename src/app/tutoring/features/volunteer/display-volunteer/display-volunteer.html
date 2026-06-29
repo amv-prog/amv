@@ -1,44 +1,40 @@
 <div class="page-center">
-  @if (member(); as memberValue) {
-    <h1>{{ memberValue?.firstName }} {{ memberValue?.lastName }}</h1>
+  @if (volunteer(); as volunteerValue) {
+    <h1>{{ volunteerValue?.firstName }} {{ volunteerValue?.lastName }}</h1>
 
     <div class="h-panel-large">
       <div class="section">
-        @if (memberValue.isParent) {
+        @if (volunteerValue.isTutor) {
           <div class="h-panel">
-            <span class="material-symbols-outlined" title="Parent">person</span>
-            <div>Parent</div>
+            <span class="material-symbols-outlined" title="Encadrant">person_text</span>
+            <div>Encadrant</div>
           </div>
         } @else {
           <div class="h-panel">
-            <span class="material-symbols-outlined" title="Enfant">child_hat</span>
-            <div>Enfant</div>
+            <span class="material-symbols-outlined" title="Bénévole">person</span>
+            <div>Bénévole</div>
           </div>
         }
 
-        @if (!!memberValue.birthDate) {
-          <div>Né.e le {{ memberValue.birthDate | date: 'd MMMM y' }}</div>
-        }
-
-        @if (!!memberValue.languages.length) {
-          <div>Langues parlées : {{ memberValue.languages.join(', ') }}</div>
+        @if (!!volunteerValue.languages.length) {
+          <div>Langues parlées : {{ volunteerValue.languages.join(', ') }}</div>
         }
       </div>
 
-      @if (!!memberValue.phoneNumbers.length || !!memberValue.email) {
+      @if (!!volunteerValue.phoneNumbers.length || !!volunteerValue.email) {
         <div class="section">
-          @if (!!memberValue.phoneNumbers.length) {
-            <div>Téléphone : {{ memberValue.phoneNumbers.join(', ') }}</div>
+          @if (!!volunteerValue.phoneNumbers.length) {
+            <div>Téléphone : {{ volunteerValue.phoneNumbers.join(', ') }}</div>
           }
 
-          @if (!!memberValue.email) {
-            <div>Email : {{ memberValue.email }}</div>
+          @if (!!volunteerValue.email) {
+            <div>Email : {{ volunteerValue.email }}</div>
           }
         </div>
       }
 
-      @if (!!memberValue.additionalInfo) {
-        <div class="section">{{ memberValue.additionalInfo }}</div>
+      @if (!!volunteerValue.additionalInfo) {
+        <div class="section">{{ volunteerValue.additionalInfo }}</div>
       }
     </div>
 
@@ -47,7 +43,7 @@
       <table class="amv-table">
         <thead>
           <tr>
-            <th scope="col">Encadrant</th>
+            <th scope="col">Élève</th>
             <th scope="col">Jour et heure</th>
             <th scope="col">Lieu</th>
             <th scope="col">Date de début</th>
@@ -56,9 +52,9 @@
         </thead>
         @for (lessonDisplay of currentLessonsToDisplay(); track lessonDisplay.lesson.id) {
           @let lesson = lessonDisplay.lesson;
-          @let tutor = lessonDisplay.tutor;
+          @let student = lessonDisplay.student;
           <tr [class.even]="$even">
-            <td>{{ displayTutorName(tutor) }}</td>
+            <td>{{ displayStudentName(student) }}</td>
             <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
             <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
             <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
@@ -93,12 +89,11 @@
     }
 
     <div class="h-panel">
-      @if (!memberValue.isParent) {
+      @if (volunteerValue.isTutor) {
         <a class="a-button" [routerLink]="['lesson', 'add']"> Ajouter un cours </a>
       }
-      <a class="a-button" [routerLink]="['edit']"> Modifier le membre </a>
-      <button type="button" (click)="validateMemberRemoval()">Supprimer le membre</button>
-      <button type="button" class="secondary" (click)="goToFamily()">Famille</button>
+      <a class="a-button" [routerLink]="['edit']"> Modifier le bénévole </a>
+      <button type="button" (click)="validateVolunteerRemoval()">Supprimer le bénévole</button>
     </div>
 
     @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
@@ -110,7 +105,7 @@
             <table class="amv-table">
               <thead>
                 <tr>
-                  <th scope="col">Encadrant</th>
+                  <th scope="col">Élève</th>
                   <th scope="col">Jour et heure</th>
                   <th scope="col">Lieu</th>
                   <th scope="col">Date de début</th>
@@ -119,9 +114,9 @@
               </thead>
               @for (lessonDisplay of futureLessonsToDisplay(); track lessonDisplay.lesson.id) {
                 @let lesson = lessonDisplay.lesson;
-                @let tutor = lessonDisplay.tutor;
+                @let student = lessonDisplay.student;
                 <tr [class.even]="$even">
-                  <td>{{ displayTutorName(tutor) }}</td>
+                  <td>{{ displayStudentName(student) }}</td>
                   <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
                   <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
                   <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
@@ -155,7 +150,7 @@
             <table class="amv-table">
               <thead>
                 <tr>
-                  <th scope="col">Encadrant</th>
+                  <th scope="col">Élève</th>
                   <th scope="col">Jour et heure</th>
                   <th scope="col">Lieu</th>
                   <th scope="col">Date de début</th>
@@ -164,9 +159,9 @@
               </thead>
               @for (lessonDisplay of pastLessonsToDisplay(); track lessonDisplay.lesson.id) {
                 @let lesson = lessonDisplay.lesson;
-                @let tutor = lessonDisplay.tutor;
+                @let student = lessonDisplay.student;
                 <tr [class.even]="$even">
-                  <td>{{ displayTutorName(tutor) }}</td>
+                  <td>{{ displayStudentName(student) }}</td>
                   <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
                   <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
                   <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
@@ -211,6 +206,6 @@
       </div>
     }
   } @else {
-    <div>Membre non trouvé</div>
+    <div>Bénévole non trouvé</div>
   }
 </div>

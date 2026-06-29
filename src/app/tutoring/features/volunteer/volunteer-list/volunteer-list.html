@@ -31,6 +31,14 @@
           <td>
             <a
               class="a-button invisible"
+              [routerLink]="['/tutoring/volunteer', volunteer.id]"
+              title="détails"
+              ><span class="material-symbols-outlined">visibility</span></a
+            >
+          </td>
+          <td>
+            <a
+              class="a-button invisible"
               [routerLink]="['/tutoring/volunteer', volunteer.id, 'edit']"
               title="modifier"
               ><span class="material-symbols-outlined">edit</span></a

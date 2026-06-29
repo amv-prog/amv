@@ -232,12 +232,26 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Le nom et prénom sont affichés.
 - Le type parent ou enfant est affiché, avec l'icone associée.
 - S'ils sont renseignés, la date de naissance, langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
-- La liste des cours actuels est affichée.
-- Un bouton permet de créer un nouveau cours
+- La liste des cours actuels concernant le membre est affichée.
+- Si le membre est un enfant, un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le membre
 - Un bouton permet de supprimer le membre
 - Un bouton permet de revenir à la famille
-- Les listes des cours prévus et terminés sont affichées
+- Les listes des cours prévus et terminés concernant le bénévole sont affichées
+- Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
+- Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
+- Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
+
+## Détail d'un bénévole
+
+- Le nom et prénom sont affichés.
+- Le type encadrant ou bénévole est affiché, avec l'icone associée.
+- S'ils sont renseignés, les langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- La liste des cours actuels concernant le bénévole est affichée.
+- Si le membre est un tuteur, un bouton permet de créer un nouveau cours
+- Un bouton permet de modifier le bénévole
+- Un bouton permet de supprimer le bénévole
+- Les listes des cours prévus et terminés concernant le bénévole sont affichées
 - Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
 - Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
 - Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
