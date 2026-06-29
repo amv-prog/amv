@@ -1,5 +1,11 @@
 <div class="page-center">
-  <h1>Ajouter un cours</h1>
+  <h1>
+    @if (!!lesson()) {
+      Modifier le cours
+    } @else {
+      Ajouter un cours
+    }
+  </h1>
   <form class="simple-form" [formRoot]="lessonForm">
     <div class="field">
       <label for="student">Élève *</label>
@@ -66,12 +72,12 @@
     }
 
     <div class="field">
-      <div class="label">Lieu *</div>
-      <amv-signal-toggle
+      <div class="label">Lieu</div>
+      <amv-toggle
         leftLabel="Local"
         rightLabel="Domicile"
         [formField]="lessonForm.place"
-      ></amv-signal-toggle>
+      ></amv-toggle>
     </div>
 
     <div class="field">

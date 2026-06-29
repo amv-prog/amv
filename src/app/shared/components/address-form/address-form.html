@@ -1,27 +1,38 @@
-<form class="simple-form" [formGroup]="addressFormGroup">
-  <div class="field">
-    <label for="street">Numéro et rue</label>
-    <input id="street" type="text" formControlName="street" />
-  </div>
-  @if (streetCtrl.dirty && streetCtrl.hasError('required')) {
-    <div class="field-error">La rue est obligatoire</div>
+@let address = addressField();
+@let street = address.street;
+<div class="field">
+  <label for="street">Numéro et rue</label>
+  <input id="street" type="text" [formField]="street" />
+</div>
+@if (street().dirty() && street().invalid()) {
+  @for (error of street().errors(); track error.kind) {
+    <div class="field-error">{{ error.message }}</div>
   }
-  <div class="field">
-    <label for="additional">Complément d'adresse</label>
-    <input id="additional" type="text" formControlName="additional" />
-  </div>
-  <div class="field">
-    <label for="postCode">Code Postal</label>
-    <input id="postCode" type="text" formControlName="postCode" />
-  </div>
-  @if (postCodeCtrl.dirty && postCodeCtrl.hasError('required')) {
-    <div class="field-error">Le code postal est obligatoire</div>
+}
+
+<div class="field">
+  <label for="additional">Complément d'adresse</label>
+  <input id="additional" type="text" [formField]="address.additional" />
+</div>
+
+@let postCode = address.postCode;
+<div class="field">
+  <label for="postCode">Code Postal</label>
+  <input id="postCode" type="text" [formField]="postCode" />
+</div>
+@if (postCode().dirty() && postCode().invalid()) {
+  @for (error of postCode().errors(); track error.kind) {
+    <div class="field-error">{{ error.message }}</div>
   }
-  <div class="field">
-    <label for="city">Ville</label>
-    <input id="city" type="text" formControlName="city" />
-  </div>
-  @if (cityCtrl.dirty && cityCtrl.hasError('required')) {
-    <div class="field-error">La ville est obligatoire</div>
+}
+
+@let city = address.city;
+<div class="field">
+  <label for="city">Ville</label>
+  <input id="city" type="text" [formField]="city" />
+</div>
+@if (city().dirty() && city().invalid()) {
+  @for (error of city().errors(); track error.kind) {
+    <div class="field-error">{{ error.message }}</div>
   }
-</form>
+}

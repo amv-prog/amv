@@ -1,37 +1,43 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
 import { Lesson } from '../../../models/lesson';
 import { RecipientMember } from '../../../models/recipient-member';
-import { VolunteerMember } from '../../../models/volunteer-member';
 import { FamilyStore } from '../../../stores/family-store';
 import { LessonStore } from '../../../stores/lesson-store';
 import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
-  selector: 'amv-lesson-list',
+  selector: 'amv-display-volunteer',
   imports: [DatePipe, RouterLink],
-  templateUrl: './lesson-list.html',
+  templateUrl: './display-volunteer.html',
 })
-export class LessonList {
-  private readonly familyStore = inject(FamilyStore);
-  private readonly volunteerStore = inject(VolunteerStore);
+export class DisplayVolunteer {
   private readonly lessonStore = inject(LessonStore);
+  private readonly volunteerStore = inject(VolunteerStore);
+  private readonly familyStore = inject(FamilyStore);
   private readonly dateService = inject(DateService);
+  private readonly router = inject(Router);
+
+  private readonly dialog = inject(Dialog);
 
   protected readonly daysMap = this.dateService.daysMap;
 
+  protected readonly volunteer = this.volunteerStore.selectedVolunteer;
+
+  protected readonly studentsMap = this.familyStore.childrenMap;
+
   protected readonly currentLessonsToDisplay = computed(() => {
     const studentsMap = this.familyStore.childrenMap();
-    const tutorsMap = this.volunteerStore.tutorsMap();
 
     return this.lessonStore
       .lessons()
+      .filter((lesson) => lesson.tutorId === this.volunteer()?.id)
       .filter((lesson) => {
         return !lesson.endDate || DateService.compareDays(lesson.endDate, new Date()) >= 0;
       })
@@ -41,18 +47,17 @@ export class LessonList {
       .sort(LessonStore.compareLessonsDays)
       .map((lesson) => {
         const student = studentsMap.get(lesson.studentId);
-        const tutor = tutorsMap.get(lesson.tutorId);
 
-        return { lesson, student, tutor };
+        return { lesson, student };
       });
   });
 
   protected readonly pastLessonsToDisplay = computed(() => {
     const studentsMap = this.familyStore.childrenMap();
-    const tutorsMap = this.volunteerStore.tutorsMap();
 
     return this.lessonStore
       .lessons()
+      .filter((lesson) => lesson.tutorId === this.volunteer()?.id)
       .filter((lesson) => {
         return !!lesson.endDate && DateService.compareDays(lesson.endDate, new Date()) < 0;
       })
@@ -62,18 +67,17 @@ export class LessonList {
       )
       .map((lesson) => {
         const student = studentsMap.get(lesson.studentId);
-        const tutor = tutorsMap.get(lesson.tutorId);
 
-        return { lesson, student, tutor };
+        return { lesson, student };
       });
   });
 
   protected readonly futureLessonsToDisplay = computed(() => {
     const studentsMap = this.familyStore.childrenMap();
-    const tutorsMap = this.volunteerStore.tutorsMap();
 
     return this.lessonStore
       .lessons()
+      .filter((lesson) => lesson.tutorId === this.volunteer()?.id)
       .filter((lesson) => {
         return DateService.compareDays(lesson.startDate, new Date()) > 0;
       })
@@ -83,13 +87,10 @@ export class LessonList {
       )
       .map((lesson) => {
         const student = studentsMap.get(lesson.studentId);
-        const tutor = tutorsMap.get(lesson.tutorId);
 
-        return { lesson, student, tutor };
+        return { lesson, student };
       });
   });
-
-  private readonly dialog = inject(Dialog);
 
   public displayStudentName(
     student: { member: RecipientMember; family: Family } | undefined,
@@ -97,8 +98,28 @@ export class LessonList {
     return !!student ? LessonStore.displayStudentName(student) : 'Inconnu';
   }
 
-  public displayTutorName(volunteer: VolunteerMember | undefined): string {
-    return !!volunteer ? LessonStore.displayTutorName(volunteer) : 'Inconnu';
+  public validateVolunteerRemoval() {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer ${this.volunteer()!.firstName} ${this.volunteer()!.lastName} ?`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeVolunteer();
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private removeVolunteer() {
+    this.volunteerStore.removeVolunteer(this.volunteer()!);
+    this.router.navigate(['tutoring', 'volunteer', 'list']);
   }
 
   stopLesson(lesson: Lesson) {

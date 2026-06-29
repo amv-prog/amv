@@ -42,7 +42,7 @@
             <a
               class="a-button invisible"
               [routerLink]="['/tutoring/family', family.id]"
-              title="modifier"
+              title="détails"
               ><span class="material-symbols-outlined">visibility</span></a
             >
           </td>
@@ -92,7 +92,14 @@
               <td>{{ member.birthDate | date: 'dd/MM/yyyy' }}</td>
               <td>{{ member.languages.join(', ') }}</td>
               <td [title]="member.additionalInfo">{{ member.additionalInfo | truncate }}</td>
-              <td></td>
+              <td>
+                <a
+                  class="a-button invisible"
+                  [routerLink]="['/tutoring/family', family.id, 'member', member.id]"
+                  title="détails"
+                  ><span class="material-symbols-outlined">visibility</span></a
+                >
+              </td>
               <td>
                 <a
                   class="a-button invisible"

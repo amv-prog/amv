@@ -1,4 +1,5 @@
 import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { DateService } from '../../shared/services/date-service';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
@@ -66,5 +67,26 @@ export class LessonStore {
       }
       return [...lessons];
     });
+  }
+
+  static compareLessonsDays(l1: Lesson, l2: Lesson): number {
+    // Sunday is the first day but we want it to be last
+    const d1 = l1.dayOfWeek || 7;
+    const d2 = l2.dayOfWeek || 7;
+    if (d1 === d2) {
+      return l1.time.localeCompare(l2.time);
+    } else if (d1 < d2) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  static compareLessonsStartDate(l1: Lesson, l2: Lesson): number {
+    return DateService.compareDays(l1.startDate, l2.startDate);
+  }
+
+  static compareLessonsEndDate(l1: Lesson, l2: Lesson): number {
+    return DateService.compareDays(l1.endDate, l2.endDate);
   }
 }
