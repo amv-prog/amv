@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
-import { FieldTree, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { disabled, FieldTree, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -51,6 +51,8 @@ export class EditLesson {
   );
 
   protected readonly lesson = this.lessonStore.selectedLesson;
+  protected readonly member = this.familyStore.selectedFamilyMember;
+  protected readonly volunteer = this.volunteerStore.selectedVolunteer;
 
   private readonly lessonFormData: WritableSignal<{
     student: string;
@@ -83,8 +85,8 @@ export class EditLesson {
     const initLesson = this.lesson();
 
     this.lessonFormData = signal({
-      student: initLesson?.studentId ?? '',
-      tutor: initLesson?.tutorId ?? '',
+      student: initLesson?.studentId ?? this.member()?.id ?? '',
+      tutor: initLesson?.tutorId ?? this.volunteer()?.id ?? '',
       dayOfWeek: initLesson?.dayOfWeek?.toString() ?? '',
       time: initLesson?.time ?? '',
       place: initLesson?.place === 'HOME' ? 'RIGHT' : 'LEFT',
@@ -99,7 +101,19 @@ export class EditLesson {
           required(form.tutor, { message: "Veuillez sélectionner l'encadrant" }),
           required(form.dayOfWeek, { message: 'Veuillez sélectionner le jour de la semaine' }),
           required(form.time, { message: "Veuillez sélectionner l'heure" }),
-          required(form.startDate, { message: 'Veuillez sélectionner la date de début' }));
+          required(form.startDate, { message: 'Veuillez sélectionner la date de début' }),
+          disabled(form.student, {
+            when: () => {
+              console.log('student readonly ' + !!this.member());
+              return !!this.member();
+            },
+          }),
+          disabled(form.tutor, {
+            when: () => {
+              console.log('tutor readonly ' + !!this.volunteer());
+              return !!this.volunteer();
+            },
+          }));
       },
       {
         submission: {

@@ -66,7 +66,7 @@
             <td>
               <a
                 class="a-button invisible"
-                [routerLink]="['/tutoring/lesson', lesson.id, 'edit']"
+                [routerLink]="['lesson', lesson.id, 'edit']"
                 title="modifier"
                 ><span class="material-symbols-outlined">edit</span></a
               >
@@ -93,6 +93,7 @@
     }
 
     <div class="h-panel">
+      <a class="a-button" [routerLink]="['lesson', 'add']"> Ajouter un cours </a>
       <a class="a-button" [routerLink]="['edit']"> Modifier le membre </a>
       <button type="button" (click)="validateMemberRemoval()">Supprimer le membre</button>
       <button type="button" class="secondary" (click)="goToFamily()">Famille</button>
@@ -126,7 +127,7 @@
                   <td>
                     <a
                       class="a-button invisible"
-                      [routerLink]="['/tutoring/lesson', lesson.id, 'edit']"
+                      [routerLink]="['lesson', lesson.id, 'edit']"
                       title="modifier"
                       ><span class="material-symbols-outlined">edit</span></a
                     >
@@ -171,7 +172,7 @@
                   <td>
                     <a
                       class="a-button invisible"
-                      [routerLink]="['/tutoring/lesson', lesson.id, 'edit']"
+                      [routerLink]="['lesson', lesson.id, 'edit']"
                       title="modifier"
                       ><span class="material-symbols-outlined">edit</span></a
                     >

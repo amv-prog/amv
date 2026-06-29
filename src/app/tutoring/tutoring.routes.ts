@@ -45,6 +45,22 @@ export const tutoringRoutes: Routes = [
                 path: 'edit',
                 component: EditFamilyMember,
               },
+              {
+                path: 'lesson/add',
+                resolve: {
+                  lesson: lessonResolver,
+                  volunteer: volunteerResolver,
+                },
+                component: EditLesson,
+              },
+              {
+                path: 'lesson/:lessonId/edit',
+                resolve: {
+                  lesson: lessonResolver,
+                  volunteer: volunteerResolver,
+                },
+                component: EditLesson,
+              },
             ],
           },
         ],
@@ -62,7 +78,11 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'lesson/add',
-        resolve: { lesson: lessonResolver },
+        resolve: {
+          lesson: lessonResolver,
+          member: familyMemberResolver,
+          volunteer: volunteerResolver,
+        },
         component: EditLesson,
       },
       {
@@ -71,7 +91,11 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'lesson/:lessonId/edit',
-        resolve: { lesson: lessonResolver },
+        resolve: {
+          lesson: lessonResolver,
+          member: familyMemberResolver,
+          volunteer: volunteerResolver,
+        },
         component: EditLesson,
       },
     ],
