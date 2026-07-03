@@ -1,0 +1,13 @@
+<div class="page-center">
+  <h1>Gestion des données</h1>
+  <div class="h-panel">
+    <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
+      >Enregistrer les données</a
+    >
+    <button (click)="fileUpload.click()">Importer un fichier</button>
+    <button (click)="validateCleanData()">Supprimer les données</button>
+    <button (click)="validateExempleImport()">Importer les données d'exemple</button>
+  </div>
+
+  <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />
+</div>

@@ -40,6 +40,10 @@ export class VolunteerStore {
     });
   }
 
+  replaceVolunteers(volunteers: VolunteerMember[]) {
+    this.volunteers.set(volunteers);
+  }
+
   setSelectedVolunteerId(volunteerId: string | undefined) {
     this.selectedVolunteerId.set(volunteerId);
   }

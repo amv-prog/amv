@@ -10,7 +10,7 @@
     @let name = familyForm.name;
     <div class="field">
       <label for="fn">Nom *</label>
-      <input id="fn" type="text" [formField]="name" />
+      <input id="fn" type="text" [formField]="name" autocomplete="new-name" />
     </div>
     @if (name().dirty() && name().invalid()) {
       @for (error of name().errors(); track error.kind) {

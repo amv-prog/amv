@@ -1,0 +1,253 @@
+{
+  "families": [
+    {
+      "name": "Alpha",
+      "additionalInfo": "Famille très gentille",
+      "address": {
+        "street": "13 rue des Moineaux",
+        "postCode": "01020",
+        "city": "Champignon",
+        "additional": "1er étage, Appartement 3"
+      },
+      "id": "13084606-65a2-4c05-8380-30021812a9d5",
+      "members": [
+        {
+          "isParent": true,
+          "firstName": "Alice",
+          "lastName": "Delta",
+          "phoneNumbers": [
+            "0102030405"
+          ],
+          "email": "alice@alpha.fr",
+          "languages": [],
+          "additionalInfo": "Mère",
+          "id": "0efe9d16-a49f-4ebf-b60e-15165176e08d",
+          "type": "RECIPIENT"
+        },
+        {
+          "isParent": true,
+          "firstName": "Bertrand",
+          "lastName": "Alpha",
+          "phoneNumbers": [
+            "0203040506",
+            "0504060201"
+          ],
+          "email": "bertrand@alpha.fr",
+          "languages": [],
+          "additionalInfo": "Père",
+          "id": "5f085395-bbe2-45fc-98da-09cc1865c475",
+          "type": "RECIPIENT"
+        },
+        {
+          "isParent": false,
+          "firstName": "Cyrille",
+          "lastName": "Alpha",
+          "phoneNumbers": [],
+          "languages": [
+            "Français"
+          ],
+          "birthDate": "2019-07-08",
+          "additionalInfo": "Difficultés de concentration",
+          "id": "64dbd5b6-c3d2-437a-89c6-d65f88f22ece",
+          "type": "RECIPIENT"
+        },
+        {
+          "isParent": false,
+          "firstName": "Dora",
+          "lastName": "Delta",
+          "phoneNumbers": [],
+          "languages": [
+            "Français",
+            "Espagnol"
+          ],
+          "birthDate": "2009-01-16",
+          "additionalInfo": "",
+          "id": "88d540be-35ef-4a63-a436-d77465eee080",
+          "type": "RECIPIENT"
+        }
+      ],
+      "contributionValidity": "2027-07-03"
+    },
+    {
+      "name": "Beta",
+      "additionalInfo": "",
+      "address": {
+        "street": "14 rue des Pinsons",
+        "postCode": "01020",
+        "city": "Champignon",
+        "additional": ""
+      },
+      "id": "b37a1686-cc74-4de6-b46d-11b0fb48e567",
+      "members": [
+        {
+          "isParent": true,
+          "firstName": "Andy",
+          "lastName": "Beta",
+          "phoneNumbers": [
+            "0607080901"
+          ],
+          "email": "andy@beta.fr",
+          "languages": [],
+          "additionalInfo": "",
+          "id": "a8f34cdb-75a8-44d0-9c12-508e3e9b2fba",
+          "type": "RECIPIENT"
+        },
+        {
+          "isParent": false,
+          "firstName": "Baptiste",
+          "lastName": "Beta",
+          "phoneNumbers": [],
+          "languages": [
+            "Français"
+          ],
+          "birthDate": "2015-11-18",
+          "additionalInfo": "",
+          "id": "10b75c31-aabd-4007-a12d-af85b8a3290b",
+          "type": "RECIPIENT"
+        },
+        {
+          "isParent": true,
+          "firstName": "Carol",
+          "lastName": "Beta",
+          "phoneNumbers": [],
+          "email": "carol@beta.fr",
+          "languages": [],
+          "additionalInfo": "Grand-mère",
+          "id": "f993b336-6e84-400c-90f2-087ad740eb95",
+          "type": "RECIPIENT"
+        }
+      ]
+    }
+  ],
+  "volunteers": [
+    {
+      "isTutor": true,
+      "firstName": "Sam",
+      "lastName": "Gamma",
+      "phoneNumbers": [
+        "0605010203"
+      ],
+      "email": "sam@gamma.fr",
+      "languages": [
+        "Français",
+        "Espagnol"
+      ],
+      "additionalInfo": "",
+      "id": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "type": "VOLUNTEER"
+    },
+    {
+      "isTutor": false,
+      "firstName": "Alexis",
+      "lastName": "Epsilon",
+      "phoneNumbers": [],
+      "email": "alexis@epsilon.fr",
+      "languages": [],
+      "additionalInfo": "Comptable",
+      "id": "34dd61b6-287f-45f5-8fa6-6e7058fd7b7a",
+      "type": "VOLUNTEER"
+    },
+    {
+      "isTutor": true,
+      "firstName": "Morgan",
+      "lastName": "Omega",
+      "phoneNumbers": [
+        "0607060504"
+      ],
+      "email": "morgan@omega.fr",
+      "languages": [],
+      "additionalInfo": "",
+      "id": "dac65446-ce0b-4525-b360-a4c4b15231ce",
+      "type": "VOLUNTEER"
+    },
+    {
+      "isTutor": true,
+      "firstName": "Pat",
+      "lastName": "Gamma",
+      "phoneNumbers": [],
+      "email": "pat@gamma.fr",
+      "languages": [],
+      "additionalInfo": "",
+      "id": "4228fde0-fcff-4535-bf89-184e7612fc43",
+      "type": "VOLUNTEER"
+    }
+  ],
+  "lessons": [
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "dayOfWeek": 3,
+      "time": "15h",
+      "place": "ASSOCIATION",
+      "startDate": "2026-07-03",
+      "endDate": "2026-07-17",
+      "id": "6f1ac288-764e-4de7-9973-2e173a1c2d5a"
+    },
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "dayOfWeek": 1,
+      "time": "17h30",
+      "place": "ASSOCIATION",
+      "startDate": "2026-07-03",
+      "id": "b5fd7f32-4a0a-46b0-8ef3-70bae4c94b73"
+    },
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "dac65446-ce0b-4525-b360-a4c4b15231ce",
+      "dayOfWeek": 5,
+      "time": "17h",
+      "place": "HOME",
+      "startDate": "2026-07-03",
+      "id": "4d44e29d-409a-4799-a38f-25070a51b528"
+    },
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "dayOfWeek": 2,
+      "time": "17h",
+      "place": "ASSOCIATION",
+      "startDate": "2025-07-03",
+      "endDate": "2026-07-02",
+      "id": "9cd69cb6-8b0d-4300-89c0-d6432cf4bb05"
+    },
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "dayOfWeek": 4,
+      "time": "18h",
+      "place": "HOME",
+      "startDate": "2025-07-01",
+      "endDate": "2026-07-01",
+      "id": "0d61356a-fead-49fe-b8ce-22662b75e216"
+    },
+    {
+      "studentId": "88d540be-35ef-4a63-a436-d77465eee080",
+      "tutorId": "7e8b809b-5c01-48fa-94a6-9b8a75cf170f",
+      "dayOfWeek": 3,
+      "time": "17h",
+      "place": "ASSOCIATION",
+      "startDate": "2026-09-01",
+      "id": "2ea05b39-9622-46ec-a042-e7477d68c9f9"
+    },
+    {
+      "studentId": "64dbd5b6-c3d2-437a-89c6-d65f88f22ece",
+      "tutorId": "4228fde0-fcff-4535-bf89-184e7612fc43",
+      "dayOfWeek": 3,
+      "time": "16h",
+      "place": "ASSOCIATION",
+      "startDate": "2026-04-03",
+      "id": "533a8dbd-1a4f-4369-b78c-588caf930ae0"
+    },
+    {
+      "studentId": "10b75c31-aabd-4007-a12d-af85b8a3290b",
+      "tutorId": "dac65446-ce0b-4525-b360-a4c4b15231ce",
+      "dayOfWeek": 4,
+      "time": "17h30",
+      "place": "ASSOCIATION",
+      "startDate": "2026-02-01",
+      "id": "29278438-c05f-466c-a519-ac2c8b26a7fa"
+    }
+  ],
+  "version": "0.1.0"
+}

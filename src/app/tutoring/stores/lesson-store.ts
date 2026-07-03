@@ -31,6 +31,10 @@ export class LessonStore {
     });
   }
 
+  replaceLessons(lessons: Lesson[]) {
+    this.lessons.set(lessons);
+  }
+
   addLesson(lesson: Lesson) {
     this.lessons.update((lessons) => [...lessons, lesson]);
   }

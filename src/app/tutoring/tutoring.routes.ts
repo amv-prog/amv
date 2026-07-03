@@ -6,6 +6,7 @@ import { EditFamily } from './features/family/edit-family/edit-family';
 import { FamilyList } from './features/family/family-list/family-list';
 import { EditLesson } from './features/lesson/edit-lesson/edit-lesson';
 import { LessonList } from './features/lesson/lesson-list/lesson-list';
+import { Settings } from './features/settings/settings';
 import { DisplayVolunteer } from './features/volunteer/display-volunteer/display-volunteer';
 import { EditVolunteer } from './features/volunteer/edit-volunteer/edit-volunteer';
 import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-list';
@@ -21,6 +22,7 @@ export const tutoringRoutes: Routes = [
     component: Tutoring,
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'family/list' },
+      { path: 'settings', component: Settings },
       { path: 'family/add', resolve: { family: familyResolver }, component: EditFamily },
       { path: 'family/list', component: FamilyList },
       {
