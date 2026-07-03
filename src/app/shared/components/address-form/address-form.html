@@ -2,7 +2,7 @@
 @let street = address.street;
 <div class="field">
   <label for="street">Numéro et rue</label>
-  <input id="street" type="text" [formField]="street" />
+  <input id="street" type="text" [formField]="street" autocomplete="new-street" />
 </div>
 @if (street().dirty() && street().invalid()) {
   @for (error of street().errors(); track error.kind) {
@@ -18,7 +18,7 @@
 @let postCode = address.postCode;
 <div class="field">
   <label for="postCode">Code Postal</label>
-  <input id="postCode" type="text" [formField]="postCode" />
+  <input id="postCode" type="text" [formField]="postCode" autocomplete="new-postcode" />
 </div>
 @if (postCode().dirty() && postCode().invalid()) {
   @for (error of postCode().errors(); track error.kind) {
@@ -29,7 +29,7 @@
 @let city = address.city;
 <div class="field">
   <label for="city">Ville</label>
-  <input id="city" type="text" [formField]="city" />
+  <input id="city" type="text" [formField]="city" autocomplete="new-city" />
 </div>
 @if (city().dirty() && city().invalid()) {
   @for (error of city().errors(); track error.kind) {

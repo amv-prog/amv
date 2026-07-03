@@ -1,4 +1,4 @@
-<div class="subtitle">Attention !</div>
+<div class="subtitle">{{ data.title ?? 'Attention !' }}</div>
 <div class="content">{{ data.text }}</div>
 <div class="buttons">
   <button type="button" (click)="confirm()">Confirmer</button>

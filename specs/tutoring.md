@@ -12,6 +12,8 @@ Le menu contient des liens vers certaines pages :
 
 - Liste des familles
 - Liste des bénévoles
+- Liste des cours
+- Paramètres
 
 ## Liste des familles
 
@@ -255,3 +257,29 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
 - Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
 - Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
+
+## Paramètres
+
+4 boutons permettent d'enregistrer les données, importer un fichier, supprimer les données, et importer les données d'exemple
+
+### Enregistrer les données
+
+L'utilisateur peut choisir où le fichier est enregistrer. La liste des familles, bénévoles, cours, ainsi que la version sont enregistrés dans un fichier json
+
+### Importer un fichier
+
+L'utilisateur peut sélectionner un fichier
+
+- Si les données ne correspondent pas au format attendu, un message indique que le fichier n'est pas valide
+- Si le fichier est valide, un message demande la confirmation à l'utilisateur
+- Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés. La version sert à mettre à jour les données le cas échéant.
+
+### Supprimer les données
+
+- Un message demande à l'utilisateur de confirmer la suppression
+- En cas de confirmation, les familles, bénévoles et cours sont supprimés
+
+### Importer les données d'exemple
+
+- Un message demande à l'utilisateur de confirmer le remplacement de ses données
+- Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés par les données d'exemple

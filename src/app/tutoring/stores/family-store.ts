@@ -53,6 +53,10 @@ export class FamilyStore {
     });
   }
 
+  replaceFamilies(families: Family[]) {
+    this.families.set(families);
+  }
+
   addFamily(family: Family) {
     this.families.update((families) => [...families, family]);
   }
