@@ -106,6 +106,14 @@
       </button>
     </div>
 
+    <div class="sub-form">
+      <div class="highlight">Adresse</div>
+      <amv-address-form
+        class="inside-form"
+        [addressField]="volunteerForm.address"
+      ></amv-address-form>
+    </div>
+
     <div class="field">
       <label for="info">Informations supplémentaires</label>
       <textarea id="info" [formField]="volunteerForm.additionalInfo"> </textarea>

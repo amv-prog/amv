@@ -167,7 +167,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ## Ajout d'un bénévole
 
-Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, son adresse, et ses informations supplémentaires.
 
 - Le bénévole est un encadrant par défaut.
 - Les champs sont initialement vides.
@@ -180,7 +180,7 @@ Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou
 
 ## Modification d'un bénévole
 
-Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, son adresse, et ses informations supplémentaires.
 
 - Les champs sont initié avec les valeurs enregistrées du bénévole.
 - Le nom et le prénom sont obligatoires.
@@ -248,7 +248,7 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 
 - Le nom et prénom sont affichés.
 - Le type encadrant ou bénévole est affiché, avec l'icone associée.
-- S'ils sont renseignés, les langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- S'ils sont renseignés, les langues parlées, numéros de téléphone, email, addresse, et renseignements complémentaires sont affichés.
 - La liste des cours actuels concernant le bénévole est affichée.
 - Si le membre est un tuteur, un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le bénévole

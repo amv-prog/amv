@@ -1,14 +1,16 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { apply, email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { AddressForm } from '../../../../shared/components/address-form/address-form';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
+import { Address } from '../../../../shared/models/address';
 import { NavigationService } from '../../../../shared/services/navigation-service';
 import { VolunteerMember } from '../../../models/volunteer-member';
 import { VolunteerStore } from '../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-edit-volunteer',
-  imports: [FormRoot, Toggle, FormField],
+  imports: [FormRoot, Toggle, FormField, AddressForm],
   templateUrl: './edit-volunteer.html',
 })
 export class EditVolunteer {
@@ -27,6 +29,12 @@ export class EditVolunteer {
     phones: string[];
     languages: string[];
     additionalInfo: string;
+    address: {
+      street: string;
+      city: string;
+      postCode: string;
+      additional: string;
+    };
   }> = signal({
     tutor: (this.volunteer()?.isTutor ?? true) ? 'LEFT' : 'RIGHT',
     firstName: this.volunteer()?.firstName || '',
@@ -41,6 +49,12 @@ export class EditVolunteer {
         ? this.volunteer()!.languages
         : [''],
     additionalInfo: this.volunteer()?.additionalInfo || '',
+    address: {
+      street: this.volunteer()?.address?.street || '',
+      city: this.volunteer()?.address?.city || '',
+      postCode: this.volunteer()?.address?.postCode || '',
+      additional: this.volunteer()?.address?.additional || '',
+    },
   });
 
   protected readonly volunteerForm = form(
@@ -49,6 +63,7 @@ export class EditVolunteer {
       required(form.firstName, { message: 'Le prénom est obligatoire' });
       required(form.lastName, { message: 'Le nom de famille est obligatoire' });
       email(form.email, { message: "L'email saisi n'est pas valide" });
+      apply(form.address, AddressForm.addressSchema);
     },
     {
       submission: {
@@ -100,6 +115,7 @@ export class EditVolunteer {
           phoneNumbers: formData.phones.filter((v) => !!v),
           languages: formData.languages.filter((v) => !!v),
           additionalInfo: formData.additionalInfo.trim(),
+          address: this.getAddress(),
         };
         this.volunteerStore.updateVolunteer(current);
         this.navigationService.back(['tutoring', 'volunteer', 'list']);
@@ -112,6 +128,7 @@ export class EditVolunteer {
           formData.email || undefined,
           formData.languages.filter((v) => !!v),
           formData.additionalInfo.trim(),
+          this.getAddress(),
         );
         this.volunteerStore.addVolunteer(current);
         this.router.navigate(['tutoring', 'volunteer', 'list']);
@@ -121,5 +138,23 @@ export class EditVolunteer {
 
   cancel() {
     this.navigationService.back(['tutoring', 'volunteer', 'list']);
+  }
+
+  private getAddress(): Address | undefined {
+    if (this.volunteerForm.address().valid()) {
+      const addressData = this.volunteerFormData().address;
+      if (AddressForm.isAddressNull(this.volunteerFormData().address)) {
+        return undefined;
+      } else {
+        return new Address(
+          addressData.street,
+          addressData.postCode,
+          addressData.city,
+          addressData.additional,
+        );
+      }
+    } else {
+      return undefined;
+    }
   }
 }
