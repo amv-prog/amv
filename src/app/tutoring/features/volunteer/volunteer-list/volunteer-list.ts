@@ -14,7 +14,7 @@ import { VolunteerStore } from '../../../stores/volunteer-store';
 export class VolunteerList {
   protected readonly volunteerStore = inject(VolunteerStore);
 
-  protected readonly volunteers = this.volunteerStore.volunteers;
+  protected readonly volunteers = this.volunteerStore.sortedVolunteers;
 
   private readonly dialog = inject(Dialog);
 

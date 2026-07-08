@@ -22,7 +22,7 @@ export class FamilyList {
   private readonly dialog = inject(Dialog);
 
   protected readonly familiesToDisplay = computed(() =>
-    this.familyStore.families().map((f) => new FamilyDisplay(f, true)),
+    this.familyStore.sortedFamilies().map((f) => new FamilyDisplay(f, true)),
   );
 
   public displayFamily(family: Family) {

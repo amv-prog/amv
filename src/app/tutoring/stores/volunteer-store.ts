@@ -12,6 +12,10 @@ export class VolunteerStore {
 
   selectedVolunteerId: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 
+  sortedVolunteers = computed(() =>
+    [...this.volunteers()].sort((v1, v2) => v1.firstName.localeCompare(v2.firstName)),
+  );
+
   selectedVolunteer = computed(() => {
     const volunteerId = this.selectedVolunteerId();
     if (!!volunteerId) {
