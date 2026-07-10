@@ -283,3 +283,22 @@ L'utilisateur peut sélectionner un fichier
 
 - Un message demande à l'utilisateur de confirmer le remplacement de ses données
 - Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés par les données d'exemple
+
+## Liste des écoles
+
+- Les "écoles" sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires.
+- La liste des écoles est stockée et récupérée dans le local storage.
+- Pour chaque école, un bouton permet de la modifier
+- Un bouton permet d'ajouter une école.
+
+### Ajouter ou modifier une école
+
+Lors du clic sur le bouton, une popin s'ouvre.
+Un formulaire permet d'ajouter ou modifier une école en saisissant son nom et des informations supplémentaires.
+
+- Le nom est obligatoire.
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, l'école est ajoutée au local storage (ou modifiée), et la popin est fermée.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.

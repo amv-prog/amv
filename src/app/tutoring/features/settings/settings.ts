@@ -8,9 +8,11 @@ import { MessageService } from '../../../shared/services/message-service';
 import { VersionStore } from '../../../shared/version-store';
 import { Family } from '../../models/family';
 import { Lesson } from '../../models/lesson';
+import { School } from '../../models/school';
 import { VolunteerMember } from '../../models/volunteer-member';
 import { FamilyStore } from '../../stores/family-store';
 import { LessonStore } from '../../stores/lesson-store';
+import { SchoolStore } from '../../stores/school-store';
 import { VolunteerStore } from '../../stores/volunteer-store';
 import * as exempleJson from './settings-exemple.json';
 
@@ -25,6 +27,7 @@ export class Settings {
   private readonly familyStore = inject(FamilyStore);
   private readonly volunteerStore = inject(VolunteerStore);
   private readonly lessonStore = inject(LessonStore);
+  private readonly schoolStore = inject(SchoolStore);
   private readonly versionStore = inject(VersionStore);
   private readonly messageService = inject(MessageService);
 
@@ -39,8 +42,9 @@ export class Settings {
       const families = this.familyStore.families();
       const volunteers = this.volunteerStore.volunteers();
       const lessons = this.lessonStore.lessons();
+      const schools = this.schoolStore.schools();
       const version = this.versionStore.version();
-      const settings = new SettingsModel(families, volunteers, lessons, version);
+      const settings = new SettingsModel(families, volunteers, lessons, version, schools);
       const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
       const blobUrl = window.URL.createObjectURL(blob);
       return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
@@ -58,12 +62,15 @@ export class Settings {
       const families = settings.families;
       const volunteers = settings.volunteers;
       const lessons = settings.lessons;
+      const schools = settings.schools || [];
       if (!families || !volunteers || !lessons) {
         this.messageService.displayError(
           "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
         );
       } else {
-        this.validateSettingsImport(new SettingsModel(families, volunteers, lessons, version));
+        this.validateSettingsImport(
+          new SettingsModel(families, volunteers, lessons, version, schools),
+        );
       }
     }
     input.value = '';
@@ -92,6 +99,7 @@ export class Settings {
     this.familyStore.replaceFamilies(settings.families);
     this.volunteerStore.replaceVolunteers(settings.volunteers);
     this.lessonStore.replaceLessons(settings.lessons);
+    this.schoolStore.replaceSchools(settings.schools || []);
     this.messageService.displaySuccess('Les données ont bien été chargées.');
   }
 
@@ -118,6 +126,7 @@ export class Settings {
     this.familyStore.replaceFamilies([]);
     this.volunteerStore.replaceVolunteers([]);
     this.lessonStore.replaceLessons([]);
+    this.schoolStore.replaceSchools([]);
     this.messageService.displaySuccess('Les données ont bien été supprimées.');
   }
 
@@ -147,5 +156,6 @@ class SettingsModel {
     public volunteers: VolunteerMember[],
     public lessons: Lesson[],
     public version: string,
+    public schools?: School[],
   ) {}
 }
