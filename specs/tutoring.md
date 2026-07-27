@@ -286,9 +286,12 @@ L'utilisateur peut sélectionner un fichier
 
 ## Liste des écoles
 
+- Une liste déroulante permet de choisir l'année scolaire à afficher, ou toutes les années
 - Les "écoles" sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires.
 - La liste des écoles est stockée et récupérée dans le local storage.
-- Pour chaque école, un bouton permet de la modifier
+- Pour chaque école, un bouton permet de la modifier, un autre d'ajouter une classe, et un autre de supprimer l'école
+- Pour chaque école, la liste des classes de l'année sélectionnée est affichée (ou toutes les années selon le choix)
+- Pour chaque classe, un bouton permet de la modifier et un autre de la supprimer
 - Un bouton permet d'ajouter une école.
 
 ### Ajouter ou modifier une école
@@ -302,3 +305,24 @@ Un formulaire permet d'ajouter ou modifier une école en saisissant son nom et d
   - Si le formulaire est valide, l'école est ajoutée au local storage (ou modifiée), et la popin est fermée.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
+
+### Supprimer une école
+
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, l'école est supprimée du local storage, ainsi que toutes ses classes, et la liste est mise à jour.
+
+### Ajouter ou modifier une classe
+
+Lors du clic sur le bouton, une popin s'ouvre.
+Le nom de l'école est affiché.
+Un formulaire permet d'ajouter ou modifier une classe.
+
+- L'année scolaire, l'enseignant et le niveau sont obligatoires.
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, la classe est ajoutée (ou modifiée) à l'école dans le local storage, et la popin est fermée.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
+
+### Supprimer une classe
+
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la classe est supprimée du local storage, et la liste est mise à jour.

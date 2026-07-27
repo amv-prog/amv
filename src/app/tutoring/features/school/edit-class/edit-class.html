@@ -6,7 +6,7 @@
   }
 </div>
 <div class="content">
-  <div>{{ school.name }}</div>
+  <div class="subtitle">{{ school.name }}</div>
   <form class="simple-form" [formRoot]="classForm">
     @let year = classForm.year;
     <div class="field">
@@ -23,12 +23,13 @@
       }
     }
 
+    @let teachers = classForm.teachers;
     <div class="sub-form">
-      @for (teacher of classForm.teachers; track teacher) {
+      @for (teacher of teachers; track teacher) {
         <div class="field">
-          <label [for]="`teacher-${$index}`">Enseignant {{ $index > 0 ? $index + 1 : '' }}</label>
+          <label [for]="`teacher-${$index}`">Enseignant {{ $index > 0 ? $index + 1 : ' *' }}</label>
           <input [id]="`teacher-${$index}`" type="text" [formField]="teacher" />
-          @if (classForm.teachers.length > 1) {
+          @if (teachers.length > 1) {
             <button
               class="invisible small"
               type="button"
@@ -40,6 +41,11 @@
           }
         </div>
       }
+      @if (teachers().dirty() && teachers().invalid()) {
+        @for (error of teachers().errors(); track error.kind) {
+          <div class="field-error">{{ error.message }}</div>
+        }
+      }
       <button
         class="invisible small"
         type="button"
@@ -50,12 +56,13 @@
       </button>
     </div>
 
+    @let grades = classForm.grades;
     <div class="sub-form">
-      @for (grade of classForm.grades; track grade) {
+      @for (grade of grades; track grade) {
         <div class="field">
-          <label [for]="`grade-${$index}`">Niveau {{ $index > 0 ? $index + 1 : '' }}</label>
+          <label [for]="`grade-${$index}`">Niveau {{ $index > 0 ? $index + 1 : ' *' }}</label>
           <input [id]="`grade-${$index}`" type="text" [formField]="grade" />
-          @if (classForm.grades.length > 1) {
+          @if (grades.length > 1) {
             <button
               class="invisible small"
               type="button"
@@ -66,6 +73,11 @@
             </button>
           }
         </div>
+      }
+      @if (grades().dirty() && grades().invalid()) {
+        @for (error of grades().errors(); track error.kind) {
+          <div class="field-error">{{ error.message }}</div>
+        }
       }
       <button class="invisible small" type="button" title="Ajouter un niveau" (click)="addGrade()">
         <span class="material-symbols-outlined">add</span>

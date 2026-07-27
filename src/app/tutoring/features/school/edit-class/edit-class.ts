@@ -1,6 +1,13 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import {
+  ChildFieldContext,
+  form,
+  FormField,
+  FormRoot,
+  required,
+  validate,
+} from '@angular/forms/signals';
 import { School } from '../../../models/school';
 import { SchoolClass } from '../../../models/school-class';
 import { SchoolStore } from '../../../stores/school-store';
@@ -32,8 +39,16 @@ export class EditClass {
     this.classFormData,
     (form) => {
       required(form.year, { message: "L'année scolaire est obligatoire" });
-      required(form.teachers, { message: "L'enseignant est obligatoire" });
-      required(form.grades, { message: 'Le niveau est obligatoire' });
+      validate(form.teachers, (context: ChildFieldContext<string[]>) =>
+        context.value().filter((v) => !!v).length === 0
+          ? { kind: 'teacher-required', message: "L'enseignant est obligatoire" }
+          : undefined,
+      );
+      validate(form.grades, (context: ChildFieldContext<string[]>) =>
+        context.value().filter((v) => !!v).length === 0
+          ? { kind: 'teacher-required', message: 'Le niveau est obligatoire' }
+          : undefined,
+      );
     },
     {
       submission: {
