@@ -54,9 +54,9 @@ export class SchoolStore {
     const date = new Date();
     const year = date.getFullYear();
     if (date.getMonth() >= 6) {
-      return year + 1;
-    } else {
       return year;
+    } else {
+      return year - 1;
     }
   }
 

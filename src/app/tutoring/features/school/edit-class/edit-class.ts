@@ -25,6 +25,7 @@ export class EditClass {
     year: this.class?.year.toString() || this.schoolYear.toString(),
     teachers: !!this.class && this.class!.teachers.length > 0 ? this.class!.teachers : [''],
     grades: !!this.class && this.class!.grades.length > 0 ? this.class!.grades : [''],
+    additionalInfo: this.class?.additionalInfo || '',
   });
 
   protected readonly classForm = form(
@@ -94,12 +95,14 @@ export class EditClass {
           year: Number(formData.year),
           teachers: formData.teachers.filter((v) => !!v),
           grades: grades,
+          additionalInfo: formData.additionalInfo.trim(),
         };
       } else {
         current = new SchoolClass(
           Number(formData.year),
           formData.teachers.filter((v) => !!v),
           grades,
+          formData.additionalInfo.trim(),
         );
       }
       this.schoolStore.updateClass(this.school, current);
