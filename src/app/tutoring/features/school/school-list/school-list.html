@@ -2,16 +2,12 @@
   <h1>Liste des écoles</h1>
   @if (schools().length) {
     <table class="amv-table">
-      <thead>
-        <tr>
-          <th scope="col">Nom</th>
-          <th scope="col">Informations supplémentaires</th>
-        </tr>
-      </thead>
       @for (school of schools(); track school.id) {
-        <tr class="head selectable trackable">
+        <tr class="head">
           <td class="important">{{ school.name }}</td>
-          <td [title]="school.additionalInfo">{{ school.additionalInfo | truncate }}</td>
+          <td [title]="school.additionalInfo" colspan="4">
+            {{ school.additionalInfo | truncate }}
+          </td>
           <td>
             <button class="invisible" title="modifier" (click)="openEditSchoolDialog(school)">
               <span class="material-symbols-outlined">edit</span>
@@ -23,6 +19,29 @@
             </button>
           </td>
         </tr>
+        @for (class of sortedClasses(school.classes); track class.id) {
+          <tr [class.even]="$even">
+            <td></td>
+            <td>
+              {{ class.teachers.join(', ') }}
+            </td>
+            <td>
+              {{ class.grades.join(' / ') }}
+            </td>
+            <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
+            <td>{{ class.year }} - {{ class.year + 1 }}</td>
+            <td>
+              <button
+                class="invisible"
+                title="modifier"
+                (click)="openEditClassDialog(school, class)"
+              >
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+            </td>
+            <td></td>
+          </tr>
+        }
       }
     </table>
   } @else {

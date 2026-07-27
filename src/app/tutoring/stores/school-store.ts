@@ -5,6 +5,8 @@ import { SchoolClass } from '../models/school-class';
 
 @Service()
 export class SchoolStore {
+  private static standardGrades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
+
   private readonly localStorage = inject(LocalStorageService);
 
   schools: WritableSignal<School[]>;
@@ -61,7 +63,18 @@ export class SchoolStore {
   }
 
   static sortedGrades(grades: string[]): string[] {
-    const standardGrades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
-    return [...grades].sort((g1, g2) => standardGrades.indexOf(g2) - standardGrades.indexOf(g1));
+    return [...grades].sort(
+      (g1, g2) => this.standardGrades.indexOf(g1) - this.standardGrades.indexOf(g2),
+    );
+  }
+
+  static sortedClasses(classes: SchoolClass[]): SchoolClass[] {
+    return [...classes].sort((c1, c2) => this.classSortWeight(c1) - this.classSortWeight(c2));
+  }
+
+  // Tri des classes (à modifier si on a plus de 5 niveaux possible ou 9 niveaux par classe)
+  private static classSortWeight(schoolClass: SchoolClass): number {
+    const gradeindex = Math.min(...schoolClass.grades.map((g) => this.standardGrades.indexOf(g)));
+    return schoolClass.year * 100 + gradeindex * 10 + schoolClass.grades.length;
   }
 }
