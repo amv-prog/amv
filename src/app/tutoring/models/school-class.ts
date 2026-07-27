@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 
-export class Class {
+export class SchoolClass {
   public id: string;
 
   constructor(

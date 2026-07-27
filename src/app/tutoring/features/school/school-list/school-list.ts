@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { School } from '../../../models/school';
 import { SchoolStore } from '../../../stores/school-store';
+import { EditClass } from '../edit-class/edit-class';
 import { EditSchool } from '../edit-school/edit-school';
 
 @Component({
@@ -19,6 +20,15 @@ export class SchoolList {
 
   public openEditSchoolDialog(school?: School) {
     this.dialog.open(EditSchool, {
+      panelClass: 'dialog',
+      data: {
+        school,
+      },
+    });
+  }
+
+  public openAddClassDialog(school: School) {
+    this.dialog.open(EditClass, {
       panelClass: 'dialog',
       data: {
         school,

@@ -1,6 +1,7 @@
 import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { School } from '../models/school';
+import { SchoolClass } from '../models/school-class';
 
 @Service()
 export class SchoolStore {
@@ -36,5 +37,31 @@ export class SchoolStore {
       }
       return [...schools];
     });
+  }
+
+  updateClass(school: School, schoolClass: SchoolClass) {
+    let cIndex = school.classes.findIndex((c) => c.id === schoolClass.id);
+    if (cIndex >= 0) {
+      school.classes.splice(cIndex, 1, { ...schoolClass });
+    } else {
+      school.classes.push(schoolClass);
+    }
+    this.updateSchool(school);
+  }
+
+  // Année scolaire en cours. L'année suivante est remontée à partir de juillet.
+  static currentSchoolYear(): number {
+    const date = new Date();
+    const year = date.getFullYear();
+    if (date.getMonth() >= 6) {
+      return year + 1;
+    } else {
+      return year;
+    }
+  }
+
+  static sortedGrades(grades: string[]): string[] {
+    const standardGrades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
+    return [...grades].sort((g1, g2) => standardGrades.indexOf(g2) - standardGrades.indexOf(g1));
   }
 }

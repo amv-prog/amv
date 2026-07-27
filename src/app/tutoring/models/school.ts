@@ -1,9 +1,9 @@
 import * as uuid from 'uuid';
-import { Class } from './class';
+import { SchoolClass } from './school-class';
 
 export class School {
   public id: string;
-  public classes: Class[] = [];
+  public classes: SchoolClass[] = [];
 
   constructor(
     public name: string,
