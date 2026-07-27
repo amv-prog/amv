@@ -41,12 +41,30 @@ export class SchoolStore {
     });
   }
 
+  removeSchool(school: School) {
+    this.schools.update((schools) => {
+      let index = schools.indexOf(school);
+      if (index >= 0) {
+        schools.splice(index, 1);
+      }
+      return [...schools];
+    });
+  }
+
   updateClass(school: School, schoolClass: SchoolClass) {
     let cIndex = school.classes.findIndex((c) => c.id === schoolClass.id);
     if (cIndex >= 0) {
       school.classes.splice(cIndex, 1, { ...schoolClass });
     } else {
       school.classes.push(schoolClass);
+    }
+    this.updateSchool(school);
+  }
+
+  removeClass(school: School, schoolClass: SchoolClass) {
+    let index = school.classes.indexOf(schoolClass);
+    if (index >= 0) {
+      school.classes.splice(index, 1);
     }
     this.updateSchool(school);
   }

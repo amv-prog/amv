@@ -31,6 +31,11 @@
               <span class="material-symbols-outlined">group_add</span>
             </button>
           </td>
+          <td>
+            <button class="invisible" title="supprimer" (click)="validateSchoolRemoval(school)">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </td>
         </tr>
         @for (class of filteredClasses(school.classes)(); track class.id) {
           <tr [class.even]="$even">
@@ -53,6 +58,15 @@
               </button>
             </td>
             <td></td>
+            <td>
+              <button
+                class="invisible"
+                title="supprimer"
+                (click)="validateClassRemoval(school, class)"
+              >
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </td>
           </tr>
         }
       }

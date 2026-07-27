@@ -1,6 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, effect, inject, Signal, signal } from '@angular/core';
 import { form, FormField, FormRoot } from '@angular/forms/signals';
+import { tap } from 'rxjs';
+import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { School } from '../../../models/school';
 import { SchoolClass } from '../../../models/school-class';
@@ -86,5 +88,51 @@ export class SchoolList {
         : classes;
       return SchoolStore.sortedClasses(filteredClasses);
     });
+  }
+
+  public validateClassRemoval(school: School, schoolClass: SchoolClass) {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer la classe de ${schoolClass.teachers.join(' et ')} pour l'année ${schoolClass.year} - ${schoolClass.year + 1} ?`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeClass(school, schoolClass);
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private removeClass(school: School, schoolClass: SchoolClass) {
+    this.schoolStore.removeClass(school, schoolClass);
+  }
+
+  public validateSchoolRemoval(school: School) {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: `Souhaitez-vous supprimer ${school.name}, ainsi que toutes ses classes ?`,
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        tap((result) => {
+          if (!!result) {
+            this.removeSchool(school);
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private removeSchool(school: School) {
+    this.schoolStore.removeSchool(school);
   }
 }
