@@ -1,5 +1,18 @@
 <div class="page-center">
   <h1>Liste des écoles</h1>
+
+  <form class="simple-form" [formRoot]="yearForm">
+    <div class="field">
+      <label for="year">Année scolaire</label>
+      <select id="year" [formField]="yearForm.year">
+        <option value="">Toutes les années</option>
+        @for (year of years(); track year) {
+          <option [value]="year">{{ year }} - {{ year + 1 }}</option>
+        }
+      </select>
+    </div>
+  </form>
+
   @if (schools().length) {
     <table class="amv-table">
       @for (school of schools(); track school.id) {
@@ -19,7 +32,7 @@
             </button>
           </td>
         </tr>
-        @for (class of sortedClasses(school.classes); track class.id) {
+        @for (class of filteredClasses(school.classes)(); track class.id) {
           <tr [class.even]="$even">
             <td></td>
             <td>
