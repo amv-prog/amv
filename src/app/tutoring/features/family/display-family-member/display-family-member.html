@@ -1,6 +1,17 @@
 <div class="page-center">
   @if (member(); as memberValue) {
-    <h1>{{ memberValue?.firstName }} {{ memberValue?.lastName }}</h1>
+    <h1>
+      <div>{{ memberValue?.firstName }} {{ memberValue?.lastName }}</div>
+      <a class="a-button invisible" [routerLink]="['edit']" title="modifier">
+        <span class="material-symbols-outlined">edit</span>
+      </a>
+      <button class="invisible" title="supprimer" (click)="validateMemberRemoval()">
+        <span class="material-symbols-outlined"> delete </span>
+      </button>
+      <button class="invisible" title="famille" (click)="goToFamily()">
+        <span class="material-symbols-outlined"> family_group </span>
+      </button>
+    </h1>
 
     <div class="h-panel-large">
       <div class="section">
@@ -42,174 +53,7 @@
       }
     </div>
 
-    @if (currentLessonsToDisplay().length) {
-      <div class="highlight">Cours actuels</div>
-      <table class="amv-table">
-        <thead>
-          <tr>
-            <th scope="col">Encadrant</th>
-            <th scope="col">Jour et heure</th>
-            <th scope="col">Lieu</th>
-            <th scope="col">Date de début</th>
-            <th scope="col">Date de fin</th>
-          </tr>
-        </thead>
-        @for (lessonDisplay of currentLessonsToDisplay(); track lessonDisplay.lesson.id) {
-          @let lesson = lessonDisplay.lesson;
-          @let tutor = lessonDisplay.tutor;
-          <tr [class.even]="$even">
-            <td>{{ displayTutorName(tutor) }}</td>
-            <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-            <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-            <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
-            <td>
-              <a
-                class="a-button invisible"
-                [routerLink]="['lesson', lesson.id, 'edit']"
-                title="modifier"
-                ><span class="material-symbols-outlined">edit</span></a
-              >
-            </td>
-            <td>
-              @if (canStopLesson(lesson)) {
-                <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
-                  <span class="material-symbols-outlined"> stop_circle </span>
-                </button>
-              } @else {
-                <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
-                  <span class="material-symbols-outlined"> play_circle </span>
-                </button>
-              }
-            </td>
-            <td>
-              <button class="invisible" title="supprimer" (click)="validateLessonRemoval(lesson)">
-                <span class="material-symbols-outlined"> delete </span>
-              </button>
-            </td>
-          </tr>
-        }
-      </table>
-    }
-
-    <div class="h-panel">
-      @if (!memberValue.isParent) {
-        <a class="a-button" [routerLink]="['lesson', 'add']"> Ajouter un cours </a>
-      }
-      <a class="a-button" [routerLink]="['edit']"> Modifier le membre </a>
-      <button type="button" (click)="validateMemberRemoval()">Supprimer le membre</button>
-      <button type="button" class="secondary" (click)="goToFamily()">Famille</button>
-    </div>
-
-    @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
-      <hr />
-      <div class="h-panel-large">
-        @if (!!futureLessonsToDisplay().length) {
-          <div class="section">
-            <div class="highlight">Futurs cours prévus</div>
-            <table class="amv-table">
-              <thead>
-                <tr>
-                  <th scope="col">Encadrant</th>
-                  <th scope="col">Jour et heure</th>
-                  <th scope="col">Lieu</th>
-                  <th scope="col">Date de début</th>
-                  <th scope="col">Date de fin</th>
-                </tr>
-              </thead>
-              @for (lessonDisplay of futureLessonsToDisplay(); track lessonDisplay.lesson.id) {
-                @let lesson = lessonDisplay.lesson;
-                @let tutor = lessonDisplay.tutor;
-                <tr [class.even]="$even">
-                  <td>{{ displayTutorName(tutor) }}</td>
-                  <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-                  <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
-                  <td>
-                    <a
-                      class="a-button invisible"
-                      [routerLink]="['lesson', lesson.id, 'edit']"
-                      title="modifier"
-                      ><span class="material-symbols-outlined">edit</span></a
-                    >
-                  </td>
-                  <td>
-                    <button
-                      class="invisible"
-                      title="supprimer"
-                      (click)="validateLessonRemoval(lesson)"
-                    >
-                      <span class="material-symbols-outlined"> delete </span>
-                    </button>
-                  </td>
-                </tr>
-              }
-            </table>
-          </div>
-        }
-
-        @if (!!pastLessonsToDisplay().length) {
-          <div class="section">
-            <div class="highlight">Cours terminés</div>
-            <table class="amv-table">
-              <thead>
-                <tr>
-                  <th scope="col">Encadrant</th>
-                  <th scope="col">Jour et heure</th>
-                  <th scope="col">Lieu</th>
-                  <th scope="col">Date de début</th>
-                  <th scope="col">Date de fin</th>
-                </tr>
-              </thead>
-              @for (lessonDisplay of pastLessonsToDisplay(); track lessonDisplay.lesson.id) {
-                @let lesson = lessonDisplay.lesson;
-                @let tutor = lessonDisplay.tutor;
-                <tr [class.even]="$even">
-                  <td>{{ displayTutorName(tutor) }}</td>
-                  <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-                  <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
-                  <td>
-                    <a
-                      class="a-button invisible"
-                      [routerLink]="['lesson', lesson.id, 'edit']"
-                      title="modifier"
-                      ><span class="material-symbols-outlined">edit</span></a
-                    >
-                  </td>
-                  <td>
-                    @if (canStopLesson(lesson)) {
-                      <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
-                        <span class="material-symbols-outlined"> stop_circle </span>
-                      </button>
-                    } @else {
-                      <button
-                        class="invisible"
-                        title="reprendre"
-                        (click)="reactivateLesson(lesson)"
-                      >
-                        <span class="material-symbols-outlined"> play_circle </span>
-                      </button>
-                    }
-                  </td>
-                  <td>
-                    <button
-                      class="invisible"
-                      title="supprimer"
-                      (click)="validateLessonRemoval(lesson)"
-                    >
-                      <span class="material-symbols-outlined"> delete </span>
-                    </button>
-                  </td>
-                </tr>
-              }
-            </table>
-          </div>
-        }
-      </div>
-    }
+    <amv-recipient-lessons [member]="memberValue"></amv-recipient-lessons>
   } @else {
     <div>Membre non trouvé</div>
   }

@@ -25,6 +25,7 @@
   &.invisible {
     background-color: transparent;
     border-color: transparent;
+    color: inherit;
 
     &:focus,
     &:hover {
