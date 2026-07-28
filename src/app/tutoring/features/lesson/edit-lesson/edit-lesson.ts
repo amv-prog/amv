@@ -122,13 +122,11 @@ export class EditLesson {
           }),
           disabled(form.student, {
             when: () => {
-              console.log('student readonly ' + !!this.member());
               return !!this.member();
             },
           }),
           disabled(form.tutor, {
             when: () => {
-              console.log('tutor readonly ' + !!this.volunteer());
               return !!this.volunteer();
             },
           }));

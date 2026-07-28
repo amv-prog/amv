@@ -93,6 +93,6 @@ export class SchoolStore {
   // Tri des classes (à modifier si on a plus de 5 niveaux possible ou 9 niveaux par classe)
   private static classSortWeight(schoolClass: SchoolClass): number {
     const gradeindex = Math.min(...schoolClass.grades.map((g) => this.standardGrades.indexOf(g)));
-    return schoolClass.year * 100 + gradeindex * 10 + schoolClass.grades.length;
+    return schoolClass.year * -100 + gradeindex * 10 + schoolClass.grades.length;
   }
 }

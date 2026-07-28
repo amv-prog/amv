@@ -68,12 +68,23 @@ export class Settings {
           "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
         );
       } else {
-        this.validateSettingsImport(
-          new SettingsModel(families, volunteers, lessons, version, schools),
-        );
+        const settings = new SettingsModel(families, volunteers, lessons, version, schools);
+        this.updateData(settings);
+        this.validateSettingsImport(settings);
       }
     }
     input.value = '';
+  }
+
+  private updateData(settings: SettingsModel) {
+    if (VersionStore.compare('0.1.3', settings.version) > 0) {
+      for (const family of settings.families) {
+        for (const member of family.members) {
+          member.school = undefined;
+          member.schoolClasses = [];
+        }
+      }
+    }
   }
 
   private validateSettingsImport(settings: SettingsModel) {
@@ -95,7 +106,7 @@ export class Settings {
       .subscribe();
   }
 
-  private importSettings(settings: SettingsModel) {
+  private importSettings(settings: any) {
     this.familyStore.replaceFamilies(settings.families);
     this.volunteerStore.replaceVolunteers(settings.volunteers);
     this.lessonStore.replaceLessons(settings.lessons);
@@ -142,7 +153,7 @@ export class Settings {
       .pipe(
         tap((result) => {
           if (!!result) {
-            this.importSettings(exempleJson as SettingsModel);
+            this.importSettings(exempleJson);
           }
         }),
       )
