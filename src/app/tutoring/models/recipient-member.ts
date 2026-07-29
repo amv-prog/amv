@@ -4,6 +4,7 @@ import { Member } from './member';
 export class RecipientMember implements Member {
   public id: string;
   public type: 'RECIPIENT' = 'RECIPIENT';
+  public schoolClassIds: string[] = [];
 
   constructor(
     public isParent: boolean,

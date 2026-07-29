@@ -167,7 +167,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ## Ajout d'un bénévole
 
-Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, son adresse, et ses informations supplémentaires.
 
 - Le bénévole est un encadrant par défaut.
 - Les champs sont initialement vides.
@@ -180,7 +180,7 @@ Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou
 
 ## Modification d'un bénévole
 
-Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, et ses informations supplémentaires.
+Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant ou non, son nom, son prénom, son email, ses numéros de téléphones, ses langues parlées, son adresse, et ses informations supplémentaires.
 
 - Les champs sont initié avec les valeurs enregistrées du bénévole.
 - Le nom et le prénom sont obligatoires.
@@ -234,6 +234,7 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Le nom et prénom sont affichés.
 - Le type parent ou enfant est affiché, avec l'icone associée.
 - S'ils sont renseignés, la date de naissance, langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- S'il s'agit d'un enfant, la liste des classes est affichée. Un bouton permet d'ajouter une classe.
 - La liste des cours actuels concernant le membre est affichée.
 - Si le membre est un enfant, un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le membre
@@ -244,11 +245,18 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
 - Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
 
+### Ajouter une classe
+
+- Une popin permet de sélectionner l'école, l'année scolaire et la classe. Les 3 champs sont obligatoires.
+- Un bouton permet de créer une nouvelle école.
+- Un bouton permet de créer une nouvelle classe, si une école est sélectionnée.
+- Au clic sur le bouton enregistrer, la classe est ajoutée au membre et s'affiche sur sa page.
+
 ## Détail d'un bénévole
 
 - Le nom et prénom sont affichés.
 - Le type encadrant ou bénévole est affiché, avec l'icone associée.
-- S'ils sont renseignés, les langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- S'ils sont renseignés, les langues parlées, numéros de téléphone, email, addresse, et renseignements complémentaires sont affichés.
 - La liste des cours actuels concernant le bénévole est affichée.
 - Si le membre est un tuteur, un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le bénévole
@@ -283,3 +291,47 @@ L'utilisateur peut sélectionner un fichier
 
 - Un message demande à l'utilisateur de confirmer le remplacement de ses données
 - Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés par les données d'exemple
+
+## Liste des écoles
+
+- Une liste déroulante permet de choisir l'année scolaire à afficher, ou toutes les années
+- Les écoles sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires, ainsi que le nombre d'élèves.
+- La liste des écoles est stockée et récupérée dans le local storage.
+- Pour chaque école, un bouton permet de la modifier, un autre d'ajouter une classe, et un autre de supprimer l'école
+- Pour chaque école, la liste des classes de l'année sélectionnée est affichée (ou toutes les années selon le choix)
+- Pour chaque classe, la liste des élèves suivis est affichée
+- Pour chaque classe, un bouton permet de la modifier et un autre de la supprimer
+- Un bouton permet d'ajouter une école.
+
+### Ajouter ou modifier une école
+
+Lors du clic sur le bouton, une popin s'ouvre.
+Un formulaire permet d'ajouter ou modifier une école en saisissant son nom et des informations supplémentaires.
+
+- Le nom est obligatoire.
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, l'école est ajoutée au local storage (ou modifiée), et la popin est fermée.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
+
+### Supprimer une école
+
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, l'école est supprimée du local storage, ainsi que toutes ses classes, et la liste est mise à jour.
+
+### Ajouter ou modifier une classe
+
+Lors du clic sur le bouton, une popin s'ouvre.
+Le nom de l'école est affiché.
+Un formulaire permet d'ajouter ou modifier une classe.
+
+- L'année scolaire, l'enseignant et le niveau sont obligatoires.
+- Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
+- Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
+  - Si le formulaire est valide, la classe est ajoutée (ou modifiée) à l'école dans le local storage, et la popin est fermée.
+  - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
+- Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
+
+### Supprimer une classe
+
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la classe est supprimée du local storage, et la liste est mise à jour.

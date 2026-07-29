@@ -16,6 +16,10 @@ export class FamilyStore {
     undefined,
   );
 
+  sortedFamilies = computed(() =>
+    [...this.families()].sort((f1, f2) => f1.name.localeCompare(f2.name)),
+  );
+
   childrenMap = computed(() => {
     const families = this.families();
     return new Map(

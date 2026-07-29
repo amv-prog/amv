@@ -22,7 +22,8 @@
           "languages": [],
           "additionalInfo": "Mère",
           "id": "0efe9d16-a49f-4ebf-b60e-15165176e08d",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": []
         },
         {
           "isParent": true,
@@ -36,7 +37,8 @@
           "languages": [],
           "additionalInfo": "Père",
           "id": "5f085395-bbe2-45fc-98da-09cc1865c475",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": []
         },
         {
           "isParent": false,
@@ -49,7 +51,11 @@
           "birthDate": "2019-07-08",
           "additionalInfo": "Difficultés de concentration",
           "id": "64dbd5b6-c3d2-437a-89c6-d65f88f22ece",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": [
+            "40b17e94-6156-414f-88a3-0eb61bb71a82",
+            "505ef0e6-76ae-4481-bde3-1031f9d8c19d"
+          ]
         },
         {
           "isParent": false,
@@ -63,7 +69,11 @@
           "birthDate": "2009-01-16",
           "additionalInfo": "",
           "id": "88d540be-35ef-4a63-a436-d77465eee080",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": [
+            "07d8756c-2451-4d84-93a3-be17f5d063b2",
+            "40b17e94-6156-414f-88a3-0eb61bb71a82"
+          ]
         }
       ],
       "contributionValidity": "2027-07-03"
@@ -90,7 +100,8 @@
           "languages": [],
           "additionalInfo": "",
           "id": "a8f34cdb-75a8-44d0-9c12-508e3e9b2fba",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": []
         },
         {
           "isParent": false,
@@ -103,7 +114,10 @@
           "birthDate": "2015-11-18",
           "additionalInfo": "",
           "id": "10b75c31-aabd-4007-a12d-af85b8a3290b",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": [
+            "505ef0e6-76ae-4481-bde3-1031f9d8c19d"
+          ]
         },
         {
           "isParent": true,
@@ -114,7 +128,8 @@
           "languages": [],
           "additionalInfo": "Grand-mère",
           "id": "f993b336-6e84-400c-90f2-087ad740eb95",
-          "type": "RECIPIENT"
+          "type": "RECIPIENT",
+          "schoolClassIds": []
         }
       ]
     }
@@ -247,7 +262,145 @@
       "place": "ASSOCIATION",
       "startDate": "2026-02-01",
       "id": "29278438-c05f-466c-a519-ac2c8b26a7fa"
+    },
+    {
+      "studentId": "64dbd5b6-c3d2-437a-89c6-d65f88f22ece",
+      "tutorId": "dac65446-ce0b-4525-b360-a4c4b15231ce",
+      "dayOfWeek": 3,
+      "time": "10h",
+      "place": "ASSOCIATION",
+      "startDate": "2025-07-28",
+      "endDate": "2026-07-01",
+      "id": "217de278-4f84-4541-ae24-178020cca6ac"
+    },
+    {
+      "studentId": "64dbd5b6-c3d2-437a-89c6-d65f88f22ece",
+      "tutorId": "dac65446-ce0b-4525-b360-a4c4b15231ce",
+      "dayOfWeek": 4,
+      "time": "18h",
+      "place": "ASSOCIATION",
+      "startDate": "2026-09-01",
+      "id": "a7b24ca9-6eb6-4673-93f5-e4a7261389fc"
     }
   ],
-  "version": "0.1.0"
+  "version": "0.1.2",
+  "schools": [
+    {
+      "name": "École Albert",
+      "additionalInfo": "Pas de climatisation",
+      "id": "5cccb190-6270-4667-8f0d-0e1592acac6f",
+      "classes": [
+        {
+          "year": 2026,
+          "teachers": [
+            "Mme Alice",
+            "Mr Bastien"
+          ],
+          "grades": [
+            "CE1"
+          ],
+          "additionalInfo": "",
+          "id": "07d8756c-2451-4d84-93a3-be17f5d063b2"
+        },
+        {
+          "year": 2026,
+          "teachers": [
+            "Mme Charlotte"
+          ],
+          "grades": [
+            "CP"
+          ],
+          "additionalInfo": "",
+          "id": "c0d76113-f2ec-4e98-bada-227871ccc003"
+        },
+        {
+          "year": 2026,
+          "teachers": [
+            "Mr Damien"
+          ],
+          "grades": [
+            "CE2",
+            "CM1"
+          ],
+          "additionalInfo": "",
+          "id": "9e5928bb-c917-4642-a0a7-1cb83a298147"
+        },
+        {
+          "year": 2025,
+          "teachers": [
+            "Mme Alice"
+          ],
+          "grades": [
+            "CP"
+          ],
+          "additionalInfo": "",
+          "id": "40b17e94-6156-414f-88a3-0eb61bb71a82"
+        },
+        {
+          "year": 2025,
+          "teachers": [
+            "Mr Bastien"
+          ],
+          "grades": [
+            "CM2"
+          ],
+          "additionalInfo": "",
+          "id": "6d3d667b-3945-442a-b20d-da1220bc8a7e"
+        }
+      ]
+    },
+    {
+      "name": "École Martine",
+      "additionalInfo": "",
+      "id": "c8bf5eb2-fbe8-455c-8018-0917ff63929b",
+      "classes": []
+    },
+    {
+      "name": "École Sabine",
+      "additionalInfo": "",
+      "id": "b89d09cc-585a-4be6-aa8c-1201c883ef97",
+      "classes": [
+        {
+          "year": 2026,
+          "teachers": [
+            "Mme Aigle"
+          ],
+          "grades": [
+            "CE1"
+          ],
+          "additionalInfo": "",
+          "id": "5bc07e63-3a8e-4113-bbcc-bfd73579ca49"
+        },
+        {
+          "year": 2025,
+          "teachers": [
+            "Mme Aigle"
+          ],
+          "grades": [
+            "CP"
+          ],
+          "additionalInfo": "",
+          "id": "97e9cf89-c143-4776-9bc4-583a37a66c83"
+        }
+      ]
+    },
+    {
+      "name": "École Ada",
+      "additionalInfo": "",
+      "id": "6a94d65b-a102-4032-b55c-3f33a922d082",
+      "classes": [
+        {
+          "year": 2026,
+          "teachers": [
+            "Mme Pomme"
+          ],
+          "grades": [
+            "CE1"
+          ],
+          "additionalInfo": "",
+          "id": "505ef0e6-76ae-4481-bde3-1031f9d8c19d"
+        }
+      ]
+    }
+  ]
 }

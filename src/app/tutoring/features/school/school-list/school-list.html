@@ -1,0 +1,100 @@
+<div class="page-center">
+  <h1>Liste des écoles</h1>
+
+  <form class="simple-form" [formRoot]="yearForm">
+    <div class="field">
+      <label for="year">Année scolaire</label>
+      <select id="year" [formField]="yearForm.year">
+        <option value="">Toutes les années</option>
+        @for (year of years(); track year) {
+          <option [value]="year">{{ year }} - {{ year + 1 }}</option>
+        }
+      </select>
+    </div>
+  </form>
+
+  @if (schoolDisplays().length) {
+    <table class="amv-table">
+      <thead>
+        <tr>
+          <th scope="col">Enfants concernés</th>
+          <th scope="col">École</th>
+          <th scope="col">Enseignant(s)</th>
+          <th scope="col">Niveau(x)</th>
+          <th scope="col">Informations supplémentaires</th>
+          <th scope="col">Année scolaire</th>
+        </tr>
+      </thead>
+      @for (schoolDisplay of schoolDisplays(); track schoolDisplay.school.id) {
+        @let school = schoolDisplay.school;
+        @let classDisplays = filteredClasses(schoolDisplay.classes)();
+        <tr class="head">
+          <td>{{ memberCount(classDisplays) || '' }}</td>
+          <td class="important">{{ school.name }}</td>
+          <td [title]="school.additionalInfo" colspan="4">
+            {{ school.additionalInfo | truncate }}
+          </td>
+          <td>
+            <button class="invisible" title="modifier" (click)="openEditSchoolDialog(school)">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </td>
+          <td>
+            <button class="invisible" title="modifier" (click)="openAddClassDialog(school)">
+              <span class="material-symbols-outlined">group_add</span>
+            </button>
+          </td>
+          <td>
+            <button class="invisible" title="supprimer" (click)="validateSchoolRemoval(school)">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </td>
+        </tr>
+        @for (classDisplay of classDisplays; track classDisplay.schoolClass.id) {
+          @let class = classDisplay.schoolClass;
+          <tr [class.even]="$even">
+            <td>{{ classDisplay.members.length ? classDisplay.members.length : '' }}</td>
+            <td></td>
+            <td>
+              {{ class.teachers.join(', ') }}
+            </td>
+            <td>
+              {{ class.grades.join(' / ') }}
+            </td>
+            <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
+            <td>{{ class.year }} - {{ class.year + 1 }}</td>
+            <td>
+              <button
+                class="invisible"
+                title="modifier"
+                (click)="openEditClassDialog(school, class)"
+              >
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+            </td>
+            <td></td>
+            <td>
+              <button
+                class="invisible"
+                title="supprimer"
+                (click)="validateClassRemoval(school, class)"
+              >
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </td>
+          </tr>
+          @for (memberDisplay of classDisplay.members; track memberDisplay.member.id) {
+            <tr class="smaller">
+              <td colspan="2"></td>
+              <td>{{ displayStudentName(memberDisplay) }}</td>
+              <td colspan="6"></td>
+            </tr>
+          }
+        }
+      }
+    </table>
+  } @else {
+    <div class="table-message">Aucune école enregistrée</div>
+  }
+  <button (click)="openEditSchoolDialog()">Ajouter une école</button>
+</div>

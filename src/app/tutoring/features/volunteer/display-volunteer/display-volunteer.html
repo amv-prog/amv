@@ -19,22 +19,29 @@
         @if (!!volunteerValue.languages.length) {
           <div>Langues parlées : {{ volunteerValue.languages.join(', ') }}</div>
         }
+
+        @if (!!volunteerValue.phoneNumbers.length) {
+          <div>Téléphone : {{ volunteerValue.phoneNumbers.join(', ') }}</div>
+        }
+
+        @if (!!volunteerValue.email) {
+          <div>Email : {{ volunteerValue.email }}</div>
+        }
       </div>
-
-      @if (!!volunteerValue.phoneNumbers.length || !!volunteerValue.email) {
-        <div class="section">
-          @if (!!volunteerValue.phoneNumbers.length) {
-            <div>Téléphone : {{ volunteerValue.phoneNumbers.join(', ') }}</div>
-          }
-
-          @if (!!volunteerValue.email) {
-            <div>Email : {{ volunteerValue.email }}</div>
-          }
-        </div>
-      }
 
       @if (!!volunteerValue.additionalInfo) {
         <div class="section">{{ volunteerValue.additionalInfo }}</div>
+      }
+
+      @if (!!volunteerValue.address) {
+        @let address = volunteerValue.address;
+        <div class="section">
+          <div>{{ address.street }}</div>
+          @if (address.additional) {
+            <div>{{ address.additional }}</div>
+          }
+          <div>{{ address.postCode }} {{ address.city }}</div>
+        </div>
       }
     </div>
 
