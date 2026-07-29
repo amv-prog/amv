@@ -51,9 +51,15 @@
       @if (!!memberValue.additionalInfo) {
         <div class="section">{{ memberValue.additionalInfo }}</div>
       }
+
+      @if (!memberValue.isParent || !!memberValue.schoolClassIds.length) {
+        <div class="section">
+          <amv-recipient-school></amv-recipient-school>
+        </div>
+      }
     </div>
 
-    <amv-recipient-lessons [member]="memberValue"></amv-recipient-lessons>
+    <amv-recipient-lessons></amv-recipient-lessons>
   } @else {
     <div>Membre non trouvé</div>
   }

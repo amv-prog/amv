@@ -50,7 +50,7 @@
   }
 
   <div class="h-panel">
-    @if (!member().isParent) {
+    @if (!member()?.isParent) {
       <a class="a-button" [routerLink]="['lesson', 'add']"> Ajouter un cours </a>
     }
   </div>

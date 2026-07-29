@@ -1,13 +1,13 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../../shared/services/date-service';
 import { Lesson } from '../../../../models/lesson';
-import { RecipientMember } from '../../../../models/recipient-member';
 import { VolunteerMember } from '../../../../models/volunteer-member';
+import { FamilyStore } from '../../../../stores/family-store';
 import { LessonStore } from '../../../../stores/lesson-store';
 import { VolunteerStore } from '../../../../stores/volunteer-store';
 
@@ -17,7 +17,8 @@ import { VolunteerStore } from '../../../../stores/volunteer-store';
   templateUrl: './recipient-lessons.html',
 })
 export class RecipientLessons {
-  public readonly member = input.required<RecipientMember>();
+  private readonly familyStore = inject(FamilyStore);
+  protected readonly member = this.familyStore.selectedFamilyMember;
 
   private readonly volunteerStore = inject(VolunteerStore);
   private readonly lessonStore = inject(LessonStore);

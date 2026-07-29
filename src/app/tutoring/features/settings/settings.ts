@@ -77,11 +77,10 @@ export class Settings {
   }
 
   private updateData(settings: SettingsModel) {
-    if (VersionStore.compare('0.1.3', settings.version) > 0) {
+    if (VersionStore.compare('0.1.2', settings.version) > 0) {
       for (const family of settings.families) {
         for (const member of family.members) {
-          member.school = undefined;
-          member.schoolClasses = [];
+          member.schoolClassIds = [];
         }
       }
     }

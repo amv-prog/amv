@@ -6,10 +6,11 @@ import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { FamilyStore } from '../../../stores/family-store';
 import { RecipientLessons } from './recipient-lessons/recipient-lessons';
+import { RecipientSchool } from './recipient-school/recipient-school';
 
 @Component({
   selector: 'amv-display-family-member',
-  imports: [DatePipe, RouterLink, RecipientLessons],
+  imports: [DatePipe, RouterLink, RecipientLessons, RecipientSchool],
   templateUrl: './display-family-member.html',
 })
 export class DisplayFamilyMember {

@@ -22,17 +22,17 @@ export class VersionStore {
     if (!oldVersion) {
       this.localStorage.removeItem('members');
     }
-    if (VersionStore.compare('0.1.3', oldVersion) > 0) {
+    if (VersionStore.compare('0.1.2', oldVersion) > 0) {
       const families = this.localStorage.getItem<any[]>('families');
 
       if (!!families) {
         for (const family of families) {
           for (const member of family.members) {
-            member.school = undefined;
-            member.schoolClasses = [];
+            member.schoolClassIds = [];
           }
         }
       }
+      this.localStorage.setItem('families', families);
     }
   }
 

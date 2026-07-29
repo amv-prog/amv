@@ -1,4 +1,4 @@
-import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { computed, effect, inject, Service, Signal, signal, WritableSignal } from '@angular/core';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { School } from '../models/school';
 import { SchoolClass } from '../models/school-class';
@@ -69,6 +69,20 @@ export class SchoolStore {
     this.updateSchool(school);
   }
 
+  findSchoolClassObject(
+    schoolClassId: string,
+  ): Signal<{ school: School; schoolClass: SchoolClass } | undefined> {
+    return computed(() => {
+      return this.schools()
+        .flatMap((s) =>
+          s.classes.map((c) => {
+            return { school: s, schoolClass: c };
+          }),
+        )
+        .find((o) => o.schoolClass.id === schoolClassId);
+    });
+  }
+
   // Année scolaire en cours. L'année suivante est remontée à partir de juillet.
   static currentSchoolYear(): number {
     const date = new Date();
@@ -91,7 +105,7 @@ export class SchoolStore {
   }
 
   // Tri des classes (à modifier si on a plus de 5 niveaux possible ou 9 niveaux par classe)
-  private static classSortWeight(schoolClass: SchoolClass): number {
+  static classSortWeight(schoolClass: SchoolClass): number {
     const gradeindex = Math.min(...schoolClass.grades.map((g) => this.standardGrades.indexOf(g)));
     return schoolClass.year * -100 + gradeindex * 10 + schoolClass.grades.length;
   }
