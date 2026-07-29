@@ -234,6 +234,7 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Le nom et prénom sont affichés.
 - Le type parent ou enfant est affiché, avec l'icone associée.
 - S'ils sont renseignés, la date de naissance, langues parlées, numéros de téléphone, email, et renseignements complémentaires sont affichés.
+- S'il s'agit d'un enfant, la liste des classes est affichée. Un bouton permet d'ajouter une classe.
 - La liste des cours actuels concernant le membre est affichée.
 - Si le membre est un enfant, un bouton permet de créer un nouveau cours
 - Un bouton permet de modifier le membre
@@ -243,6 +244,13 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Les cours dont la date de fin est supérieure ou égale à la date du jour et la date de début est inférieure ou égale à la date du jour sont affichés dans les cours actuels
 - Les cours dont la date de début est supérieure à la date du jours sont affichés dans les cours prévus
 - Les cours dont la date de fin est inférieure à la date du jour sont affichés dans les cours terminés
+
+### Ajouter une classe
+
+- Une popin permet de sélectionner l'école, l'année scolaire et la classe. Les 3 champs sont obligatoires.
+- Un bouton permet de créer une nouvelle école.
+- Un bouton permet de créer une nouvelle classe, si une école est sélectionnée.
+- Au clic sur le bouton enregistrer, la classe est ajoutée au membre et s'affiche sur sa page.
 
 ## Détail d'un bénévole
 
