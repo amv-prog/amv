@@ -295,10 +295,11 @@ L'utilisateur peut sélectionner un fichier
 ## Liste des écoles
 
 - Une liste déroulante permet de choisir l'année scolaire à afficher, ou toutes les années
-- Les "écoles" sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires.
+- Les écoles sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires, ainsi que le nombre d'élèves.
 - La liste des écoles est stockée et récupérée dans le local storage.
 - Pour chaque école, un bouton permet de la modifier, un autre d'ajouter une classe, et un autre de supprimer l'école
 - Pour chaque école, la liste des classes de l'année sélectionnée est affichée (ou toutes les années selon le choix)
+- Pour chaque classe, la liste des élèves suivis est affichée
 - Pour chaque classe, un bouton permet de la modifier et un autre de la supprimer
 - Un bouton permet d'ajouter une école.
 

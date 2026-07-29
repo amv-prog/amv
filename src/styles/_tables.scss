@@ -62,6 +62,16 @@
     background-color: $c1-lighter;
   }
 
+  .smaller {
+    background-color: white;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+
+    td {
+      padding: 0.5rem;
+    }
+  }
+
   .selectable {
     cursor: pointer;
   }

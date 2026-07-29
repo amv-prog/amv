@@ -13,10 +13,23 @@
     </div>
   </form>
 
-  @if (schools().length) {
+  @if (schoolDisplays().length) {
     <table class="amv-table">
-      @for (school of schools(); track school.id) {
+      <thead>
+        <tr>
+          <th scope="col">Enfants concernés</th>
+          <th scope="col">École</th>
+          <th scope="col">Enseignant(s)</th>
+          <th scope="col">Niveau(x)</th>
+          <th scope="col">Informations supplémentaires</th>
+          <th scope="col">Année scolaire</th>
+        </tr>
+      </thead>
+      @for (schoolDisplay of schoolDisplays(); track schoolDisplay.school.id) {
+        @let school = schoolDisplay.school;
+        @let classDisplays = filteredClasses(schoolDisplay.classes)();
         <tr class="head">
+          <td>{{ memberCount(classDisplays) || '' }}</td>
           <td class="important">{{ school.name }}</td>
           <td [title]="school.additionalInfo" colspan="4">
             {{ school.additionalInfo | truncate }}
@@ -37,8 +50,10 @@
             </button>
           </td>
         </tr>
-        @for (class of filteredClasses(school.classes)(); track class.id) {
+        @for (classDisplay of classDisplays; track classDisplay.schoolClass.id) {
+          @let class = classDisplay.schoolClass;
           <tr [class.even]="$even">
+            <td>{{ classDisplay.members.length ? classDisplay.members.length : '' }}</td>
             <td></td>
             <td>
               {{ class.teachers.join(', ') }}
@@ -68,6 +83,13 @@
               </button>
             </td>
           </tr>
+          @for (memberDisplay of classDisplay.members; track memberDisplay.member.id) {
+            <tr class="smaller">
+              <td colspan="2"></td>
+              <td>{{ displayStudentName(memberDisplay) }}</td>
+              <td colspan="6"></td>
+            </tr>
+          }
         }
       }
     </table>

@@ -4,8 +4,12 @@ import { form, FormField, FormRoot } from '@angular/forms/signals';
 import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
+import { Family } from '../../../models/family';
+import { RecipientMember } from '../../../models/recipient-member';
 import { School } from '../../../models/school';
 import { SchoolClass } from '../../../models/school-class';
+import { FamilyStore } from '../../../stores/family-store';
+import { LessonStore } from '../../../stores/lesson-store';
 import { SchoolStore } from '../../../stores/school-store';
 import { EditClass } from '../edit-class/edit-class';
 import { EditSchool } from '../edit-school/edit-school';
@@ -19,13 +23,19 @@ export class SchoolList {
   private readonly dialog = inject(Dialog);
 
   protected readonly schoolStore = inject(SchoolStore);
+  protected readonly familyStore = inject(FamilyStore);
 
-  protected readonly schools = this.schoolStore.sortedSchools;
+  protected readonly schoolDisplays = computed(() => {
+    const schools = this.schoolStore.sortedSchools();
+
+    return schools.map((s) => this.getSchoolDisplay(s));
+  });
 
   private readonly schoolYear = SchoolStore.currentSchoolYear();
 
   protected readonly years = computed(() => {
-    const classYears = this.schools()
+    const classYears = this.schoolStore
+      .schools()
       .flatMap((school) => school.classes)
       .map((schoolClass) => schoolClass.year);
 
@@ -80,14 +90,20 @@ export class SchoolList {
     });
   }
 
-  public filteredClasses(classes: SchoolClass[]): Signal<SchoolClass[]> {
+  public filteredClasses(classDisplays: SchoolClassDisplay[]): Signal<SchoolClassDisplay[]> {
     return computed(() => {
       const year = this.yearFormData().year;
       const filteredClasses = !!year
-        ? classes.filter((schoolClass) => schoolClass.year === Number(year))
-        : classes;
-      return SchoolStore.sortedClasses(filteredClasses);
+        ? classDisplays.filter(
+            (schoolClassDisplay) => schoolClassDisplay.schoolClass.year === Number(year),
+          )
+        : classDisplays;
+      return filteredClasses;
     });
+  }
+
+  public memberCount(classDisplays: SchoolClassDisplay[]): number {
+    return [...new Set(classDisplays.flatMap((c) => c.members).map((m) => m.member.id))].length;
   }
 
   public validateClassRemoval(school: School, schoolClass: SchoolClass) {
@@ -135,4 +151,43 @@ export class SchoolList {
   private removeSchool(school: School) {
     this.schoolStore.removeSchool(school);
   }
+
+  private getSchoolClassDisplay(schoolClass: SchoolClass): SchoolClassDisplay {
+    const classMembers = this.familyStore
+      .families()
+      .flatMap((f) =>
+        f.members.map((m) => {
+          return { member: m, family: f };
+        }),
+      )
+      .filter((o) => o.member.schoolClassIds.includes(schoolClass.id));
+    return new SchoolClassDisplay(schoolClass, classMembers);
+  }
+
+  private getSchoolDisplay(school: School): SchoolDisplay {
+    const classes = SchoolStore.sortedClasses(school.classes).map((c) =>
+      this.getSchoolClassDisplay(c),
+    );
+    return new SchoolDisplay(school, classes);
+  }
+
+  public displayStudentName(
+    student: { member: RecipientMember; family: Family } | undefined,
+  ): string {
+    return !!student ? LessonStore.displayStudentName(student) : 'Inconnu';
+  }
+}
+
+class SchoolDisplay {
+  constructor(
+    public school: School,
+    public classes: SchoolClassDisplay[],
+  ) {}
+}
+
+class SchoolClassDisplay {
+  constructor(
+    public schoolClass: SchoolClass,
+    public members: { member: RecipientMember; family: Family }[],
+  ) {}
 }
