@@ -1,35 +1,33 @@
 @let schoolClassesValue = sortedSchoolClassesDisplay();
-@if (!!schoolClassesValue.length) {
-  <table class="amv-table">
-    @for (classDisplay of schoolClassesValue; track classDisplay.classId) {
-      <tr [class.even]="$even">
-        @if (!!classDisplay.school && !!classDisplay.schoolClass) {
-          @let school = classDisplay.school;
-          @let class = classDisplay.schoolClass;
-          <td>{{ class.year }} - {{ class.year + 1 }}</td>
-          <td class="important">{{ school.name }}</td>
+<div class="page-center">
+  <div class="highlight">Classes</div>
+  @if (!!schoolClassesValue.length) {
+    <table class="amv-table">
+      @for (classDisplay of schoolClassesValue; track classDisplay.classId) {
+        <tr [class.even]="$even">
+          @if (!!classDisplay.school && !!classDisplay.schoolClass) {
+            @let school = classDisplay.school;
+            @let class = classDisplay.schoolClass;
+            <td>{{ class.year }} - {{ class.year + 1 }}</td>
+            <td class="important">{{ school.name }}</td>
+            <td>
+              {{ class.teachers.join(', ') }}
+            </td>
+            <td>
+              {{ class.grades.join(' / ') }}
+            </td>
+            <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
+          } @else {
+            <td colspan="5">Classe non trouvée</td>
+          }
           <td>
-            {{ class.teachers.join(', ') }}
+            <button class="invisible" title="supprimer" (click)="removeClass(classDisplay.classId)">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
           </td>
-          <td>
-            {{ class.grades.join(' / ') }}
-          </td>
-          <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
-        } @else {
-          <td colspan="5">Classe non trouvée</td>
-        }
-        <td>
-          <button class="invisible" title="modifier">
-            <span class="material-symbols-outlined">edit</span>
-          </button>
-        </td>
-        <td>
-          <button class="invisible" title="supprimer">
-            <span class="material-symbols-outlined"> delete </span>
-          </button>
-        </td>
-      </tr>
-    }
-  </table>
-}
-<button (click)="openNewClassDialog()">Ajouter une classe</button>
+        </tr>
+      }
+    </table>
+  }
+  <button (click)="openNewClassDialog()">Ajouter une classe</button>
+</div>

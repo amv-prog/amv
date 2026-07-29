@@ -38,6 +38,15 @@ export class RecipientSchool {
     });
   }
 
+  public removeClass(schoolClassId: string) {
+    const member = this.member();
+    let index = member?.schoolClassIds.findIndex((c) => c === schoolClassId) || -1;
+    if (!!member && index >= 0) {
+      member.schoolClassIds.splice(index, 1);
+      this.familyStore.updateFamilyMember(member);
+    }
+  }
+
   private sortedClasses(classes: RecipientClassDisplay[]): RecipientClassDisplay[] {
     return [...classes].sort(
       (c1, c2) => this.displayClassSortWeight(c1) - this.displayClassSortWeight(c2),
