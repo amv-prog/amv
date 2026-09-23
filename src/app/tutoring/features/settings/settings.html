@@ -10,4 +10,9 @@
   </div>
 
   <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />
+
+  <div>
+    <amv-google-button></amv-google-button>
+    <button (click)="createGoogleSheet()">Créer un fichier</button>
+  </div>
 </div>

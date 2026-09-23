@@ -3,7 +3,9 @@ import { Component, computed, inject, Signal } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { GoogleButton } from '../../../shared/components/google-button/google-button';
 import { DateService } from '../../../shared/services/date-service';
+import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
 import { MessageService } from '../../../shared/services/message-service';
 import { VersionStore } from '../../../shared/version-store';
 import { Family } from '../../models/family';
@@ -18,7 +20,7 @@ import * as exempleJson from './settings-exemple.json';
 
 @Component({
   selector: 'amv-settings',
-  imports: [],
+  imports: [GoogleButton],
   templateUrl: './settings.html',
 })
 export class Settings {
@@ -30,6 +32,7 @@ export class Settings {
   private readonly schoolStore = inject(SchoolStore);
   private readonly versionStore = inject(VersionStore);
   private readonly messageService = inject(MessageService);
+  private readonly googleSheetService = inject(GoogleSheetService);
 
   private readonly dialog = inject(Dialog);
 
@@ -157,6 +160,10 @@ export class Settings {
         }),
       )
       .subscribe();
+  }
+
+  createGoogleSheet() {
+    this.googleSheetService.createGoogleSheet('TestTU2309_02').subscribe();
   }
 }
 

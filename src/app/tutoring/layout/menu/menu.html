@@ -1,4 +1,8 @@
 <div class="menu">
+  @if (googleUser(); as user) {
+    <div>{{ user.email }}</div>
+  }
+
   <div>
     <a routerLink="/tutoring/family/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">family_group</span>

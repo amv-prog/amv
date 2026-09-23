@@ -14,9 +14,11 @@ import {
 import { routes } from './app.routes';
 
 import { registerLocaleData } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import localeFr from '@angular/common/locales/fr';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { fr } from 'date-fns/locale';
+import { googleAuthInterceptor } from './shared/interceptors/google-auth-interceptor';
 registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
@@ -29,5 +31,6 @@ export const appConfig: ApplicationConfig = {
     { provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FNS_FORMATS },
     provideDateFnsAdapter(),
+    provideHttpClient(withInterceptors([googleAuthInterceptor])),
   ],
 };
