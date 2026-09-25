@@ -1,11 +1,9 @@
-import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class FamilyStore {
   private readonly localStorage = inject(LocalStorageService);
 

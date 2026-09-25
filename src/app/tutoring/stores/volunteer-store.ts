@@ -1,10 +1,8 @@
-import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { VolunteerMember } from '../models/volunteer-member';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class VolunteerStore {
   private readonly localStorage = inject(LocalStorageService);
 

@@ -1,56 +1,54 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, computed, inject, Signal } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
+import { debounce, form, FormField, FormRoot } from '@angular/forms/signals';
 import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GoogleButton } from '../../../shared/components/google-button/google-button';
-import { DateService } from '../../../shared/services/date-service';
+import { Toggle } from '../../../shared/components/toggle/toggle';
 import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
-import { MessageService } from '../../../shared/services/message-service';
-import { VersionStore } from '../../../shared/version-store';
-import { Family } from '../../models/family';
-import { Lesson } from '../../models/lesson';
-import { School } from '../../models/school';
-import { VolunteerMember } from '../../models/volunteer-member';
-import { FamilyStore } from '../../stores/family-store';
-import { LessonStore } from '../../stores/lesson-store';
-import { SchoolStore } from '../../stores/school-store';
-import { VolunteerStore } from '../../stores/volunteer-store';
+import { LocalSaveService } from '../../services/local-save-service';
+import { SettingsStore } from '../../stores/settings-store';
 import * as exempleJson from './settings-exemple.json';
 
 @Component({
   selector: 'amv-settings',
-  imports: [GoogleButton],
+  imports: [FormRoot, Toggle, FormField, GoogleButton],
   templateUrl: './settings.html',
 })
 export class Settings {
-  private readonly sanitizer = inject(DomSanitizer);
-  private readonly dateService = inject(DateService);
-  private readonly familyStore = inject(FamilyStore);
-  private readonly volunteerStore = inject(VolunteerStore);
-  private readonly lessonStore = inject(LessonStore);
-  private readonly schoolStore = inject(SchoolStore);
-  private readonly versionStore = inject(VersionStore);
-  private readonly messageService = inject(MessageService);
+  private readonly settingsStore = inject(SettingsStore);
   private readonly googleSheetService = inject(GoogleSheetService);
+  private readonly localSaveService = inject(LocalSaveService);
 
   private readonly dialog = inject(Dialog);
 
-  protected readonly sanitizedBlobUrl: Signal<SafeUrl>;
-  protected readonly fileName: string;
+  protected readonly settings = this.settingsStore.settings;
+
+  protected readonly settingsFormData: WritableSignal<{
+    saveMode: 'LEFT' | 'RIGHT';
+    spreadsheetId: string;
+  }> = signal({
+    saveMode: this.settings().saveMode === 'LOCALHOST' ? 'LEFT' : 'RIGHT',
+    spreadsheetId: this.settings().spreadsheetId || '',
+  });
+
+  protected readonly settingsForm = form(this.settingsFormData, (form) => {
+    debounce(form.spreadsheetId, 500);
+  });
+
+  protected readonly sanitizedBlobUrl = this.localSaveService.sanitizedSettingsBlobUrl();
+  protected readonly fileName = this.localSaveService.saveFileName();
 
   constructor() {
-    this.fileName = `settings-${this.dateService.formatDate(new Date(), 'yyyyMMdd')}.json`;
-    this.sanitizedBlobUrl = computed(() => {
-      const families = this.familyStore.families();
-      const volunteers = this.volunteerStore.volunteers();
-      const lessons = this.lessonStore.lessons();
-      const schools = this.schoolStore.schools();
-      const version = this.versionStore.version();
-      const settings = new SettingsModel(families, volunteers, lessons, version, schools);
-      const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
-      const blobUrl = window.URL.createObjectURL(blob);
-      return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+    effect(() => {
+      if (this.settingsForm().dirty()) {
+        const data = this.settingsForm().value();
+
+        this.settingsStore.updateSettings({
+          saveMode: data.saveMode === 'LEFT' ? 'LOCALHOST' : 'GOOGLESHEET',
+          spreadsheetId: data.spreadsheetId || undefined,
+        });
+      }
     });
   }
 
@@ -59,64 +57,12 @@ export class Settings {
 
     if (!!input.files?.length) {
       const file = input.files![0];
-      const text = await file.text();
-      const settings = JSON.parse(text);
-      const version = settings.version;
-      const families = settings.families;
-      const volunteers = settings.volunteers;
-      const lessons = settings.lessons;
-      const schools = settings.schools || [];
-      if (!families || !volunteers || !lessons) {
-        this.messageService.displayError(
-          "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
-        );
-      } else {
-        const settings = new SettingsModel(families, volunteers, lessons, version, schools);
-        this.updateData(settings);
-        this.validateSettingsImport(settings);
-      }
+      this.localSaveService.loadFile(file);
     }
     input.value = '';
   }
 
-  private updateData(settings: SettingsModel) {
-    if (VersionStore.compare('0.1.2', settings.version) > 0) {
-      for (const family of settings.families) {
-        for (const member of family.members) {
-          member.schoolClassIds = [];
-        }
-      }
-    }
-  }
-
-  private validateSettingsImport(settings: SettingsModel) {
-    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
-      panelClass: 'dialog',
-      data: {
-        text: 'Souhaitez-vous importer ces données ? Les données actuelles seront supprimées.',
-      },
-    });
-
-    dialogRef.closed
-      .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.importSettings(settings);
-          }
-        }),
-      )
-      .subscribe();
-  }
-
-  private importSettings(settings: any) {
-    this.familyStore.replaceFamilies(settings.families);
-    this.volunteerStore.replaceVolunteers(settings.volunteers);
-    this.lessonStore.replaceLessons(settings.lessons);
-    this.schoolStore.replaceSchools(settings.schools || []);
-    this.messageService.displaySuccess('Les données ont bien été chargées.');
-  }
-
-  validateCleanData() {
+  validateCleanLocalData() {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
@@ -128,22 +74,14 @@ export class Settings {
       .pipe(
         tap((result) => {
           if (!!result) {
-            this.cleanData();
+            this.localSaveService.cleanData();
           }
         }),
       )
       .subscribe();
   }
 
-  private cleanData() {
-    this.familyStore.replaceFamilies([]);
-    this.volunteerStore.replaceVolunteers([]);
-    this.lessonStore.replaceLessons([]);
-    this.schoolStore.replaceSchools([]);
-    this.messageService.displaySuccess('Les données ont bien été supprimées.');
-  }
-
-  validateExempleImport() {
+  validateExempleLocalImport() {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
@@ -155,7 +93,7 @@ export class Settings {
       .pipe(
         tap((result) => {
           if (!!result) {
-            this.importSettings(exempleJson);
+            this.localSaveService.importSettings(exempleJson);
           }
         }),
       )
@@ -165,14 +103,16 @@ export class Settings {
   createGoogleSheet() {
     this.googleSheetService.createGoogleSheet('TestTU2309_02').subscribe();
   }
-}
 
-class SettingsModel {
-  constructor(
-    public families: Family[],
-    public volunteers: VolunteerMember[],
-    public lessons: Lesson[],
-    public version: string,
-    public schools?: School[],
-  ) {}
+  writeCell() {
+    this.googleSheetService
+      .writeCell('1tjXanz-evFm7XeA3bH6XgjdP8VQx8shl3b1OoW1e8hQ', 'Feuille 1', 'A1', 'Test2')
+      .subscribe();
+  }
+
+  renameSheet() {
+    this.googleSheetService
+      .renameSheet('1tjXanz-evFm7XeA3bH6XgjdP8VQx8shl3b1OoW1e8hQ', '0', 'TU_Data')
+      .subscribe();
+  }
 }
