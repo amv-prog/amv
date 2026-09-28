@@ -1,10 +1,10 @@
 import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { VolunteerMember } from '../models/volunteer-member';
+import { SaveService, SaveType } from '../services/save-service';
 
 @Service()
 export class VolunteerStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly saveService = inject(SaveService);
 
   volunteers: WritableSignal<VolunteerMember[]>;
 
@@ -34,11 +34,11 @@ export class VolunteerStore {
 
   constructor() {
     this.volunteers = signal<VolunteerMember[]>(
-      this.localStorage.getItem<VolunteerMember[]>('volunteers') || [],
+      this.saveService.getItem<VolunteerMember[]>(SaveType.VOLUNTEERS) || [],
     );
 
     effect(() => {
-      this.localStorage.setItem('volunteers', this.volunteers());
+      this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
     });
   }
 

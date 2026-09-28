@@ -35,6 +35,21 @@ export class GoogleSheetService {
     );
   }
 
+  writeCells(
+    spreadsheetId: string,
+    sheetId: string,
+    range: string,
+    values: string[][],
+  ): Observable<UpdateValuesResponse> {
+    const body: ValueRange = {
+      values,
+    };
+    return this.http.put<UpdateValuesResponse>(
+      `${this.baseUrl}/${spreadsheetId}/values/${sheetId}!${range}?valueInputOption=RAW`,
+      body,
+    );
+  }
+
   renameSheet(
     spreadsheetId: string,
     sheetId: string,

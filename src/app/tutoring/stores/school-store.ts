@@ -1,13 +1,13 @@
 import { computed, effect, inject, Service, Signal, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { School } from '../models/school';
 import { SchoolClass } from '../models/school-class';
+import { SaveService, SaveType } from '../services/save-service';
 
 @Service()
 export class SchoolStore {
   private static standardGrades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
 
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly saveService = inject(SaveService);
 
   schools: WritableSignal<School[]>;
 
@@ -16,10 +16,10 @@ export class SchoolStore {
   );
 
   constructor() {
-    this.schools = signal<School[]>(this.localStorage.getItem<School[]>('schools') || []);
+    this.schools = signal<School[]>(this.saveService.getItem<School[]>(SaveType.SCHOOLS) || []);
 
     effect(() => {
-      this.localStorage.setItem('schools', this.schools());
+      this.saveService.update(SaveType.SCHOOLS, this.schools());
     });
   }
 

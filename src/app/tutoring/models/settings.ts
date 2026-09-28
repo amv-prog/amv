@@ -1,4 +1,4 @@
 export interface Settings {
-  saveMode: 'LOCALHOST' | 'GOOGLESHEET';
+  saveMode: 'LOCAL_STORAGE' | 'GOOGLESHEET';
   spreadsheetId?: string;
 }

@@ -10,7 +10,7 @@ export class SettingsStore {
 
   constructor() {
     this.settings = signal<Settings>(
-      this.localStorage.getItem<Settings>('settings') || { saveMode: 'LOCALHOST' },
+      this.localStorage.getItem<Settings>('settings') || { saveMode: 'LOCAL_STORAGE' },
     );
 
     effect(() => {

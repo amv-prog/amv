@@ -28,7 +28,7 @@ export class Settings {
     saveMode: 'LEFT' | 'RIGHT';
     spreadsheetId: string;
   }> = signal({
-    saveMode: this.settings().saveMode === 'LOCALHOST' ? 'LEFT' : 'RIGHT',
+    saveMode: this.settings().saveMode === 'LOCAL_STORAGE' ? 'LEFT' : 'RIGHT',
     spreadsheetId: this.settings().spreadsheetId || '',
   });
 
@@ -45,7 +45,7 @@ export class Settings {
         const data = this.settingsForm().value();
 
         this.settingsStore.updateSettings({
-          saveMode: data.saveMode === 'LEFT' ? 'LOCALHOST' : 'GOOGLESHEET',
+          saveMode: data.saveMode === 'LEFT' ? 'LOCAL_STORAGE' : 'GOOGLESHEET',
           spreadsheetId: data.spreadsheetId || undefined,
         });
       }

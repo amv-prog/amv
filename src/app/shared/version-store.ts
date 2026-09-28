@@ -1,29 +1,29 @@
 import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import * as packageJson from 'packageJson';
-import { LocalStorageService } from './services/local-storage-service';
+import { SaveService, SaveType } from '../tutoring/services/save-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VersionStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly saveService = inject(SaveService);
   version: WritableSignal<string>;
 
   constructor() {
-    this.updateStorage(this.localStorage.getItem<string>('version'));
+    this.updateStorage(this.saveService.getItem<string>(SaveType.VERSION));
     this.version = signal<string>(packageJson.version);
 
     effect(() => {
-      this.localStorage.setItem('version', this.version());
+      this.saveService.update(SaveType.VERSION, this.version());
     });
   }
 
   updateStorage(oldVersion: string | null) {
     if (!oldVersion) {
-      this.localStorage.removeItem('members');
+      this.saveService.removeItem('members');
     }
     if (VersionStore.compare('0.1.2', oldVersion) > 0) {
-      const families = this.localStorage.getItem<any[]>('families');
+      const families = this.saveService.getItem<any[]>(SaveType.FAMILIES);
 
       if (!!families) {
         for (const family of families) {
@@ -32,7 +32,7 @@ export class VersionStore {
           }
         }
       }
-      this.localStorage.setItem('families', families);
+      this.saveService.update(SaveType.FAMILIES, families);
     }
   }
 

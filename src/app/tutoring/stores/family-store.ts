@@ -1,11 +1,11 @@
 import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
+import { SaveService, SaveType } from '../services/save-service';
 
 @Service()
 export class FamilyStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly saveService = inject(SaveService);
 
   families: WritableSignal<Family[]>;
 
@@ -48,10 +48,10 @@ export class FamilyStore {
   });
 
   constructor() {
-    this.families = signal<Family[]>(this.localStorage.getItem<Family[]>('families') || []);
+    this.families = signal<Family[]>(this.saveService.getItem<Family[]>(SaveType.FAMILIES) || []);
 
     effect(() => {
-      this.localStorage.setItem('families', this.families());
+      this.saveService.update(SaveType.FAMILIES, this.families());
     });
   }
 

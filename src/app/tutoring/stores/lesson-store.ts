@@ -1,14 +1,14 @@
 import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
 import { DateService } from '../../shared/services/date-service';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
 import { RecipientMember } from '../models/recipient-member';
 import { VolunteerMember } from '../models/volunteer-member';
+import { SaveService, SaveType } from '../services/save-service';
 
 @Service()
 export class LessonStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly saveService = inject(SaveService);
 
   lessons: WritableSignal<Lesson[]>;
 
@@ -24,10 +24,10 @@ export class LessonStore {
   });
 
   constructor() {
-    this.lessons = signal<Lesson[]>(this.localStorage.getItem<Lesson[]>('lessons') || []);
+    this.lessons = signal<Lesson[]>(this.saveService.getItem<Lesson[]>(SaveType.LESSONS) || []);
 
     effect(() => {
-      this.localStorage.setItem('lessons', this.lessons());
+      this.saveService.update(SaveType.LESSONS, this.lessons());
     });
   }
 
