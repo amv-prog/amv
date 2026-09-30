@@ -10,7 +10,7 @@ export class VersionStore {
   version: WritableSignal<string>;
 
   constructor() {
-    this.updateStorage(this.saveService.getItem<string>(SaveType.VERSION));
+    this.updateStorage(this.saveService.getItem<string>(SaveType.VERSION, ''));
     this.version = signal<string>(packageJson.version);
 
     effect(() => {
@@ -23,7 +23,7 @@ export class VersionStore {
       this.saveService.removeItem('members');
     }
     if (VersionStore.compare('0.1.2', oldVersion) > 0) {
-      const families = this.saveService.getItem<any[]>(SaveType.FAMILIES);
+      const families = this.saveService.getItem<any[]>(SaveType.FAMILIES, []);
 
       if (!!families) {
         for (const family of families) {

@@ -73,4 +73,16 @@ export class GoogleSheetService {
       body,
     );
   }
+
+  readCells(spreadsheetId: string, sheetId: string, range: string): Observable<ValueRange> {
+    return this.http.get<ValueRange>(
+      `${this.baseUrl}/${spreadsheetId}/values/${sheetId}!${range}?majorDimension=ROWS`,
+    );
+  }
+
+  readAllCells(spreadsheetId: string, sheetId: string): Observable<ValueRange> {
+    return this.http.get<ValueRange>(
+      `${this.baseUrl}/${spreadsheetId}/values/${sheetId}?majorDimension=ROWS`,
+    );
+  }
 }

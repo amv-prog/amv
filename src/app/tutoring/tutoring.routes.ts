@@ -14,12 +14,14 @@ import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-lis
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
 import { lessonResolver } from './resolvers/lesson-resolver';
+import { savedDataResolver } from './resolvers/saved-data-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';
 import { Tutoring } from './tutoring';
 
 export const tutoringRoutes: Routes = [
   {
     path: '',
+    resolve: { data: savedDataResolver },
     component: Tutoring,
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'family/list' },

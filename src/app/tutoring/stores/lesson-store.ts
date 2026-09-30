@@ -24,7 +24,7 @@ export class LessonStore {
   });
 
   constructor() {
-    this.lessons = signal<Lesson[]>(this.saveService.getItem<Lesson[]>(SaveType.LESSONS) || []);
+    this.lessons = signal<Lesson[]>(this.saveService.getItem<Lesson[]>(SaveType.LESSONS, []));
 
     effect(() => {
       this.saveService.update(SaveType.LESSONS, this.lessons());

@@ -19,7 +19,6 @@ export class SettingsStore {
   }
 
   updateSettings(settings: Settings) {
-    console.log('Settings updated');
     this.settings.set({ ...settings });
   }
 }

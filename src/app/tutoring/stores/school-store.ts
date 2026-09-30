@@ -16,7 +16,7 @@ export class SchoolStore {
   );
 
   constructor() {
-    this.schools = signal<School[]>(this.saveService.getItem<School[]>(SaveType.SCHOOLS) || []);
+    this.schools = signal<School[]>(this.saveService.getItem<School[]>(SaveType.SCHOOLS, []));
 
     effect(() => {
       this.saveService.update(SaveType.SCHOOLS, this.schools());

@@ -48,7 +48,7 @@ export class FamilyStore {
   });
 
   constructor() {
-    this.families = signal<Family[]>(this.saveService.getItem<Family[]>(SaveType.FAMILIES) || []);
+    this.families = signal<Family[]>(this.saveService.getItem<Family[]>(SaveType.FAMILIES, []));
 
     effect(() => {
       this.saveService.update(SaveType.FAMILIES, this.families());

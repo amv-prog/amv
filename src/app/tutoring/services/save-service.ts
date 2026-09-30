@@ -1,4 +1,5 @@
-import { inject, Service } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { MessageService } from '../../shared/services/message-service';
 import { SettingsStore } from '../stores/settings-store';
@@ -10,6 +11,8 @@ export class SaveService {
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleSaveService = inject(GoogleSaveService);
   private readonly messageService = inject(MessageService);
+
+  private latestLoadedData = signal<Map<string, string>>(new Map<string, string>());
 
   update(type: SaveType, data: any) {
     const settings = this.settingStore.settings();
@@ -27,12 +30,13 @@ export class SaveService {
     }
   }
 
-  getItem<T>(type: SaveType): T | null {
-    const settings = this.settingStore.settings();
-    if (settings.saveMode === 'GOOGLESHEET') {
-      return null;
-    } else {
-      return this.localStorageService.getItem<T>(type);
+  getItem<T>(type: SaveType, empty: T): T {
+    try {
+      const value = this.latestLoadedData().get(type);
+      return value ? JSON.parse(value) : empty;
+    } catch (error) {
+      console.error('Error reading from latest data', error);
+      return empty;
     }
   }
 
@@ -40,6 +44,43 @@ export class SaveService {
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'LOCAL_STORAGE') {
       localStorage.removeItem(key);
+    }
+  }
+
+  loadLatestData(): Observable<boolean> {
+    return this.loadLatestDataMap().pipe(
+      map((data) => {
+        this.latestLoadedData.set(data);
+        return true;
+      }),
+    );
+  }
+
+  private loadLatestDataMap(): Observable<Map<string, string>> {
+    const settings = this.settingStore.settings();
+    if (settings.saveMode === 'GOOGLESHEET') {
+      const spreadsheetId = settings.spreadsheetId;
+      if (spreadsheetId) {
+        return this.googleSaveService.getAllData(spreadsheetId).pipe(
+          map((data) => {
+            const map = new Map<string, string>();
+            for (let row of data) {
+              if (row.length === 2) {
+                map.set(row[0], row[1]);
+              }
+            }
+            return map;
+          }),
+        );
+      } else {
+        return of(new Map<string, string>());
+      }
+    } else {
+      const map = new Map<string, string>();
+      for (let type of Object.values(SaveType)) {
+        map.set(type, this.localStorageService.getItem(type) || '');
+      }
+      return of(map);
     }
   }
 }

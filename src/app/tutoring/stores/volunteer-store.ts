@@ -34,7 +34,7 @@ export class VolunteerStore {
 
   constructor() {
     this.volunteers = signal<VolunteerMember[]>(
-      this.saveService.getItem<VolunteerMember[]>(SaveType.VOLUNTEERS) || [],
+      this.saveService.getItem<VolunteerMember[]>(SaveType.VOLUNTEERS, []),
     );
 
     effect(() => {

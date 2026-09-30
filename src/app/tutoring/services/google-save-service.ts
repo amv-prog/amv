@@ -1,4 +1,5 @@
 import { inject, Service } from '@angular/core';
+import { catchError, map, Observable, of } from 'rxjs';
 import { GoogleSheetService } from '../../shared/services/google-sheet-service';
 import { MessageService } from '../../shared/services/message-service';
 import { SaveType } from './save-service';
@@ -23,6 +24,27 @@ export class GoogleSaveService {
           );
         },
       });
+  }
+
+  getAllData(spreadsheetId: string): Observable<string[][]> {
+    return this.googleSheetService.readAllCells(spreadsheetId, this.SAVE_SHEET).pipe(
+      map((valueRange) => valueRange.values || [[]]),
+      catchError((e) => {
+        console.error(e);
+        return of([[]]);
+      }),
+    );
+  }
+
+  getData(type: SaveType, spreadsheetId: string): Observable<string> {
+    const index = this.getIndex(type);
+    return this.googleSheetService.readCells(spreadsheetId, this.SAVE_SHEET, `B${index}`).pipe(
+      map((valueRange) => valueRange.values?.[0][0] || ''),
+      catchError((e) => {
+        console.error(e);
+        return of('');
+      }),
+    );
   }
 
   private getIndex(type: SaveType): number {
