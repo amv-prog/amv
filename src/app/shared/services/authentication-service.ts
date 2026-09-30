@@ -1,23 +1,52 @@
-import { effect, Service, signal } from '@angular/core';
+import { effect, inject, Service, signal, WritableSignal } from '@angular/core';
 
 import { GoogleUser } from '../models/google-user';
+import { SessionStorageService } from './session-storage-service';
 
 @Service()
 export class AuthenticationService {
   static readonly CLIENT_ID =
     '344404452907-3rolv6u3u94tstsive2d14mnhde6s1ag.apps.googleusercontent.com';
 
+  private readonly sessionStorage = inject(SessionStorageService);
+
   isGsiLoaded = signal<boolean>(false);
   tokenClient = signal<google.accounts.oauth2.TokenClient | undefined>(undefined);
-  googleUser = signal<GoogleUser | undefined>(undefined);
-  accessToken = signal<string | undefined>(undefined);
+  googleUser: WritableSignal<GoogleUser | undefined>;
+  accessToken: WritableSignal<string | undefined>;
 
   constructor() {
     this.loadScript();
+
+    this.googleUser = signal<GoogleUser | undefined>(
+      this.sessionStorage.getItem<GoogleUser>('user') || undefined,
+    );
+    effect(() => {
+      const user = this.googleUser();
+      if (!!user) {
+        this.sessionStorage.setItem('user', user);
+      } else {
+        this.sessionStorage.removeItem('user');
+      }
+    });
+
+    this.accessToken = signal<string | undefined>(
+      this.sessionStorage.getItem<string>('accessToken') || undefined,
+    );
+    effect(() => {
+      const token = this.accessToken();
+      if (!!token) {
+        this.sessionStorage.setItem('accessToken', token);
+      } else {
+        this.sessionStorage.removeItem('accessToken');
+      }
+    });
+
     effect(() => {
       const tokenClient = this.tokenClient();
       const googleUser = this.googleUser();
-      if (!!tokenClient && !!googleUser?.email) {
+      const accessToken = this.accessToken();
+      if (!accessToken && !!tokenClient && !!googleUser?.email) {
         tokenClient.requestAccessToken({
           hint: googleUser.email,
         });
