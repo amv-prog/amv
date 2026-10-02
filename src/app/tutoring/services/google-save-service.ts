@@ -1,7 +1,9 @@
-import { inject, Service } from '@angular/core';
+import { computed, inject, Service, Signal } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
+import { AuthenticationService } from '../../shared/services/authentication-service';
 import { GoogleSheetService } from '../../shared/services/google-sheet-service';
 import { MessageService } from '../../shared/services/message-service';
+import { SettingsStore } from '../stores/settings-store';
 import { SaveType } from './save-service';
 
 @Service()
@@ -9,6 +11,16 @@ export class GoogleSaveService {
   private readonly googleSheetService = inject(GoogleSheetService);
   private readonly SAVE_SHEET = 'TU_Data';
   private readonly messageService = inject(MessageService);
+  private readonly settingStore = inject(SettingsStore);
+  private readonly authenticationService = inject(AuthenticationService);
+
+  reloadSignal(): Signal<boolean> {
+    return computed(() => {
+      const settings = this.settingStore.settings();
+      const accessToken = this.authenticationService.accessToken();
+      return settings.saveMode === 'GOOGLESHEET' && !!settings.spreadsheetId && !!accessToken;
+    });
+  }
 
   saveData(type: SaveType, spreadsheetId: string, data: any) {
     const index = this.getIndex(type);
@@ -32,17 +44,6 @@ export class GoogleSaveService {
       catchError((e) => {
         console.error(e);
         return of([[]]);
-      }),
-    );
-  }
-
-  getData(type: SaveType, spreadsheetId: string): Observable<string> {
-    const index = this.getIndex(type);
-    return this.googleSheetService.readCells(spreadsheetId, this.SAVE_SHEET, `B${index}`).pipe(
-      map((valueRange) => valueRange.values?.[0][0] || ''),
-      catchError((e) => {
-        console.error(e);
-        return of('');
       }),
     );
   }

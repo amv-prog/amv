@@ -1,4 +1,4 @@
-import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
 import { DateService } from '../../shared/services/date-service';
 import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
@@ -24,19 +24,19 @@ export class LessonStore {
   });
 
   constructor() {
-    this.lessons = signal<Lesson[]>(this.saveService.getItem<Lesson[]>(SaveType.LESSONS, []));
-
-    effect(() => {
-      this.saveService.update(SaveType.LESSONS, this.lessons());
-    });
+    this.lessons = linkedSignal<Lesson[]>(() =>
+      this.saveService.getSignal<Lesson[]>(SaveType.LESSONS, [])(),
+    );
   }
 
   replaceLessons(lessons: Lesson[]) {
     this.lessons.set(lessons);
+    this.saveService.update(SaveType.LESSONS, this.lessons());
   }
 
   addLesson(lesson: Lesson) {
     this.lessons.update((lessons) => [...lessons, lesson]);
+    this.saveService.update(SaveType.LESSONS, this.lessons());
   }
 
   updateLesson(lesson: Lesson) {
@@ -47,6 +47,7 @@ export class LessonStore {
       }
       return [...lessons];
     });
+    this.saveService.update(SaveType.LESSONS, this.lessons());
   }
 
   public static displayStudentName(student: { member: RecipientMember; family: Family }): string {
@@ -71,6 +72,7 @@ export class LessonStore {
       }
       return [...lessons];
     });
+    this.saveService.update(SaveType.LESSONS, this.lessons());
   }
 
   static compareLessonsDays(l1: Lesson, l2: Lesson): number {

@@ -1,4 +1,4 @@
-import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
 import { SaveService, SaveType } from '../services/save-service';
@@ -48,19 +48,19 @@ export class FamilyStore {
   });
 
   constructor() {
-    this.families = signal<Family[]>(this.saveService.getItem<Family[]>(SaveType.FAMILIES, []));
-
-    effect(() => {
-      this.saveService.update(SaveType.FAMILIES, this.families());
-    });
+    this.families = linkedSignal<Family[]>(() =>
+      this.saveService.getSignal<Family[]>(SaveType.FAMILIES, [])(),
+    );
   }
 
   replaceFamilies(families: Family[]) {
     this.families.set(families);
+    this.saveService.update(SaveType.FAMILIES, this.families());
   }
 
   addFamily(family: Family) {
     this.families.update((families) => [...families, family]);
+    this.saveService.update(SaveType.FAMILIES, this.families());
   }
 
   updateFamily(family: Family) {
@@ -71,6 +71,7 @@ export class FamilyStore {
       }
       return [...families];
     });
+    this.saveService.update(SaveType.FAMILIES, this.families());
   }
 
   removeFamily(family: Family) {
@@ -81,6 +82,7 @@ export class FamilyStore {
       }
       return [...families];
     });
+    this.saveService.update(SaveType.FAMILIES, this.families());
   }
 
   setSelectedFamilyId(familyId: string | undefined) {

@@ -1,9 +1,10 @@
-import { inject, Service, signal } from '@angular/core';
+import { computed, effect, inject, Service, Signal, signal, untracked } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { MessageService } from '../../shared/services/message-service';
 import { SettingsStore } from '../stores/settings-store';
 import { GoogleSaveService } from './google-save-service';
+import { LocalSaveService } from './local-save-service';
 
 @Service()
 export class SaveService {
@@ -11,10 +12,24 @@ export class SaveService {
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleSaveService = inject(GoogleSaveService);
   private readonly messageService = inject(MessageService);
+  private readonly localSaveService = inject(LocalSaveService);
 
   private latestLoadedData = signal<Map<string, string>>(new Map<string, string>());
 
+  constructor() {
+    effect(() => {
+      const reloadGoogle = this.googleSaveService.reloadSignal()();
+      const reloadLocalStorage = this.localSaveService.reloadSignal()();
+      untracked(() => {
+        if (reloadGoogle || reloadLocalStorage) {
+          this.loadLatestData();
+        }
+      });
+    });
+  }
+
   update(type: SaveType, data: any) {
+    console.log('update ' + type);
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'GOOGLESHEET') {
       const spreadsheetId = settings.spreadsheetId;
@@ -30,14 +45,18 @@ export class SaveService {
     }
   }
 
-  getItem<T>(type: SaveType, empty: T): T {
-    try {
+  getSignal<T>(type: SaveType, empty: T): Signal<T> {
+    return computed(() => {
       const value = this.latestLoadedData().get(type);
-      return value ? JSON.parse(value) : empty;
-    } catch (error) {
-      console.error('Error reading from latest data', error);
-      return empty;
-    }
+      return untracked(() => {
+        try {
+          return value ? JSON.parse(value) : empty;
+        } catch (error) {
+          console.error('Error reading from latest data', error);
+          return empty;
+        }
+      });
+    });
   }
 
   removeItem(key: string): void {
@@ -48,6 +67,7 @@ export class SaveService {
   }
 
   loadLatestData(): Observable<boolean> {
+    console.log('loadLatestData');
     return this.loadLatestDataMap().pipe(
       map((data) => {
         this.latestLoadedData.set(data);

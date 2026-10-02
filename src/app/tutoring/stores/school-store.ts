@@ -1,4 +1,4 @@
-import { computed, effect, inject, Service, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, inject, linkedSignal, Service, Signal, WritableSignal } from '@angular/core';
 import { School } from '../models/school';
 import { SchoolClass } from '../models/school-class';
 import { SaveService, SaveType } from '../services/save-service';
@@ -16,19 +16,19 @@ export class SchoolStore {
   );
 
   constructor() {
-    this.schools = signal<School[]>(this.saveService.getItem<School[]>(SaveType.SCHOOLS, []));
-
-    effect(() => {
-      this.saveService.update(SaveType.SCHOOLS, this.schools());
-    });
+    this.schools = linkedSignal<School[]>(() =>
+      this.saveService.getSignal<School[]>(SaveType.SCHOOLS, [])(),
+    );
   }
 
   replaceSchools(schools: School[]) {
     this.schools.set(schools);
+    this.saveService.update(SaveType.SCHOOLS, this.schools());
   }
 
   addSchool(school: School) {
     this.schools.update((schools) => [...schools, school]);
+    this.saveService.update(SaveType.SCHOOLS, this.schools());
   }
 
   updateSchool(school: School) {
@@ -39,6 +39,7 @@ export class SchoolStore {
       }
       return [...schools];
     });
+    this.saveService.update(SaveType.SCHOOLS, this.schools());
   }
 
   removeSchool(school: School) {
@@ -49,6 +50,7 @@ export class SchoolStore {
       }
       return [...schools];
     });
+    this.saveService.update(SaveType.SCHOOLS, this.schools());
   }
 
   updateClass(school: School, schoolClass: SchoolClass) {

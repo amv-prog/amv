@@ -10,7 +10,7 @@ export class VersionStore {
   version: WritableSignal<string>;
 
   constructor() {
-    this.updateStorage(this.saveService.getItem<string>(SaveType.VERSION, ''));
+    this.updateStorage(this.saveService.getSignal<string>(SaveType.VERSION, '')());
     this.version = signal<string>(packageJson.version);
 
     effect(() => {
@@ -19,11 +19,12 @@ export class VersionStore {
   }
 
   updateStorage(oldVersion: string | null) {
-    if (!oldVersion) {
+    /* if (!oldVersion) {
       this.saveService.removeItem('members');
     }
     if (VersionStore.compare('0.1.2', oldVersion) > 0) {
-      const families = this.saveService.getItem<any[]>(SaveType.FAMILIES, []);
+      console.log("version < 0.1.2 " + oldVersion);
+      const families = this.saveService.getSignal<any[]>(SaveType.FAMILIES, [])();
 
       if (!!families) {
         for (const family of families) {
@@ -33,7 +34,7 @@ export class VersionStore {
         }
       }
       this.saveService.update(SaveType.FAMILIES, families);
-    }
+    } */
   }
 
   static compare(version1: string | null, version2: string | null) {

@@ -10,23 +10,23 @@ import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
 import { School } from '../models/school';
 import { VolunteerMember } from '../models/volunteer-member';
-import { FamilyStore } from '../stores/family-store';
-import { LessonStore } from '../stores/lesson-store';
-import { SchoolStore } from '../stores/school-store';
-import { VolunteerStore } from '../stores/volunteer-store';
+import { SettingsStore } from '../stores/settings-store';
 
 @Service()
 export class LocalSaveService {
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly familyStore = inject(FamilyStore);
-  private readonly volunteerStore = inject(VolunteerStore);
-  private readonly lessonStore = inject(LessonStore);
-  private readonly schoolStore = inject(SchoolStore);
-  private readonly versionStore = inject(VersionStore);
   private readonly dateService = inject(DateService);
   private readonly messageService = inject(MessageService);
+  private readonly settingStore = inject(SettingsStore);
 
   private readonly dialog = inject(Dialog);
+
+  reloadSignal(): Signal<boolean> {
+    return computed(() => {
+      const settings = this.settingStore.settings();
+      return settings.saveMode === 'LOCAL_STORAGE';
+    });
+  }
 
   saveFileName(): string {
     return `settings-${this.dateService.formatDate(new Date(), 'yyyyMMdd')}.json`;
@@ -34,14 +34,15 @@ export class LocalSaveService {
 
   sanitizedSettingsBlobUrl(): Signal<SafeUrl> {
     return computed(() => {
-      const families = this.familyStore.families();
+      /* const families = this.familyStore.families();
       const volunteers = this.volunteerStore.volunteers();
       const lessons = this.lessonStore.lessons();
       const schools = this.schoolStore.schools();
       const version = this.versionStore.version();
       const settings = new DataSaveModel(families, volunteers, lessons, version, schools);
       const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
-      const blobUrl = window.URL.createObjectURL(blob);
+      const blobUrl = window.URL.createObjectURL(blob); */
+      const blobUrl = window.URL.createObjectURL(new Blob([''], { type: 'application/json' }));
       return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
     });
   }
@@ -95,18 +96,18 @@ export class LocalSaveService {
   }
 
   importSettings(dataSave: any) {
-    this.familyStore.replaceFamilies(dataSave.families);
+    /* this.familyStore.replaceFamilies(dataSave.families);
     this.volunteerStore.replaceVolunteers(dataSave.volunteers);
     this.lessonStore.replaceLessons(dataSave.lessons);
-    this.schoolStore.replaceSchools(dataSave.schools || []);
+    this.schoolStore.replaceSchools(dataSave.schools || []); */
     this.messageService.displaySuccess('Les données ont bien été chargées.');
   }
 
   cleanData() {
-    this.familyStore.replaceFamilies([]);
+    /* this.familyStore.replaceFamilies([]);
     this.volunteerStore.replaceVolunteers([]);
     this.lessonStore.replaceLessons([]);
-    this.schoolStore.replaceSchools([]);
+    this.schoolStore.replaceSchools([]); */
     this.messageService.displaySuccess('Les données ont bien été supprimées.');
   }
 }

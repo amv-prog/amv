@@ -1,4 +1,4 @@
-import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
 import { VolunteerMember } from '../models/volunteer-member';
 import { SaveService, SaveType } from '../services/save-service';
 
@@ -33,25 +33,24 @@ export class VolunteerStore {
   });
 
   constructor() {
-    this.volunteers = signal<VolunteerMember[]>(
-      this.saveService.getItem<VolunteerMember[]>(SaveType.VOLUNTEERS, []),
+    this.volunteers = linkedSignal<VolunteerMember[]>(() =>
+      this.saveService.getSignal<VolunteerMember[]>(SaveType.VOLUNTEERS, [])(),
     );
-
-    effect(() => {
-      this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
-    });
   }
 
   replaceVolunteers(volunteers: VolunteerMember[]) {
     this.volunteers.set(volunteers);
+    this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
   }
 
   setSelectedVolunteerId(volunteerId: string | undefined) {
     this.selectedVolunteerId.set(volunteerId);
+    this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
   }
 
   addVolunteer(volunteer: VolunteerMember) {
     this.volunteers.update((volunteers) => [...volunteers, volunteer]);
+    this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
   }
 
   updateVolunteer(volunteer: VolunteerMember) {
@@ -62,6 +61,7 @@ export class VolunteerStore {
       }
       return [...volunteers];
     });
+    this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
   }
 
   removeVolunteer(volunteer: VolunteerMember) {
@@ -72,5 +72,6 @@ export class VolunteerStore {
       }
       return [...volunteers];
     });
+    this.saveService.update(SaveType.VOLUNTEERS, this.volunteers());
   }
 }
