@@ -63,6 +63,16 @@ export class DataService {
     );
   }
 
+  saveNewData$(data: Map<string, any>): Observable<boolean> {
+    const updates = Object.values(SaveType).map((type) => this.update$(type, data.get(type)));
+    return combineLatest(updates).pipe(
+      map(() => {
+        this.latestLoadedData.set(data);
+        return true;
+      }),
+    );
+  }
+
   private loadLatestDataMap$(): Observable<Map<string, any>> {
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'GOOGLESHEET') {

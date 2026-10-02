@@ -1,14 +1,13 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
 import { debounce, form, FormField, FormRoot } from '@angular/forms/signals';
-import { tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GoogleButton } from '../../../shared/components/google-button/google-button';
 import { Toggle } from '../../../shared/components/toggle/toggle';
 import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
-import { LocalSaveService } from '../../services/local-save-service';
+import { FileDataService } from '../../services/file-data-service';
 import { SettingsStore } from '../../stores/settings-store';
-import * as exempleJson from './settings-exemple.json';
 
 @Component({
   selector: 'amv-settings',
@@ -18,7 +17,7 @@ import * as exempleJson from './settings-exemple.json';
 export class Settings {
   private readonly settingsStore = inject(SettingsStore);
   private readonly googleSheetService = inject(GoogleSheetService);
-  private readonly localSaveService = inject(LocalSaveService);
+  private readonly fileDataService = inject(FileDataService);
 
   private readonly dialog = inject(Dialog);
 
@@ -36,8 +35,8 @@ export class Settings {
     debounce(form.spreadsheetId, 500);
   });
 
-  protected readonly sanitizedBlobUrl = this.localSaveService.sanitizedSettingsBlobUrl();
-  protected readonly fileName = this.localSaveService.saveFileName();
+  protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
+  protected readonly fileName = this.fileDataService.saveFileName();
 
   constructor() {
     effect(() => {
@@ -57,7 +56,7 @@ export class Settings {
 
     if (!!input.files?.length) {
       const file = input.files![0];
-      this.localSaveService.loadFile(file);
+      this.fileDataService.loadFile(file);
     }
     input.value = '';
   }
@@ -72,11 +71,8 @@ export class Settings {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.localSaveService.cleanData();
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.cleanData$()),
       )
       .subscribe();
   }
@@ -91,11 +87,8 @@ export class Settings {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.localSaveService.importSettings(exempleJson);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.importExemple$()),
       )
       .subscribe();
   }
