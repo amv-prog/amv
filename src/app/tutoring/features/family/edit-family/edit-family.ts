@@ -1,6 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { apply, FieldTree, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 import { AddressForm } from '../../../../shared/components/address-form/address-form';
 import { Address } from '../../../../shared/models/address';
 import { NavigationService } from '../../../../shared/services/navigation-service';
@@ -77,12 +78,16 @@ export class EditFamily {
           additionalInfo: formData.additionalInfo.trim(),
           address: this.getAddress(),
         };
-        this.familyStore.updateFamily(current);
-        this.navigationService.back(['tutoring', 'family', current.id]);
+        this.familyStore
+          .updateFamily$(current)
+          .pipe(tap(() => this.navigationService.back(['tutoring', 'family', current!.id])))
+          .subscribe();
       } else {
         current = new Family(formData.name, formData.additionalInfo.trim(), this.getAddress());
-        this.familyStore.addFamily(current);
-        this.router.navigate(['tutoring', 'family', current.id]);
+        this.familyStore
+          .addFamily$(current)
+          .pipe(tap(() => this.router.navigate(['tutoring', 'family', current!.id])))
+          .subscribe();
       }
     }
   }

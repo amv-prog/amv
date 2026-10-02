@@ -6,6 +6,7 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { tap } from 'rxjs';
 import { DateService } from '../../../../../shared/services/date-service';
 import { FamilyStore } from '../../../../stores/family-store';
 
@@ -65,8 +66,10 @@ export class EditContribution {
         ...current,
         contributionValidity: validityDate,
       };
-      this.familyStore.updateFamily(current);
-      this.dialogRef.close();
+      this.familyStore
+        .updateFamily$(current)
+        .pipe(tap(() => this.dialogRef.close()))
+        .subscribe();
     }
   }
 

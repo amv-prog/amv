@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BatchUpdateResponse } from '../models/google-sheet/batch-update-response';
+import { ClearValuesResponse } from '../models/google-sheet/clear-values-response';
 import { Spreadsheet } from '../models/google-sheet/spreadsheet';
 import { UpdateValuesResponse } from '../models/google-sheet/update-values-response';
 import { ValueRange } from '../models/google-sheet/value-range';
@@ -83,6 +84,17 @@ export class GoogleSheetService {
   readAllCells(spreadsheetId: string, sheetId: string): Observable<ValueRange> {
     return this.http.get<ValueRange>(
       `${this.baseUrl}/${spreadsheetId}/values/${sheetId}?majorDimension=ROWS`,
+    );
+  }
+
+  clearCells(
+    spreadsheetId: string,
+    sheetId: string,
+    range: string,
+  ): Observable<ClearValuesResponse> {
+    return this.http.post<ClearValuesResponse>(
+      `${this.baseUrl}/${spreadsheetId}/values/${sheetId}!${range}:clear`,
+      undefined,
     );
   }
 }

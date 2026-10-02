@@ -2,7 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
@@ -108,28 +108,23 @@ export class DisplayVolunteer {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeVolunteer();
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.volunteerStore.removeVolunteer$(this.volunteer()!)),
+        tap(() => this.router.navigate(['tutoring', 'volunteer', 'list'])),
       )
       .subscribe();
-  }
-
-  private removeVolunteer() {
-    this.volunteerStore.removeVolunteer(this.volunteer()!);
-    this.router.navigate(['tutoring', 'volunteer', 'list']);
   }
 
   stopLesson(lesson: Lesson) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    this.lessonStore.updateLesson({ ...lesson, endDate: this.dateService.formatDate(today) });
+    this.lessonStore
+      .updateLesson$({ ...lesson, endDate: this.dateService.formatDate(today) })
+      .subscribe();
   }
 
   reactivateLesson(lesson: Lesson) {
-    this.lessonStore.updateLesson({ ...lesson, endDate: undefined });
+    this.lessonStore.updateLesson$({ ...lesson, endDate: undefined }).subscribe();
   }
 
   canStopLesson(lesson: Lesson) {
@@ -146,16 +141,9 @@ export class DisplayVolunteer {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeLesson(lesson);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.lessonStore.removeLesson$(lesson)),
       )
       .subscribe();
-  }
-
-  private removeLesson(lesson: Lesson) {
-    this.lessonStore.removeLesson(lesson);
   }
 }

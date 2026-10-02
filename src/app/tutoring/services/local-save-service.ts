@@ -1,8 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { computed, inject, Service, Signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { filter, map, Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { ConfirmationDialog } from '../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../shared/services/date-service';
 import { MessageService } from '../../shared/services/message-service';
@@ -11,23 +10,14 @@ import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
 import { School } from '../models/school';
 import { VolunteerMember } from '../models/volunteer-member';
-import { SettingsStore } from '../stores/settings-store';
 
 @Service()
 export class LocalSaveService {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly dateService = inject(DateService);
   private readonly messageService = inject(MessageService);
-  private readonly settingStore = inject(SettingsStore);
 
   private readonly dialog = inject(Dialog);
-
-  reload$(): Observable<boolean> {
-    return toObservable(this.settingStore.settings).pipe(
-      filter((settings) => settings.saveMode === 'LOCAL_STORAGE'),
-      map(() => true),
-    );
-  }
 
   saveFileName(): string {
     return `settings-${this.dateService.formatDate(new Date(), 'yyyyMMdd')}.json`;

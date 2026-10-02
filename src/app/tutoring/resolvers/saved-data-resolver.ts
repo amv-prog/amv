@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SaveService } from '../services/save-service';
+import { DataService } from '../services/data-service';
 
 export const savedDataResolver: ResolveFn<boolean> = (): Observable<boolean> => {
-  const saveService = inject(SaveService);
-  return saveService.loadLatestData();
+  const dataService = inject(DataService);
+  return dataService.loadLatestData$();
 };

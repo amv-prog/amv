@@ -1,13 +1,14 @@
 import { computed, inject, linkedSignal, Service, Signal, WritableSignal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { School } from '../models/school';
 import { SchoolClass } from '../models/school-class';
-import { SaveService, SaveType } from '../services/save-service';
+import { DataService, SaveType } from '../services/data-service';
 
 @Service()
 export class SchoolStore {
   private static standardGrades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
 
-  private readonly saveService = inject(SaveService);
+  private readonly dataService = inject(DataService);
 
   schools: WritableSignal<School[]>;
 
@@ -17,21 +18,21 @@ export class SchoolStore {
 
   constructor() {
     this.schools = linkedSignal<School[]>(() =>
-      this.saveService.getSignal<School[]>(SaveType.SCHOOLS, [])(),
+      this.dataService.getSignal<School[]>(SaveType.SCHOOLS, [])(),
     );
   }
 
-  replaceSchools(schools: School[]) {
+  replaceSchools$(schools: School[]): Observable<boolean> {
     this.schools.set(schools);
-    this.saveService.update(SaveType.SCHOOLS, this.schools());
+    return this.dataService.update$(SaveType.SCHOOLS, this.schools());
   }
 
-  addSchool(school: School) {
+  addSchool$(school: School): Observable<boolean> {
     this.schools.update((schools) => [...schools, school]);
-    this.saveService.update(SaveType.SCHOOLS, this.schools());
+    return this.dataService.update$(SaveType.SCHOOLS, this.schools());
   }
 
-  updateSchool(school: School) {
+  updateSchool$(school: School): Observable<boolean> {
     this.schools.update((schools) => {
       let index = schools.findIndex((f) => f.id === school.id);
       if (index >= 0) {
@@ -39,10 +40,10 @@ export class SchoolStore {
       }
       return [...schools];
     });
-    this.saveService.update(SaveType.SCHOOLS, this.schools());
+    return this.dataService.update$(SaveType.SCHOOLS, this.schools());
   }
 
-  removeSchool(school: School) {
+  removeSchool$(school: School): Observable<boolean> {
     this.schools.update((schools) => {
       let index = schools.indexOf(school);
       if (index >= 0) {
@@ -50,25 +51,25 @@ export class SchoolStore {
       }
       return [...schools];
     });
-    this.saveService.update(SaveType.SCHOOLS, this.schools());
+    return this.dataService.update$(SaveType.SCHOOLS, this.schools());
   }
 
-  updateClass(school: School, schoolClass: SchoolClass) {
+  updateClass$(school: School, schoolClass: SchoolClass): Observable<boolean> {
     let cIndex = school.classes.findIndex((c) => c.id === schoolClass.id);
     if (cIndex >= 0) {
       school.classes.splice(cIndex, 1, { ...schoolClass });
     } else {
       school.classes.push(schoolClass);
     }
-    this.updateSchool(school);
+    return this.updateSchool$(school);
   }
 
-  removeClass(school: School, schoolClass: SchoolClass) {
+  removeClass$(school: School, schoolClass: SchoolClass): Observable<boolean> {
     let index = school.classes.indexOf(schoolClass);
     if (index >= 0) {
       school.classes.splice(index, 1);
     }
-    this.updateSchool(school);
+    return this.updateSchool$(school);
   }
 
   findSchoolClassObject(

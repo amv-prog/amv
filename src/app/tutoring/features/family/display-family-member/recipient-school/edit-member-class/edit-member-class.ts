@@ -9,6 +9,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { disabled, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { tap } from 'rxjs';
 import { FamilyStore } from '../../../../../stores/family-store';
 import { SchoolStore } from '../../../../../stores/school-store';
 import { EditClass } from '../../../../school/edit-class/edit-class';
@@ -123,8 +124,10 @@ export class EditMemberClass {
         member.schoolClassIds.push(formData.classId);
       }
 
-      this.familyStore.updateFamilyMember(member);
-      this.dialogRef.close(true);
+      this.familyStore
+        .updateFamilyMember$(member)
+        .pipe(tap(() => this.dialogRef.close(true)))
+        .subscribe();
     }
   }
 

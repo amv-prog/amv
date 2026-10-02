@@ -43,7 +43,7 @@ export class RecipientSchool {
     let index = member?.schoolClassIds.findIndex((c) => c === schoolClassId) || -1;
     if (!!member && index >= 0) {
       member.schoolClassIds.splice(index, 1);
-      this.familyStore.updateFamilyMember(member);
+      this.familyStore.updateFamilyMember$(member).subscribe();
     }
   }
 

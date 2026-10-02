@@ -1,21 +1,21 @@
-import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import * as packageJson from 'packageJson';
-import { SaveService, SaveType } from '../tutoring/services/save-service';
+import { DataService, SaveType } from '../tutoring/services/data-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VersionStore {
-  private readonly saveService = inject(SaveService);
+  private readonly dataService = inject(DataService);
   version: WritableSignal<string>;
 
   constructor() {
-    this.updateStorage(this.saveService.getSignal<string>(SaveType.VERSION, '')());
+    this.updateStorage(this.dataService.getSignal<string>(SaveType.VERSION, '')());
     this.version = signal<string>(packageJson.version);
 
-    effect(() => {
-      this.saveService.update(SaveType.VERSION, this.version());
-    });
+    /* effect(() => {
+      this.dataService.update(SaveType.VERSION, this.version());
+    }); */
   }
 
   updateStorage(oldVersion: string | null) {
