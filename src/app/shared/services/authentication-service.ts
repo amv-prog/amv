@@ -141,4 +141,17 @@ export class AuthenticationService {
     );
     return JSON.parse(jsonPayload);
   }
+
+  handleGoogleSignOut() {
+    const accessToken = this.accessToken();
+    if (!!accessToken) {
+      google.accounts.oauth2.revoke(accessToken, () => {
+        this.accessToken.set(undefined);
+        this.googleUser.set(undefined);
+      });
+    } else {
+      this.accessToken.set(undefined);
+      this.googleUser.set(undefined);
+    }
+  }
 }

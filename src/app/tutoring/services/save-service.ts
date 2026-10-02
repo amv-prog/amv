@@ -1,5 +1,5 @@
-import { computed, effect, inject, Service, Signal, signal, untracked } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { computed, inject, Service, Signal, signal, untracked } from '@angular/core';
+import { map, merge, Observable, of, switchMap } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { MessageService } from '../../shared/services/message-service';
 import { SettingsStore } from '../stores/settings-store';
@@ -16,20 +16,19 @@ export class SaveService {
 
   private latestLoadedData = signal<Map<string, string>>(new Map<string, string>());
 
-  constructor() {
-    effect(() => {
-      const reloadGoogle = this.googleSaveService.reloadSignal()();
-      const reloadLocalStorage = this.localSaveService.reloadSignal()();
-      untracked(() => {
-        if (reloadGoogle || reloadLocalStorage) {
-          this.loadLatestData();
+  reload$(): Observable<boolean> {
+    return merge(this.googleSaveService.reload$(), this.localSaveService.reload$()).pipe(
+      switchMap((reload) => {
+        if (reload) {
+          return this.loadLatestData();
+        } else {
+          return of(reload);
         }
-      });
-    });
+      }),
+    );
   }
 
   update(type: SaveType, data: any) {
-    console.log('update ' + type);
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'GOOGLESHEET') {
       const spreadsheetId = settings.spreadsheetId;
@@ -67,7 +66,6 @@ export class SaveService {
   }
 
   loadLatestData(): Observable<boolean> {
-    console.log('loadLatestData');
     return this.loadLatestDataMap().pipe(
       map((data) => {
         this.latestLoadedData.set(data);

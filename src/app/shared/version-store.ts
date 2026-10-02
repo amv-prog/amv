@@ -23,7 +23,6 @@ export class VersionStore {
       this.saveService.removeItem('members');
     }
     if (VersionStore.compare('0.1.2', oldVersion) > 0) {
-      console.log("version < 0.1.2 " + oldVersion);
       const families = this.saveService.getSignal<any[]>(SaveType.FAMILIES, [])();
 
       if (!!families) {

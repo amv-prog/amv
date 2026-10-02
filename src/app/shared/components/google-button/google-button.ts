@@ -1,4 +1,4 @@
-import { afterRenderEffect, Component, effect, inject } from '@angular/core';
+import { afterRenderEffect, Component, inject, untracked } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication-service';
 
 @Component({
@@ -10,6 +10,8 @@ export class GoogleButton {
   private readonly authenticationService = inject(AuthenticationService);
 
   protected readonly isGsiLoaded = this.authenticationService.isGsiLoaded;
+
+  protected readonly user = this.authenticationService.googleUser;
 
   constructor() {
     afterRenderEffect(() => {
@@ -28,5 +30,24 @@ export class GoogleButton {
         }
       }
     });
+
+    afterRenderEffect(() => {
+      const user = !!this.authenticationService.googleUser();
+
+      untracked(() => {
+        const buttonContainer = document.getElementById('g_id_signin_container');
+        if (buttonContainer) {
+          if (!!user) {
+            buttonContainer.style.visibility = 'hidden';
+          } else {
+            buttonContainer.style.visibility = 'visible';
+          }
+        }
+      });
+    });
+  }
+
+  signOut() {
+    this.authenticationService.handleGoogleSignOut();
   }
 }

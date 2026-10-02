@@ -1,5 +1,6 @@
-import { computed, inject, Service, Signal } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { inject, Service } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { catchError, combineLatest, filter, map, Observable, of } from 'rxjs';
 import { AuthenticationService } from '../../shared/services/authentication-service';
 import { GoogleSheetService } from '../../shared/services/google-sheet-service';
 import { MessageService } from '../../shared/services/message-service';
@@ -14,12 +15,17 @@ export class GoogleSaveService {
   private readonly settingStore = inject(SettingsStore);
   private readonly authenticationService = inject(AuthenticationService);
 
-  reloadSignal(): Signal<boolean> {
-    return computed(() => {
-      const settings = this.settingStore.settings();
-      const accessToken = this.authenticationService.accessToken();
-      return settings.saveMode === 'GOOGLESHEET' && !!settings.spreadsheetId && !!accessToken;
-    });
+  reload$(): Observable<boolean> {
+    return combineLatest([
+      toObservable(this.settingStore.settings),
+      toObservable(this.authenticationService.accessToken),
+    ]).pipe(
+      filter(
+        ([settings, accessToken]) =>
+          settings.saveMode === 'GOOGLESHEET' && !!settings.spreadsheetId && !!accessToken,
+      ),
+      map(() => true),
+    );
   }
 
   saveData(type: SaveType, spreadsheetId: string, data: any) {
