@@ -1,5 +1,5 @@
 import { inject, Service } from '@angular/core';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { map, Observable, of, throwError } from 'rxjs';
 import { GoogleSheetService } from '../../shared/services/google-sheet-service';
 import { SettingsStore } from '../stores/settings-store';
 import { SaveType } from './data-service';
@@ -29,13 +29,9 @@ export class GoogleDataService {
   }
 
   getAllData(spreadsheetId: string): Observable<string[][]> {
-    return this.googleSheetService.readAllCells(spreadsheetId, this.SAVE_SHEET).pipe(
-      map((valueRange) => valueRange.values || [[]]),
-      catchError((e) => {
-        console.error(e);
-        return of([[]]);
-      }),
-    );
+    return this.googleSheetService
+      .readAllCells(spreadsheetId, this.SAVE_SHEET)
+      .pipe(map((valueRange) => valueRange.values || [[]]));
   }
 
   removeData(type: SaveType): Observable<boolean> {

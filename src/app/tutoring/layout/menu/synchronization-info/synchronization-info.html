@@ -1,0 +1,20 @@
+<div>
+  @if (settings().saveMode === 'GOOGLESHEET') {
+    <div class="h-panel">
+      <div>Données Google</div>
+      @if (googleUser(); as user) {
+        <img class="google-icon" [src]="user.photoUrl" [alt]="user.email" [title]="user.email" />
+      }
+    </div>
+  }
+
+  @if (settings().saveMode === 'LOCAL_STORAGE') {
+    <div>Données locales</div>
+  }
+
+  @if (dataErrors(); as errors) {
+    @for (error of errors; track error) {
+      <div class="error">{{ error }}</div>
+    }
+  }
+</div>

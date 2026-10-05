@@ -1,14 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthenticationService } from '../../../shared/services/authentication-service';
+import { SynchronizationInfo } from './synchronization-info/synchronization-info';
 
 @Component({
   selector: 'amv-menu',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, SynchronizationInfo],
   templateUrl: './menu.html',
 })
-export class Menu {
-  private readonly authenticationService = inject(AuthenticationService);
-
-  protected readonly googleUser = this.authenticationService.googleUser;
-}
+export class Menu {}

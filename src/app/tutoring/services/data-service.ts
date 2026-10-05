@@ -1,6 +1,6 @@
 import { computed, inject, Service, Signal, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { AuthenticationService } from '../../shared/services/authentication-service';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { SettingsStore } from '../stores/settings-store';
@@ -8,6 +8,7 @@ import { GoogleDataService } from './google-data-service';
 
 @Service()
 export class DataService {
+  private readonly ERROR_DATA = 'error';
   private readonly settingStore = inject(SettingsStore);
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleDataService = inject(GoogleDataService);
@@ -20,11 +21,16 @@ export class DataService {
       toObservable(this.settingStore.settings),
       toObservable(this.authenticationService.accessToken),
     ]).pipe(
-      filter(
-        ([settings, accessToken]) =>
-          settings.saveMode === 'LOCAL_STORAGE' || (!!settings.spreadsheetId && !!accessToken),
-      ),
-      switchMap(() => this.loadLatestData$()),
+      switchMap(([settings, accessToken]) => {
+        if (settings.saveMode === 'LOCAL_STORAGE' || !!accessToken) {
+          return this.loadLatestData$();
+        } else {
+          const data = new Map<string, any>();
+          data.set(this.ERROR_DATA, ['Aucun utilisateur connecté']);
+          this.latestLoadedData.set(data);
+          return of(true);
+        }
+      }),
     );
   }
 
@@ -41,6 +47,12 @@ export class DataService {
   getSignal<T>(type: SaveType, empty: T): Signal<T> {
     return computed(() => {
       return this.latestLoadedData().get(type) || empty;
+    });
+  }
+
+  getLoadingErrors(): Signal<string[]> {
+    return computed(() => {
+      return this.latestLoadedData().get(this.ERROR_DATA) || [];
     });
   }
 
@@ -81,23 +93,36 @@ export class DataService {
         return this.googleDataService.getAllData(spreadsheetId).pipe(
           map((data) => {
             const map = new Map<string, any>();
-            for (let row of data) {
+            const errors: string[] = [];
+            for (let [index, row] of data.entries()) {
               if (row.length === 2) {
                 const stringValue = row[1];
                 if (!!stringValue) {
                   try {
                     map.set(row[0], JSON.parse(stringValue));
                   } catch (error) {
-                    console.error('Error reading from latest data', error);
+                    errors.push(`Erreur de lecture ligne ${index + 1}`);
                   }
                 }
+              } else if (row.length > 2) {
+                errors.push(`Ligne ${index + 1} mal formée`);
               }
+            }
+            if (errors.length > 0) {
+              map.set(this.ERROR_DATA, errors);
             }
             return map;
           }),
+          catchError((e) => {
+            const data = new Map<string, any>();
+            data.set(this.ERROR_DATA, ['Fichier non récupéré']);
+            return of(data);
+          }),
         );
       } else {
-        return of(new Map<string, any>());
+        const data = new Map<string, any>();
+        data.set(this.ERROR_DATA, ['Aucun fichier renseigné']);
+        return of(data);
       }
     } else {
       const map = new Map<string, string>();
