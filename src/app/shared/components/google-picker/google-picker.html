@@ -1,0 +1,37 @@
+<button (click)="openPicker()">Sélectionner un fichier Google</button>
+
+@if (showPicker()) {
+  @if (accessToken(); as token) {
+    <drive-picker
+      [attr.app-id]="appId"
+      [attr.oauth-token]="token"
+      (picker-picked)="onFilePicked($event)"
+      (picker-canceled)="onCanceled()"
+      (picker-error)="onPickerError($event)"
+    >
+      <!-- This view shows Google Sheets specifically -->
+      <drive-picker-docs-view
+        view-id="SPREADSHEETS"
+        mimeTypes="application/vnd.google-apps.spreadsheet"
+        query="TestTU"
+      >
+      </drive-picker-docs-view>
+    </drive-picker>
+  } @else {
+    <drive-picker
+      [attr.client-id]="clientId"
+      [attr.app-id]="appId"
+      (picker-picked)="onFilePicked($event)"
+      (picker-canceled)="onCanceled()"
+      (picker-error)="onPickerError($event)"
+    >
+      <!-- This view shows Google Sheets specifically -->
+      <drive-picker-docs-view
+        view-id="SPREADSHEETS"
+        mimeTypes="application/vnd.google-apps.spreadsheet"
+        query="TestTU"
+      >
+      </drive-picker-docs-view>
+    </drive-picker>
+  }
+}

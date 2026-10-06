@@ -16,6 +16,7 @@
         <input id="spreadsheetId" type="text" [formField]="settingsForm.spreadsheetId" />
       </div>
       <div>
+        <amv-google-picker></amv-google-picker>
         <amv-google-button></amv-google-button>
         <button (click)="createGoogleSheet()">Créer un fichier</button>
         <button (click)="writeCell()">Écrire dans une cellule</button>

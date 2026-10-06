@@ -4,6 +4,7 @@ import { debounce, form, FormField, FormRoot } from '@angular/forms/signals';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GoogleButton } from '../../../shared/components/google-button/google-button';
+import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { Toggle } from '../../../shared/components/toggle/toggle';
 import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
 import { FileDataService } from '../../services/file-data-service';
@@ -11,7 +12,7 @@ import { SettingsStore } from '../../stores/settings-store';
 
 @Component({
   selector: 'amv-settings',
-  imports: [FormRoot, Toggle, FormField, GoogleButton],
+  imports: [FormRoot, Toggle, FormField, GoogleButton, GooglePicker],
   templateUrl: './settings.html',
 })
 export class Settings {

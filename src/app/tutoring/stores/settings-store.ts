@@ -21,4 +21,10 @@ export class SettingsStore {
   updateSettings(settings: Settings) {
     this.settings.set({ ...settings });
   }
+
+  updateSpreadsheetId(spreadsheetId: string) {
+    this.settings.update((settings) => {
+      return { ...settings, spreadsheetId };
+    });
+  }
 }
