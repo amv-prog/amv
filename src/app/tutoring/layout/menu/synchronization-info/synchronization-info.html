@@ -1,11 +1,7 @@
 <div>
   @if (settings().saveMode === 'GOOGLESHEET') {
-    <div class="h-panel">
-      <div>Données Google</div>
-      @if (googleUser(); as user) {
-        <img class="google-icon" [src]="user.photoUrl" [alt]="user.email" [title]="user.email" />
-      }
-    </div>
+    <div>Données Google</div>
+    <div>{{ settings().spreadsheet?.name }}</div>
   }
 
   @if (settings().saveMode === 'LOCAL_STORAGE') {

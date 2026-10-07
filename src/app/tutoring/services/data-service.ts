@@ -1,7 +1,6 @@
 import { computed, inject, Service, Signal, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
-import { AuthenticationService } from '../../shared/services/authentication-service';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { SettingsStore } from '../stores/settings-store';
 import { GoogleDataService } from './google-data-service';
@@ -12,24 +11,13 @@ export class DataService {
   private readonly settingStore = inject(SettingsStore);
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleDataService = inject(GoogleDataService);
-  private readonly authenticationService = inject(AuthenticationService);
 
   private latestLoadedData = signal<Map<string, any>>(new Map<string, any>());
 
   reload$(): Observable<boolean> {
-    return combineLatest([
-      toObservable(this.settingStore.settings),
-      toObservable(this.authenticationService.accessToken),
-    ]).pipe(
-      switchMap(([settings, accessToken]) => {
-        if (settings.saveMode === 'LOCAL_STORAGE' || !!accessToken) {
-          return this.loadLatestData$();
-        } else {
-          const data = new Map<string, any>();
-          data.set(this.ERROR_DATA, ['Aucun utilisateur connecté']);
-          this.latestLoadedData.set(data);
-          return of(true);
-        }
+    return toObservable(this.settingStore.settings).pipe(
+      switchMap(() => {
+        return this.loadLatestData$();
       }),
     );
   }
@@ -88,7 +76,7 @@ export class DataService {
   private loadLatestDataMap$(): Observable<Map<string, any>> {
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'GOOGLESHEET') {
-      const spreadsheetId = settings.spreadsheetId;
+      const spreadsheetId = settings.spreadsheet?.id;
       if (spreadsheetId) {
         return this.googleDataService.getAllData(spreadsheetId).pipe(
           map((data) => {

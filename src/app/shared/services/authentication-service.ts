@@ -1,6 +1,6 @@
 import { effect, inject, Service, signal, WritableSignal } from '@angular/core';
 
-import { GoogleUser } from '../models/google-user';
+import { Subject } from 'rxjs';
 import { SessionStorageService } from './session-storage-service';
 
 @Service()
@@ -9,28 +9,18 @@ export class AuthenticationService {
     '344404452907-3rolv6u3u94tstsive2d14mnhde6s1ag.apps.googleusercontent.com';
   static readonly API_KEY = 'AIzaSyCfvsGTVwPOLznVMgeIuNGroWw3u61NTVk';
   static readonly APP_ID = '344404452907';
+  private readonly scope = 'https://www.googleapis.com/auth/drive.file';
 
   private readonly sessionStorage = inject(SessionStorageService);
 
-  isGsiLoaded = signal<boolean>(false);
+  isAuthenticationReady = signal<boolean>(false);
   tokenClient = signal<google.accounts.oauth2.TokenClient | undefined>(undefined);
-  googleUser: WritableSignal<GoogleUser | undefined>;
   accessToken: WritableSignal<string | undefined>;
+
+  private tokenSubject = new Subject<string>();
 
   constructor() {
     this.loadScript();
-
-    this.googleUser = signal<GoogleUser | undefined>(
-      this.sessionStorage.getItem<GoogleUser>('user') || undefined,
-    );
-    effect(() => {
-      const user = this.googleUser();
-      if (!!user) {
-        this.sessionStorage.setItem('user', user);
-      } else {
-        this.sessionStorage.removeItem('user');
-      }
-    });
 
     this.accessToken = signal<string | undefined>(
       this.sessionStorage.getItem<string>('accessToken') || undefined,
@@ -43,23 +33,12 @@ export class AuthenticationService {
         this.sessionStorage.removeItem('accessToken');
       }
     });
-
-    effect(() => {
-      const tokenClient = this.tokenClient();
-      const googleUser = this.googleUser();
-      const accessToken = this.accessToken();
-      if (!accessToken && !!tokenClient && !!googleUser?.email) {
-        tokenClient.requestAccessToken({
-          hint: googleUser.email,
-        });
-      }
-    });
   }
 
   loadScript() {
     if (typeof google !== 'undefined' && google?.accounts?.id) {
-      this.isGsiLoaded.set(true);
-      this.initializeGsi();
+      this.initializeTokenClient();
+      this.isAuthenticationReady.set(true);
       return;
     }
 
@@ -68,8 +47,8 @@ export class AuthenticationService {
     gsiScript.async = true;
     gsiScript.defer = true;
     gsiScript.onload = () => {
-      this.isGsiLoaded.set(true);
-      this.initializeGsi();
+      this.initializeTokenClient();
+      this.isAuthenticationReady.set(true);
       this;
     };
     gsiScript.onerror = () => {
@@ -78,70 +57,34 @@ export class AuthenticationService {
     document.head.appendChild(gsiScript);
   }
 
-  private initializeGsi() {
+  private initializeTokenClient() {
     if (!window.google?.accounts?.id) {
       console.warn('Google Identity Services SDK not available.');
       return;
     }
-
-    google.accounts.id.initialize({
-      client_id: AuthenticationService.CLIENT_ID,
-      callback: (response) => this.handleGoogleSignIn(response),
-      ux_mode: 'popup',
-    });
-
-    this.initializeTokenClient();
-  }
-
-  private handleGoogleSignIn(response: google.accounts.id.CredentialResponse) {
-    this.googleUser.set(this.createGoogleUser(response.credential));
-  }
-
-  private initializeTokenClient() {
     // scope
-    const scope = 'https://www.googleapis.com/auth/drive.file';
     this.tokenClient.set(
       google.accounts.oauth2.initTokenClient({
         client_id: AuthenticationService.CLIENT_ID,
-        scope,
+        scope: this.scope,
         callback: (tokenResponse) => {
           if (tokenResponse.error) {
             console.error(
               `Failed to get access token : ${tokenResponse.error} ${tokenResponse.error_description} ${tokenResponse.error_uri}`,
             );
+            this.tokenSubject.error('Failed to retrieve access token');
           } else {
             this.accessToken.set(tokenResponse.access_token);
+            this.tokenSubject.next(tokenResponse.access_token);
           }
         },
       }),
     );
   }
 
-  private createGoogleUser(idToken: string) {
-    const user = new GoogleUser(idToken);
-    const payload = this.decodeJwt(idToken);
-    user.id = payload.sub;
-    user.name = payload.name;
-    user.email = payload.email;
-    user.photoUrl = payload.picture;
-    user.firstName = payload['given_name'];
-    user.lastName = payload['family_name'];
-    return user;
-  }
-
-  private decodeJwt(idToken: string): any {
-    const base64Url = idToken.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join(''),
-    );
-    return JSON.parse(jsonPayload);
+  getAccessToken() {
+    this.tokenClient()?.requestAccessToken({ prompt: '' });
+    return this.tokenSubject.asObservable();
   }
 
   handleGoogleSignOut() {
@@ -149,11 +92,9 @@ export class AuthenticationService {
     if (!!accessToken) {
       google.accounts.oauth2.revoke(accessToken, () => {
         this.accessToken.set(undefined);
-        this.googleUser.set(undefined);
       });
     } else {
       this.accessToken.set(undefined);
-      this.googleUser.set(undefined);
     }
   }
 }

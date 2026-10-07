@@ -11,7 +11,7 @@ export class GoogleDataService {
   private readonly SAVE_SHEET = 'TU_Data';
 
   saveData(type: SaveType, data: any): Observable<boolean> {
-    const spreadsheetId = this.settingStore.settings().spreadsheetId;
+    const spreadsheetId = this.settingStore.settings().spreadsheet?.id;
     if (!!spreadsheetId) {
       const index = this.getIndex(type);
       return this.googleSheetService
@@ -35,7 +35,7 @@ export class GoogleDataService {
   }
 
   removeData(type: SaveType): Observable<boolean> {
-    const spreadsheetId = this.settingStore.settings().spreadsheetId;
+    const spreadsheetId = this.settingStore.settings().spreadsheet?.id;
     if (!!spreadsheetId) {
       const index = this.getIndex(type);
       if (!!index) {

@@ -1,40 +1,40 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
-import { debounce, form, FormField, FormRoot } from '@angular/forms/signals';
+import { form, FormField, FormRoot } from '@angular/forms/signals';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
-import { GoogleButton } from '../../../shared/components/google-button/google-button';
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { Toggle } from '../../../shared/components/toggle/toggle';
+import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
+import { AuthenticationService } from '../../../shared/services/authentication-service';
 import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
 import { FileDataService } from '../../services/file-data-service';
 import { SettingsStore } from '../../stores/settings-store';
 
 @Component({
   selector: 'amv-settings',
-  imports: [FormRoot, Toggle, FormField, GoogleButton, GooglePicker],
+  imports: [FormRoot, Toggle, FormField, GooglePicker],
   templateUrl: './settings.html',
 })
 export class Settings {
   private readonly settingsStore = inject(SettingsStore);
   private readonly googleSheetService = inject(GoogleSheetService);
   private readonly fileDataService = inject(FileDataService);
+  private readonly authenticationService = inject(AuthenticationService);
 
   private readonly dialog = inject(Dialog);
 
+  protected readonly isAuthenticationReady = this.authenticationService.isAuthenticationReady;
+  protected readonly accessToken = this.authenticationService.accessToken;
   protected readonly settings = this.settingsStore.settings;
 
   protected readonly settingsFormData: WritableSignal<{
     saveMode: 'LEFT' | 'RIGHT';
-    spreadsheetId: string;
   }> = signal({
     saveMode: this.settings().saveMode === 'LOCAL_STORAGE' ? 'LEFT' : 'RIGHT',
-    spreadsheetId: this.settings().spreadsheetId || '',
   });
 
-  protected readonly settingsForm = form(this.settingsFormData, (form) => {
-    debounce(form.spreadsheetId, 500);
-  });
+  protected readonly settingsForm = form(this.settingsFormData);
 
   protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
   protected readonly fileName = this.fileDataService.saveFileName();
@@ -44,10 +44,9 @@ export class Settings {
       if (this.settingsForm().dirty()) {
         const data = this.settingsForm().value();
 
-        this.settingsStore.updateSettings({
-          saveMode: data.saveMode === 'LEFT' ? 'LOCAL_STORAGE' : 'GOOGLESHEET',
-          spreadsheetId: data.spreadsheetId || undefined,
-        });
+        this.settingsStore.updateSaveMode(
+          data.saveMode === 'LEFT' ? 'LOCAL_STORAGE' : 'GOOGLESHEET',
+        );
       }
     });
   }
@@ -94,14 +93,16 @@ export class Settings {
       .subscribe();
   }
 
-  createGoogleSheet() {
-    this.googleSheetService.createGoogleSheet('TestTU2309_02').subscribe();
+  signOut() {
+    this.authenticationService.handleGoogleSignOut();
   }
 
-  writeCell() {
-    this.googleSheetService
-      .writeCell('1tjXanz-evFm7XeA3bH6XgjdP8VQx8shl3b1OoW1e8hQ', 'Feuille 1', 'A1', 'Test2')
-      .subscribe();
+  selectFile(event: GoogleDocInfo) {
+    this.settingsStore.updateSpreadsheet(event);
+  }
+
+  createGoogleSheet() {
+    this.googleSheetService.createGoogleSheet('TestTU2309_02').subscribe();
   }
 
   renameSheet() {

@@ -1,4 +1,6 @@
+import { GoogleDocInfo } from '../../shared/models/google-doc-info';
+
 export interface Settings {
   saveMode: 'LOCAL_STORAGE' | 'GOOGLESHEET';
-  spreadsheetId?: string;
+  spreadsheet?: GoogleDocInfo;
 }
