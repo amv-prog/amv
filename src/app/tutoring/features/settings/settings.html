@@ -24,7 +24,6 @@
             <button (click)="signOut()">Se déconnecter</button>
           }
         </div>
-        <button (click)="renameSheet()">Renommer la feuille</button>
       }
     </div>
   } @else {
@@ -35,6 +34,7 @@
       <button (click)="fileUpload.click()">Importer un fichier</button>
       <button (click)="validateCleanLocalData()">Supprimer les données</button>
       <button (click)="validateExempleLocalImport()">Importer les données d'exemple</button>
+      <button (click)="createGoogleSheet()">Utiliser un nouveau fichier Google</button>
     </div>
 
     <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />

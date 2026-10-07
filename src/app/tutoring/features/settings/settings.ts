@@ -1,15 +1,15 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
 import { form, FormField, FormRoot } from '@angular/forms/signals';
-import { filter, switchMap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { Toggle } from '../../../shared/components/toggle/toggle';
 import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
 import { AuthenticationService } from '../../../shared/services/authentication-service';
-import { GoogleSheetService } from '../../../shared/services/google-sheet-service';
 import { FileDataService } from '../../services/file-data-service';
 import { SettingsStore } from '../../stores/settings-store';
+import { CreateFile } from './create-file/create-file';
 
 @Component({
   selector: 'amv-settings',
@@ -18,7 +18,6 @@ import { SettingsStore } from '../../stores/settings-store';
 })
 export class Settings {
   private readonly settingsStore = inject(SettingsStore);
-  private readonly googleSheetService = inject(GoogleSheetService);
   private readonly fileDataService = inject(FileDataService);
   private readonly authenticationService = inject(AuthenticationService);
 
@@ -102,12 +101,18 @@ export class Settings {
   }
 
   createGoogleSheet() {
-    this.googleSheetService.createGoogleSheet('TestTU2309_02').subscribe();
-  }
+    const dialogRef = this.dialog.open<boolean>(CreateFile, {
+      panelClass: 'dialog',
+    });
 
-  renameSheet() {
-    this.googleSheetService
-      .renameSheet('1tjXanz-evFm7XeA3bH6XgjdP8VQx8shl3b1OoW1e8hQ', '0', 'TU_Data')
+    dialogRef.closed
+      .pipe(
+        tap(() => {
+          this.settingsForm
+            .saveMode()
+            .reset(this.settings().saveMode === 'LOCAL_STORAGE' ? 'LEFT' : 'RIGHT');
+        }),
+      )
       .subscribe();
   }
 }

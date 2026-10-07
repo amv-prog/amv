@@ -1,6 +1,7 @@
 import { computed, inject, Service, Signal, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { Spreadsheet } from '../../shared/models/google-sheet/spreadsheet';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { SettingsStore } from '../stores/settings-store';
 import { GoogleDataService } from './google-data-service';
@@ -25,7 +26,7 @@ export class DataService {
   update$(type: SaveType, data: any): Observable<boolean> {
     const settings = this.settingStore.settings();
     if (settings.saveMode === 'GOOGLESHEET') {
-      return this.googleDataService.saveData(type, data);
+      return this.googleDataService.saveData$(type, data);
     } else {
       this.localStorageService.setItem(type, data);
       return of(true);
@@ -50,7 +51,7 @@ export class DataService {
       localStorage.removeItem(type);
       return of(true);
     } else {
-      return this.googleDataService.removeData(type);
+      return this.googleDataService.removeData$(type);
     }
   }
 
@@ -78,7 +79,7 @@ export class DataService {
     if (settings.saveMode === 'GOOGLESHEET') {
       const spreadsheetId = settings.spreadsheet?.id;
       if (spreadsheetId) {
-        return this.googleDataService.getAllData(spreadsheetId).pipe(
+        return this.googleDataService.getAllData$(spreadsheetId).pipe(
           map((data) => {
             const map = new Map<string, any>();
             const errors: string[] = [];
@@ -119,6 +120,24 @@ export class DataService {
       }
       return of(map);
     }
+  }
+
+  createCurrentDataGoogle$(name: string): Observable<Spreadsheet> {
+    return this.googleDataService.createEmptyFile$(name).pipe(
+      switchMap((spreadsheet) => {
+        const requests = Object.values(SaveType)
+          .map((type) => {
+            const data = this.latestLoadedData().get(type);
+            if (!!data) {
+              return this.googleDataService.saveData$(type, data, spreadsheet.spreadsheetId);
+            } else {
+              return null;
+            }
+          })
+          .filter((request) => !!request);
+        return combineLatest(requests).pipe(map(() => spreadsheet));
+      }),
+    );
   }
 }
 
