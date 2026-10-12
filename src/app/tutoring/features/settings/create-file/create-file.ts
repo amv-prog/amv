@@ -2,6 +2,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { catchError, tap } from 'rxjs';
+import { LoadingService } from '../../../../shared/services/loading-service';
 import { MessageService } from '../../../../shared/services/message-service';
 import { DataService } from '../../../services/data-service';
 import { GoogleDataService } from '../../../services/google-data-service';
@@ -18,6 +19,7 @@ export class CreateFile {
   private readonly googleDataService = inject(GoogleDataService);
   private readonly dataService = inject(DataService);
   private readonly messageService = inject(MessageService);
+  private readonly loadingService = inject(LoadingService);
 
   protected readonly error = signal<string>('');
 
@@ -30,6 +32,10 @@ export class CreateFile {
   protected readonly newFileForm = form(this.newFileFormData, (form) => {
     required(form.name, { message: 'Veuillez saisir le nom du fichier' });
   });
+
+  load() {
+    this.loadingService.loadingStart();
+  }
 
   createEmptyFile() {
     if (this.newFileForm().valid()) {
