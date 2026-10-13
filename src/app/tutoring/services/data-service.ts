@@ -103,7 +103,7 @@ export class DataService {
         }),
         catchError((e) => {
           const data = new Map<string, any>();
-          data.set(this.ERROR_DATA, ['Fichier non récupéré']);
+          data.set(this.ERROR_DATA, ['Erreur lors du chargement du fichier']);
           return of(data);
         }),
       );

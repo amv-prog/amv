@@ -2,7 +2,17 @@
   <h1>Gestion des données</h1>
 
   @if (settings().spreadsheet; as spreadsheet) {
-    <div class="subtitle">Données Google : {{ spreadsheet.name }}</div>
+    <div class="section">
+      <div class="highlight">Données Google : {{ spreadsheet.name }}</div>
+      @if (dataErrors(); as errors) {
+        @for (error of errors; track error) {
+          <div class="error bold h-panel">
+            <span class="material-symbols-outlined">warning</span>
+            <div>{{ error }}</div>
+          </div>
+        }
+      }
+    </div>
 
     @if (isAuthenticationReady()) {
       <div class="h-panel">
@@ -16,7 +26,7 @@
       <button (click)="switchToLocal()">Se déconnecter et utiliser les données locales</button>
     </div>
   } @else {
-    <div class="subtitle">Données locales</div>
+    <div class="highlight">Données locales</div>
     <div class="h-panel">
       <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
         >Enregistrer les données</a

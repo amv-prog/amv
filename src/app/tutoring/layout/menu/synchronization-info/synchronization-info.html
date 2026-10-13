@@ -8,7 +8,10 @@
 
   @if (dataErrors(); as errors) {
     @for (error of errors; track error) {
-      <div class="error">{{ error }}</div>
+      <div class="error bold h-panel">
+        <span class="material-symbols-outlined">warning</span>
+        <div>{{ error }}</div>
+      </div>
     }
   }
 </div>

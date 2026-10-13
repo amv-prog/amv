@@ -5,6 +5,7 @@ import { ConfirmationDialog } from '../../../shared/components/confirmation-dial
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
 import { AuthenticationService } from '../../../shared/services/authentication-service';
+import { DataService } from '../../services/data-service';
 import { FileDataService } from '../../services/file-data-service';
 import { SettingsStore } from '../../stores/settings-store';
 import { CreateFile } from './create-file/create-file';
@@ -18,6 +19,7 @@ export class Settings {
   private readonly settingsStore = inject(SettingsStore);
   private readonly fileDataService = inject(FileDataService);
   private readonly authenticationService = inject(AuthenticationService);
+  private readonly dataService = inject(DataService);
 
   private readonly dialog = inject(Dialog);
 
@@ -27,6 +29,8 @@ export class Settings {
 
   protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
   protected readonly fileName = this.fileDataService.saveFileName();
+
+  protected readonly dataErrors = this.dataService.getLoadingErrors();
 
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
