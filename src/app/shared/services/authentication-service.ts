@@ -7,7 +7,6 @@ import { SessionStorageService } from './session-storage-service';
 export class AuthenticationService {
   static readonly CLIENT_ID =
     '344404452907-3rolv6u3u94tstsive2d14mnhde6s1ag.apps.googleusercontent.com';
-  static readonly API_KEY = 'AIzaSyCfvsGTVwPOLznVMgeIuNGroWw3u61NTVk';
   static readonly APP_ID = '344404452907';
   private readonly scope = 'https://www.googleapis.com/auth/drive.file';
 

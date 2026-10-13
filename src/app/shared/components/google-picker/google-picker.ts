@@ -11,7 +11,6 @@ import { AuthenticationService } from '../../services/authentication-service';
   templateUrl: './google-picker.html',
 })
 export class GooglePicker {
-  protected readonly apiKey = AuthenticationService.API_KEY;
   protected readonly clientId = AuthenticationService.CLIENT_ID;
   protected readonly appId = AuthenticationService.APP_ID;
 
