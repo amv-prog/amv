@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { Spreadsheet } from '../../shared/models/google-sheet/spreadsheet';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
+import { MessageService } from '../../shared/services/message-service';
 import { SettingsStore } from '../stores/settings-store';
 import { GoogleDataService } from './google-data-service';
 
@@ -12,6 +13,7 @@ export class DataService {
   private readonly settingStore = inject(SettingsStore);
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleDataService = inject(GoogleDataService);
+  private readonly messageService = inject(MessageService);
 
   private latestLoadedData = signal<Map<string, any>>(new Map<string, any>());
 
@@ -26,7 +28,14 @@ export class DataService {
   update$(type: SaveType, data: any): Observable<boolean> {
     const settings = this.settingStore.settings();
     if (!!settings.spreadsheet) {
-      return this.googleDataService.saveData$(type, data);
+      return this.googleDataService.saveData$(type, data).pipe(
+        catchError((e) => {
+          this.messageService.displayError(
+            "Une erreur s'est produite lors de l'enregistrement des données.",
+          );
+          throw e;
+        }),
+      );
     } else {
       this.localStorageService.setItem(type, data);
       return of(true);
@@ -51,7 +60,14 @@ export class DataService {
       localStorage.removeItem(type);
       return of(true);
     } else {
-      return this.googleDataService.removeData$(type);
+      return this.googleDataService.removeData$(type).pipe(
+        catchError((e) => {
+          this.messageService.displayError(
+            "Une erreur s'est produite lors de l'enregistrement des données.",
+          );
+          throw e;
+        }),
+      );
     }
   }
 
