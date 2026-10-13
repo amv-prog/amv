@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './layout/footer/footer';
-import { Spinner } from './shared/components/spinner/spinner';
+import { Loader } from './shared/components/loader/loader';
 
 @Component({
   selector: 'amv-root',
-  imports: [RouterOutlet, Footer, Spinner],
+  imports: [RouterOutlet, Footer, Loader],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

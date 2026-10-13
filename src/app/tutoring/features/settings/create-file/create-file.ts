@@ -33,10 +33,6 @@ export class CreateFile {
     required(form.name, { message: 'Veuillez saisir le nom du fichier' });
   });
 
-  load() {
-    this.loadingService.loadingStart();
-  }
-
   createEmptyFile() {
     if (this.newFileForm().valid()) {
       const name = this.newFileFormData().name;
