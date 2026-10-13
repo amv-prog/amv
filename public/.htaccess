@@ -1,3 +1,7 @@
+<IfModule mod_headers.c>
+  Header set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+</IfModule>
+
 # check that mod_negotiation is enabled
 <IfModule mod_negotiation.c>
     # diable MultiViews to prevent the Apache behavior of indexing a directory
