@@ -1,10 +1,10 @@
-import { CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { CdkConnectedOverlay, CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, computed, inject } from '@angular/core';
 import { LoadingService } from '../../services/loading-service';
 
 @Component({
   selector: 'amv-loader',
-  imports: [CdkConnectedOverlay],
+  imports: [CdkConnectedOverlay, CdkOverlayOrigin],
   templateUrl: './loader.html',
 })
 export class Loader {

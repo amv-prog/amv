@@ -1,4 +1,4 @@
-<button (click)="openPicker()">Sélectionner un fichier Google</button>
+<button (click)="openPicker()"><ng-content /></button>
 
 @if (showPicker()) {
   @if (accessToken(); as token) {

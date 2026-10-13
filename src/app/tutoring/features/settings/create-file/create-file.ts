@@ -2,7 +2,6 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { catchError, tap } from 'rxjs';
-import { LoadingService } from '../../../../shared/services/loading-service';
 import { MessageService } from '../../../../shared/services/message-service';
 import { DataService } from '../../../services/data-service';
 import { GoogleDataService } from '../../../services/google-data-service';
@@ -19,7 +18,6 @@ export class CreateFile {
   private readonly googleDataService = inject(GoogleDataService);
   private readonly dataService = inject(DataService);
   private readonly messageService = inject(MessageService);
-  private readonly loadingService = inject(LoadingService);
 
   protected readonly error = signal<string>('');
 
@@ -40,12 +38,9 @@ export class CreateFile {
         .createEmptyFile$(name)
         .pipe(
           tap((spreadsheet) => {
-            this.settingsStore.updateSettings({
-              saveMode: 'GOOGLESHEET',
-              spreadsheet: {
-                id: spreadsheet.spreadsheetId,
-                name: spreadsheet.properties.title,
-              },
+            this.settingsStore.updateSpreadsheet({
+              id: spreadsheet.spreadsheetId,
+              name: spreadsheet.properties.title,
             });
             this.messageService.displaySuccess('Fichier créé avec succès');
             this.dialogRef.close();
@@ -66,12 +61,9 @@ export class CreateFile {
         .createCurrentDataGoogle$(name)
         .pipe(
           tap((spreadsheet) => {
-            this.settingsStore.updateSettings({
-              saveMode: 'GOOGLESHEET',
-              spreadsheet: {
-                id: spreadsheet.spreadsheetId,
-                name: spreadsheet.properties.title,
-              },
+            this.settingsStore.updateSpreadsheet({
+              id: spreadsheet.spreadsheetId,
+              name: spreadsheet.properties.title,
             });
             this.messageService.displaySuccess('Fichier créé avec succès');
             this.dialogRef.close();

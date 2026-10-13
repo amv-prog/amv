@@ -1,10 +1,8 @@
 <div>
-  @if (settings().saveMode === 'GOOGLESHEET') {
+  @if (settings().spreadsheet; as spreadsheet) {
     <div>Données Google</div>
-    <div>{{ settings().spreadsheet?.name }}</div>
-  }
-
-  @if (settings().saveMode === 'LOCAL_STORAGE') {
+    <div class="bold">{{ spreadsheet.name }}</div>
+  } @else {
     <div>Données locales</div>
   }
 

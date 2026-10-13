@@ -25,7 +25,7 @@ export class DataService {
 
   update$(type: SaveType, data: any): Observable<boolean> {
     const settings = this.settingStore.settings();
-    if (settings.saveMode === 'GOOGLESHEET') {
+    if (!!settings.spreadsheet) {
       return this.googleDataService.saveData$(type, data);
     } else {
       this.localStorageService.setItem(type, data);
@@ -47,7 +47,7 @@ export class DataService {
 
   removeData$(type: SaveType): Observable<boolean> {
     const settings = this.settingStore.settings();
-    if (settings.saveMode === 'LOCAL_STORAGE') {
+    if (!settings.spreadsheet) {
       localStorage.removeItem(type);
       return of(true);
     } else {
@@ -76,43 +76,37 @@ export class DataService {
 
   private loadLatestDataMap$(): Observable<Map<string, any>> {
     const settings = this.settingStore.settings();
-    if (settings.saveMode === 'GOOGLESHEET') {
-      const spreadsheetId = settings.spreadsheet?.id;
-      if (spreadsheetId) {
-        return this.googleDataService.getAllData$(spreadsheetId).pipe(
-          map((data) => {
-            const map = new Map<string, any>();
-            const errors: string[] = [];
-            for (let [index, row] of data.entries()) {
-              if (row.length === 2) {
-                const stringValue = row[1];
-                if (!!stringValue) {
-                  try {
-                    map.set(row[0], JSON.parse(stringValue));
-                  } catch (error) {
-                    errors.push(`Erreur de lecture ligne ${index + 1}`);
-                  }
+    if (!!settings.spreadsheet) {
+      const spreadsheetId = settings.spreadsheet.id;
+      return this.googleDataService.getAllData$(spreadsheetId).pipe(
+        map((data) => {
+          const map = new Map<string, any>();
+          const errors: string[] = [];
+          for (let [index, row] of data.entries()) {
+            if (row.length === 2) {
+              const stringValue = row[1];
+              if (!!stringValue) {
+                try {
+                  map.set(row[0], JSON.parse(stringValue));
+                } catch (error) {
+                  errors.push(`Erreur de lecture ligne ${index + 1}`);
                 }
-              } else if (row.length > 2) {
-                errors.push(`Ligne ${index + 1} mal formée`);
               }
+            } else if (row.length > 2) {
+              errors.push(`Ligne ${index + 1} mal formée`);
             }
-            if (errors.length > 0) {
-              map.set(this.ERROR_DATA, errors);
-            }
-            return map;
-          }),
-          catchError((e) => {
-            const data = new Map<string, any>();
-            data.set(this.ERROR_DATA, ['Fichier non récupéré']);
-            return of(data);
-          }),
-        );
-      } else {
-        const data = new Map<string, any>();
-        data.set(this.ERROR_DATA, ['Aucun fichier renseigné']);
-        return of(data);
-      }
+          }
+          if (errors.length > 0) {
+            map.set(this.ERROR_DATA, errors);
+          }
+          return map;
+        }),
+        catchError((e) => {
+          const data = new Map<string, any>();
+          data.set(this.ERROR_DATA, ['Fichier non récupéré']);
+          return of(data);
+        }),
+      );
     } else {
       const map = new Map<string, string>();
       for (let type of Object.values(SaveType)) {

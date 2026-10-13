@@ -1,10 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
-import { form, FormField, FormRoot } from '@angular/forms/signals';
-import { filter, switchMap, tap } from 'rxjs';
+import { Component, inject } from '@angular/core';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
-import { Toggle } from '../../../shared/components/toggle/toggle';
 import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
 import { AuthenticationService } from '../../../shared/services/authentication-service';
 import { FileDataService } from '../../services/file-data-service';
@@ -13,7 +11,7 @@ import { CreateFile } from './create-file/create-file';
 
 @Component({
   selector: 'amv-settings',
-  imports: [FormRoot, Toggle, FormField, GooglePicker],
+  imports: [GooglePicker],
   templateUrl: './settings.html',
 })
 export class Settings {
@@ -27,28 +25,8 @@ export class Settings {
   protected readonly accessToken = this.authenticationService.accessToken;
   protected readonly settings = this.settingsStore.settings;
 
-  protected readonly settingsFormData: WritableSignal<{
-    saveMode: 'LEFT' | 'RIGHT';
-  }> = signal({
-    saveMode: this.settings().saveMode === 'LOCAL_STORAGE' ? 'LEFT' : 'RIGHT',
-  });
-
-  protected readonly settingsForm = form(this.settingsFormData);
-
   protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
   protected readonly fileName = this.fileDataService.saveFileName();
-
-  constructor() {
-    effect(() => {
-      if (this.settingsForm().dirty()) {
-        const data = this.settingsForm().value();
-
-        this.settingsStore.updateSaveMode(
-          data.saveMode === 'LEFT' ? 'LOCAL_STORAGE' : 'GOOGLESHEET',
-        );
-      }
-    });
-  }
 
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -58,6 +36,11 @@ export class Settings {
       this.fileDataService.loadFile(file);
     }
     input.value = '';
+  }
+
+  switchToLocal() {
+    this.authenticationService.handleGoogleSignOut();
+    this.settingsStore.updateSpreadsheet(undefined);
   }
 
   validateCleanLocalData() {
@@ -92,27 +75,13 @@ export class Settings {
       .subscribe();
   }
 
-  signOut() {
-    this.authenticationService.handleGoogleSignOut();
-  }
-
   selectFile(event: GoogleDocInfo) {
     this.settingsStore.updateSpreadsheet(event);
   }
 
   createGoogleSheet() {
-    const dialogRef = this.dialog.open<boolean>(CreateFile, {
+    this.dialog.open<boolean>(CreateFile, {
       panelClass: 'dialog',
     });
-
-    dialogRef.closed
-      .pipe(
-        tap(() => {
-          this.settingsForm
-            .saveMode()
-            .reset(this.settings().saveMode === 'LOCAL_STORAGE' ? 'LEFT' : 'RIGHT');
-        }),
-      )
-      .subscribe();
   }
 }

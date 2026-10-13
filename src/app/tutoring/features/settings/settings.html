@@ -1,32 +1,22 @@
 <div class="page-center section">
   <h1>Gestion des données</h1>
 
-  <form class="simple-form" [formRoot]="settingsForm">
-    <div class="field">
-      <amv-toggle
-        leftLabel="Navigateur"
-        rightLabel="Fichier Google"
-        [formField]="settingsForm.saveMode"
-      ></amv-toggle>
-    </div>
-  </form>
-  @if (settingsFormData().saveMode === 'RIGHT') {
-    @if (settings().spreadsheet; as spreadsheet) {
-      <div class="subtitle">{{ spreadsheet.name }}</div>
-    }
+  @if (settings().spreadsheet; as spreadsheet) {
+    <div class="subtitle">Données Google : {{ spreadsheet.name }}</div>
 
-    <div>
-      @if (isAuthenticationReady()) {
-        <div class="h-panel">
-          <amv-google-picker (fileSelected)="selectFile($event)"></amv-google-picker>
-          <button (click)="createGoogleSheet()">Créer un nouveau fichier</button>
-          @if (!!accessToken()) {
-            <button (click)="signOut()">Se déconnecter</button>
-          }
-        </div>
-      }
+    @if (isAuthenticationReady()) {
+      <div class="h-panel">
+        <amv-google-picker (fileSelected)="selectFile($event)">
+          Sélectionner un autre fichier Google
+        </amv-google-picker>
+        <button (click)="createGoogleSheet()">Créer un nouveau fichier Google</button>
+      </div>
+    }
+    <div class="h-panel">
+      <button (click)="switchToLocal()">Se déconnecter et utiliser les données locales</button>
     </div>
   } @else {
+    <div class="subtitle">Données locales</div>
     <div class="h-panel">
       <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
         >Enregistrer les données</a
@@ -34,8 +24,15 @@
       <button (click)="fileUpload.click()">Importer un fichier</button>
       <button (click)="validateCleanLocalData()">Supprimer les données</button>
       <button (click)="validateExempleLocalImport()">Importer les données d'exemple</button>
-      <button (click)="createGoogleSheet()">Utiliser un nouveau fichier Google</button>
     </div>
+    @if (isAuthenticationReady()) {
+      <div class="h-panel">
+        <amv-google-picker (fileSelected)="selectFile($event)">
+          Utiliser un fichier Google
+        </amv-google-picker>
+        <button (click)="createGoogleSheet()">Créer et utiliser un nouveau fichier Google</button>
+      </div>
+    }
 
     <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />
   }
