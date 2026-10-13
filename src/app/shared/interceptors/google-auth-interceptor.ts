@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { catchError, filter, switchMap, take, throwError } from 'rxjs';
+import { catchError, EMPTY, filter, switchMap, take, throwError } from 'rxjs';
 import { AuthenticationService } from '../services/authentication-service';
 
 export const googleAuthInterceptor: HttpInterceptorFn = (req, next) => {
@@ -20,10 +20,14 @@ export const googleAuthInterceptor: HttpInterceptorFn = (req, next) => {
             return authenticationService.getAccessToken().pipe(
               take(1),
               switchMap((newToken: string) => {
-                const newClone = req.clone({
-                  setHeaders: { Authorization: `Bearer ${newToken}` },
-                });
-                return next(newClone);
+                if (!newToken) {
+                  throw error;
+                } else {
+                  const newClone = req.clone({
+                    setHeaders: { Authorization: `Bearer ${newToken}` },
+                  });
+                  return next(newClone);
+                }
               }),
             );
           }
@@ -37,10 +41,14 @@ export const googleAuthInterceptor: HttpInterceptorFn = (req, next) => {
         switchMap(() => authenticationService.getAccessToken()),
         take(1),
         switchMap((newToken: string) => {
-          const newClone = req.clone({
-            setHeaders: { Authorization: `Bearer ${newToken}` },
-          });
-          return next(newClone);
+          if (!newToken) {
+            return EMPTY;
+          } else {
+            const newClone = req.clone({
+              setHeaders: { Authorization: `Bearer ${newToken}` },
+            });
+            return next(newClone);
+          }
         }),
       );
     }

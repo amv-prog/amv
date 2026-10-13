@@ -1,6 +1,7 @@
 import { effect, inject, Service, signal, WritableSignal } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { MessageService } from './message-service';
 import { SessionStorageService } from './session-storage-service';
 
 @Service()
@@ -11,6 +12,7 @@ export class AuthenticationService {
   private readonly scope = 'https://www.googleapis.com/auth/drive.file';
 
   private readonly sessionStorage = inject(SessionStorageService);
+  private readonly messageService = inject(MessageService);
 
   isAuthenticationReady = signal<boolean>(false);
   tokenClient = signal<google.accounts.oauth2.TokenClient | undefined>(undefined);
@@ -71,17 +73,25 @@ export class AuthenticationService {
             console.error(
               `Failed to get access token : ${tokenResponse.error} ${tokenResponse.error_description} ${tokenResponse.error_uri}`,
             );
-            this.tokenSubject.error('Failed to retrieve access token');
+            this.tokenSubject.next('');
           } else {
             this.accessToken.set(tokenResponse.access_token);
             this.tokenSubject.next(tokenResponse.access_token);
           }
         },
+        error_callback: (err) => {
+          if (err.type === 'popup_failed_to_open') {
+            this.messageService.displayError(
+              "Google n'a pas pu ouvrir la popup de connexion. Vérifier que les popups sont autorisées pour ce site.",
+            );
+          }
+          this.tokenSubject.next('');
+        },
       }),
     );
   }
 
-  getAccessToken() {
+  getAccessToken(): Observable<string> {
     this.tokenClient()?.requestAccessToken({ prompt: '' });
     return this.tokenSubject.asObservable();
   }
