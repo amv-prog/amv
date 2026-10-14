@@ -31,7 +31,10 @@ export const googleAuthInterceptor: HttpInterceptorFn = (req, next) => {
               }),
             );
           }
-
+          // Erreur 403 pour le picker si le token est périmé
+          if (error.status === 403) {
+            authenticationService.resetAccessToken();
+          }
           return throwError(() => error);
         }),
       );

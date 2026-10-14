@@ -106,4 +106,8 @@ export class AuthenticationService {
       this.accessToken.set(undefined);
     }
   }
+
+  resetAccessToken() {
+    this.accessToken.set(undefined);
+  }
 }
