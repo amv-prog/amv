@@ -67,7 +67,7 @@ export class Settings {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
-        text: "Souhaitez-vous Importer les données d'exemple ? Les données actuelles seront supprimées.",
+        text: "Souhaitez-vous importer les données d'exemple ? Les données actuelles seront supprimées.",
       },
     });
 

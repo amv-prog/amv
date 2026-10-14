@@ -68,20 +68,9 @@ export class FileDataService {
       data.set(SaveType.SCHOOLS, schools);
       data.set(SaveType.VOLUNTEERS, volunteers);
       data.set(SaveType.VERSION, version);
-      this.updateData(data);
+      DataService.updateData(data, this.versionStore.version());
       this.validateSettingsImport(data);
     }
-  }
-
-  private updateData(data: Map<string, any>) {
-    if (VersionStore.compare('0.1.2', data.get('version')) > 0) {
-      for (const family of data.get(SaveType.FAMILIES)) {
-        for (const member of family.members) {
-          member.schoolClassIds = [];
-        }
-      }
-    }
-    data.set(SaveType.VERSION, this.versionStore.version());
   }
 
   private validateSettingsImport(data: Map<string, any>) {
@@ -102,7 +91,7 @@ export class FileDataService {
 
   importSettings$(dataMap: Map<string, any>): Observable<boolean> {
     return this.dataService
-      .saveNewData$(dataMap)
+      .saveAllData$(dataMap)
       .pipe(tap(() => this.messageService.displaySuccess('Les données ont bien été chargées.')));
   }
 
@@ -110,7 +99,7 @@ export class FileDataService {
     const cleanData = new Map<string, any>();
     cleanData.set(SaveType.VERSION, this.versionStore.version());
     return this.dataService
-      .saveNewData$(cleanData)
+      .saveAllData$(cleanData)
       .pipe(tap(() => this.messageService.displaySuccess('Les données ont bien été supprimées.')));
   }
 
@@ -120,7 +109,8 @@ export class FileDataService {
     data.set(SaveType.LESSONS, exempleJson.lessons);
     data.set(SaveType.SCHOOLS, exempleJson.schools);
     data.set(SaveType.VOLUNTEERS, exempleJson.volunteers);
-    data.set(SaveType.VERSION, this.versionStore.version());
+    data.set(SaveType.VERSION, exempleJson.version);
+    DataService.updateData(data, this.versionStore.version());
     return this.importSettings$(data);
   }
 }

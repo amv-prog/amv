@@ -4,6 +4,7 @@ import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs'
 import { Spreadsheet } from '../../shared/models/google-sheet/spreadsheet';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { MessageService } from '../../shared/services/message-service';
+import { VersionStore } from '../../shared/version-store';
 import { SettingsStore } from '../stores/settings-store';
 import { GoogleDataService } from './google-data-service';
 
@@ -14,6 +15,7 @@ export class DataService {
   private readonly localStorageService = inject(LocalStorageService);
   private readonly googleDataService = inject(GoogleDataService);
   private readonly messageService = inject(MessageService);
+  private readonly versionStore = inject(VersionStore);
 
   private latestLoadedData = signal<Map<string, any>>(new Map<string, any>());
 
@@ -73,6 +75,18 @@ export class DataService {
 
   loadLatestData$(): Observable<boolean> {
     return this.loadLatestDataMap$().pipe(
+      switchMap((data) => {
+        // Mise à jour des données en fonction de la version
+        const dataVersion: string | undefined = data.get(SaveType.VERSION);
+        const currentVersion = this.versionStore.version();
+        if (dataVersion !== currentVersion) {
+          console.log('update data ' + dataVersion + ' to ' + currentVersion);
+          DataService.updateData(data, this.versionStore.version());
+          return this.saveAllData$(data).pipe(map(() => data));
+        } else {
+          return of(data);
+        }
+      }),
       map((data) => {
         this.latestLoadedData.set(data);
         return true;
@@ -80,7 +94,7 @@ export class DataService {
     );
   }
 
-  saveNewData$(data: Map<string, any>): Observable<boolean> {
+  saveAllData$(data: Map<string, any>): Observable<boolean> {
     const updates = Object.values(SaveType).map((type) => this.update$(type, data.get(type)));
     return combineLatest(updates).pipe(
       map(() => {
@@ -148,6 +162,27 @@ export class DataService {
         return combineLatest(requests).pipe(map(() => spreadsheet));
       }),
     );
+  }
+
+  static updateData(data: Map<string, any>, currentVersion: string) {
+    const dataVersion = data.get(SaveType.VERSION);
+
+    if (!dataVersion) {
+      data.delete('members');
+    }
+    if (VersionStore.compare('0.1.2', dataVersion) > 0) {
+      const families: any[] = data.get(SaveType.FAMILIES);
+
+      if (!!families) {
+        for (const family of families) {
+          for (const member of family.members) {
+            member.schoolClassIds = [];
+          }
+        }
+      }
+    }
+
+    data.set(SaveType.VERSION, currentVersion);
   }
 }
 
