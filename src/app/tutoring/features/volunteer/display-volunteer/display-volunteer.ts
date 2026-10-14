@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
@@ -111,6 +112,7 @@ export class DisplayVolunteer {
         filter((result) => !!result),
         switchMap(() => this.volunteerStore.removeVolunteer$(this.volunteer()!)),
         tap(() => this.router.navigate(['tutoring', 'volunteer', 'list'])),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
@@ -143,6 +145,7 @@ export class DisplayVolunteer {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.lessonStore.removeLesson$(lesson)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }

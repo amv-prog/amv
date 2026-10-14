@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
@@ -120,6 +121,7 @@ export class RecipientLessons {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.lessonStore.removeLesson$(lesson)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }

@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
@@ -39,6 +40,7 @@ export class DisplayFamilyMember {
         filter((result) => !!result),
         switchMap(() => this.familyStore.removeFamilyMember$(this.family()!, this.member()!)),
         tap(() => this.router.navigate(['tutoring', 'family', this.family()!.id])),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }

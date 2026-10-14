@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, effect, inject, Signal, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField, FormRoot } from '@angular/forms/signals';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
@@ -118,6 +119,7 @@ export class SchoolList {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.schoolStore.removeClass$(school, schoolClass)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
@@ -134,6 +136,7 @@ export class SchoolList {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.schoolStore.removeSchool$(school)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }

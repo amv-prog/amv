@@ -42,6 +42,7 @@ export class FamilyList {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.familyStore.removeFamilyMember$(family, member)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }

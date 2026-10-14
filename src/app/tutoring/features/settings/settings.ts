@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
@@ -63,6 +64,7 @@ export class Settings {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.fileDataService.importSettings$(data)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
@@ -84,6 +86,7 @@ export class Settings {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.fileDataService.cleanData$()),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
@@ -100,6 +103,7 @@ export class Settings {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.fileDataService.importExemple$()),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
