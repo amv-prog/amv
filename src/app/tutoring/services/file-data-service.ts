@@ -1,8 +1,6 @@
-import { Dialog } from '@angular/cdk/dialog';
 import { computed, inject, Service, Signal } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { filter, Observable, switchMap, tap } from 'rxjs';
-import { ConfirmationDialog } from '../../shared/components/confirmation-dialog/confirmation-dialog';
+import { Observable, tap } from 'rxjs';
 import { DateService } from '../../shared/services/date-service';
 import { MessageService } from '../../shared/services/message-service';
 import { VersionStore } from '../../shared/version-store';
@@ -29,8 +27,6 @@ export class FileDataService {
   private readonly versionStore = inject(VersionStore);
   private readonly dataService = inject(DataService);
 
-  private readonly dialog = inject(Dialog);
-
   saveFileName(): string {
     return `settings-${this.dateService.formatDate(new Date(), 'yyyyMMdd')}.json`;
   }
@@ -49,7 +45,7 @@ export class FileDataService {
     });
   }
 
-  async loadFile(file: File) {
+  async fileData(file: File): Promise<Map<string, any> | undefined> {
     const text = await file.text();
     const settings = JSON.parse(text);
     const version = settings.version;
@@ -58,9 +54,7 @@ export class FileDataService {
     const lessons = settings.lessons;
     const schools = settings.schools || [];
     if (!families || !volunteers || !lessons) {
-      this.messageService.displayError(
-        "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
-      );
+      return undefined;
     } else {
       const data = new Map<string, any>();
       data.set(SaveType.FAMILIES, families);
@@ -69,24 +63,8 @@ export class FileDataService {
       data.set(SaveType.VOLUNTEERS, volunteers);
       data.set(SaveType.VERSION, version);
       DataService.updateData(data, this.versionStore.version());
-      this.validateSettingsImport(data);
+      return data;
     }
-  }
-
-  private validateSettingsImport(data: Map<string, any>) {
-    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
-      panelClass: 'dialog',
-      data: {
-        text: 'Souhaitez-vous importer ces données ? Les données actuelles seront supprimées.',
-      },
-    });
-
-    dialogRef.closed
-      .pipe(
-        filter((result) => !!result),
-        switchMap(() => this.importSettings$(data)),
-      )
-      .subscribe();
   }
 
   importSettings$(dataMap: Map<string, any>): Observable<boolean> {

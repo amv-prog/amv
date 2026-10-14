@@ -5,6 +5,7 @@ import { ConfirmationDialog } from '../../../shared/components/confirmation-dial
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
 import { AuthenticationService } from '../../../shared/services/authentication-service';
+import { MessageService } from '../../../shared/services/message-service';
 import { DataService } from '../../services/data-service';
 import { FileDataService } from '../../services/file-data-service';
 import { SettingsStore } from '../../stores/settings-store';
@@ -20,6 +21,7 @@ export class Settings {
   private readonly fileDataService = inject(FileDataService);
   private readonly authenticationService = inject(AuthenticationService);
   private readonly dataService = inject(DataService);
+  private readonly messageService = inject(MessageService);
 
   private readonly dialog = inject(Dialog);
 
@@ -37,9 +39,32 @@ export class Settings {
 
     if (!!input.files?.length) {
       const file = input.files![0];
-      this.fileDataService.loadFile(file);
+      const data = await this.fileDataService.fileData(file);
+      if (!!data) {
+        this.validateSettingsImport(data);
+      } else {
+        this.messageService.displayError(
+          "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
+        );
+      }
     }
     input.value = '';
+  }
+
+  private validateSettingsImport(data: Map<string, any>) {
+    const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
+      panelClass: 'dialog',
+      data: {
+        text: 'Souhaitez-vous importer ces données ? Les données actuelles seront supprimées.',
+      },
+    });
+
+    dialogRef.closed
+      .pipe(
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.importSettings$(data)),
+      )
+      .subscribe();
   }
 
   switchToLocal() {
