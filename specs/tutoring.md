@@ -29,7 +29,7 @@ Le menu contient des liens vers certaines pages :
 
 - Les familles sont affichées, avec l'état de la cotisation, leur nom, les informations supplémentaires, des boutons permettent d'afficher le détail d'une famille, de modifier la famille, ou de la supprimer, et une icone indique si la famille est pliée ou dépliée.
 - Sous chaque famille en mode dépliée, la liste des membres de la famille est affichée, avec leur prénom, nom de famille, numéro de téléphone, email, date de naissance, langues parlées, informations supplémentaires, un bouton pour modifier le membre, et un bouton pour supprimer le membre.
-- La liste des familles et de leurs membres est stockée et récupérée dans le local storage.
+- La liste des familles et de leurs membres est stockée et récupérée selon l'accès aux données choisi dans les paramètres.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
 - Un bouton permet d'ajouter une famille
 
@@ -43,7 +43,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer une famille
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé du local storage, ainsi que tous ses membres, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé des données, ainsi que tous ses membres, et la liste est mise à jour.
 
 ### Modifier un membre
 
@@ -51,7 +51,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer un membre
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le membre est supprimé du local storage, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le membre est supprimé des données, et la liste est mise à jour.
 
 ### Ajout d'une famille
 
@@ -66,7 +66,7 @@ Un formulaire permet d'ajouter une famille en saisissant son nom, son adresse, e
 - Si le nom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Si un champ de l'adresse n'est pas vide, la rue, le code postal et la ville sont obligatoires. Des messages d'erreurs s'affichent si le champ a été touché et n'est pas valide.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, la famille est ajoutée au local storage, et l'utilisateur est redirigé sur la page de détail de la famille.
+  - Si le formulaire est valide, la famille est ajoutée aux données, et l'utilisateur est redirigé sur la page de détail de la famille.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la page de la famille à défaut.
 
@@ -79,7 +79,7 @@ Un formulaire permet de modifier une famille en saisissant son nom, son adresse,
 - Si le nom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Si un champ de l'adresse n'est pas vide, la rue, le code postal et la ville sont obligatoires. Des messages d'erreurs s'affichent si le champ a été touché et n'est pas valide.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, la famille est modifiée dans le local storage, et l'utilisateur est redirigé sur la page de détail de la famille.
+  - Si le formulaire est valide, la famille est modifiée dans les données, et l'utilisateur est redirigé sur la page de détail de la famille.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la page de la famille à défaut.
 
@@ -99,7 +99,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer la famille
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé du local storage, ainsi que tous ses membres, et l'utilisateur est redirigé vers la liste des familles.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la famille est supprimé des données, ainsi que tous ses membres, et l'utilisateur est redirigé vers la liste des familles.
 
 ### Ajouter un membre
 
@@ -111,7 +111,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer un membre
 
-Lors du clic sur le bouton, le membre est supprimé du local storage, et la liste est mise à jour.
+Lors du clic sur le bouton, le membre est supprimé des données, et la liste est mise à jour.
 
 ### Valider / modifier la cotisation
 
@@ -131,7 +131,7 @@ Un formulaire permet d'ajouter un membre en saisissant son type (parent ou enfan
 - Un numéro de téléphone ou une langue peut être supprimé en appuyant sur -.
 - Si l'un des champs obligatoires est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si les champs sont valides, le membre est ajouté à sa famille dans le local storage, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
+  - Si les champs sont valides, le membre est ajouté à sa famille dans les données, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur le détail de la famille à défaut.
 
@@ -143,14 +143,14 @@ Un formulaire permet de modifier un membre en saisissant son type (parent ou enf
 - Le nom et le prénom sont obligatoires.
 - Si l'un des champs obligatoires est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si les champs sont valides, le membre est modifié dans le local storage, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
+  - Si les champs sont valides, le membre est modifié dans les données, et l'utilisateur est redirigé sur la page d'où il vient, ou sur le détail de la famille à défaut.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur le détail de la famille à défaut.
 
 ## Liste des bénévoles
 
 - Les bénévoles sont affichés, avec l'info d'encadrant, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
-- La liste des bénévoles est stockée et récupérée dans le local storage.
+- La liste des bénévoles est stockée et récupérée dans les données.
 - Un bouton permet d'ajouter un bénévole.
 
 ### Modifier un bénévole
@@ -159,7 +159,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page de modifica
 
 ### Supprimer un bénévole
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le bénévole est supprimé du local storage, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, le bénévole est supprimé des données, et la liste est mise à jour.
 
 ### Ajout d'un bénévole
 
@@ -174,7 +174,7 @@ Un formulaire permet d'ajouter un bénévole en saisissant s'il est encadrant ou
 - Le nom et le prénom sont obligatoires.
 - Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
+  - Si le formulaire est valide, le bénévole est ajouté aux données, et l'utilisateur est redirigé sur la liste des bénévoles.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
 
@@ -186,14 +186,14 @@ Un formulaire permet de modifier un bénévole en saisissant s'il est encadrant 
 - Le nom et le prénom sont obligatoires.
 - Si le nom ou le prénom est vide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, le bénévole est ajouté au local storage, et l'utilisateur est redirigé sur la liste des bénévoles.
+  - Si le formulaire est valide, le bénévole est ajouté aux données, et l'utilisateur est redirigé sur la liste des bénévoles.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des bénévoles par défaut.
 
 ## Liste des cours
 
 - Les cours actuels sont affichés, avec l'élève, l'encadrant, le jour et l'heure, le lieu, la date de début et la date de fin.
-- La liste des cours est stockée et récupérée dans le local storage.
+- La liste des cours est stockée et récupérée dans les données.
 - Pour chaque cours, un bouton permet de le modifier, un autre de l'arrêter ou le reprendre, selon la date de fin, et un autre de le supprimer
 - Un bouton permet d'ajouter un cours.
 - Les listes des cours prévus et terminés sont également affichées
@@ -223,7 +223,7 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 - Le lieu est "Local" par défaut
 - Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la page.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, le cours est ajouté au local storage (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
+  - Si le formulaire est valide, le cours est ajouté aux données (ou modifié), et l'utilisateur est redirigé sur la page précédente, ou la liste des cours.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, l'utilisateur revient sur la page précédente, ou sur la liste des cours par défaut.
 - Si l'utilisateur vient de la page de l'élève, ce dernier n'est pas modifiable
@@ -268,13 +268,23 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 
 ## Paramètres
 
-4 boutons permettent d'enregistrer les données, importer un fichier, supprimer les données, et importer les données d'exemple
+### Données locales
 
-### Enregistrer les données
+Lorsque l'application est en mode données locales, les données sont récupérées et sauvegardées dans le local storage. 4 boutons permettent de gérer les données :
+- Enregistrer les données
+- Importer un fichier
+- Supprimer les données
+- Importer les données d'exemple
+
+2 autres boutons permettent de passer en mode fichier Google
+- Utiliser un fichier Google
+- Créer et utiliser un nouveau fichier Google
+
+#### Enregistrer les données
 
 L'utilisateur peut choisir où le fichier est enregistrer. La liste des familles, bénévoles, cours, ainsi que la version sont enregistrés dans un fichier json
 
-### Importer un fichier
+#### Importer un fichier
 
 L'utilisateur peut sélectionner un fichier
 
@@ -282,21 +292,54 @@ L'utilisateur peut sélectionner un fichier
 - Si le fichier est valide, un message demande la confirmation à l'utilisateur
 - Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés. La version sert à mettre à jour les données le cas échéant.
 
-### Supprimer les données
+#### Supprimer les données
 
 - Un message demande à l'utilisateur de confirmer la suppression
 - En cas de confirmation, les familles, bénévoles et cours sont supprimés
 
-### Importer les données d'exemple
+#### Importer les données d'exemple
 
 - Un message demande à l'utilisateur de confirmer le remplacement de ses données
 - Si l'utilisateur confirme, les familles, bénévoles et cours sont remplacés par les données d'exemple
+
+#### Utiliser un fichier Google
+
+- Une popup lui demande à l'utilisateur de choisir un compte, puis d'accorder l'accès aux fichiers.
+- En cas de validation, une popup permet de sélectionner un fichier Google parmi ceux auxquels l'utilisateur a accès.
+- Si un fichier invalide est sélectionné, un message d'erreur s'affiche. Si un fichier valide est sélectionné, les données sont chargées.
+
+#### Créer et utiliser un nouveau fichier Google
+
+- Une popin demande à l'utilisateur de renseigner le nom désiré pour le fichier. Un bouton permet de créer un fichier vide, un autre de créer un fichier avec les données actuelles. Un bouton annuler permet de fermer la popin
+- Au clic sur un des boutons de création, une popup demande à l'utilisateur de choisir un compte, puis d'accorder l'accès aux fichiers. Le fichier est ensuite créé dans le Google Drive de l'utilisateur, soit vide, soit avec les données actuelles, puis il est utilisé pour la gestion des données.
+
+### Données Google
+
+Lorsque l'application est en mode données Google, les données sont récupérées et sauvegardées dans le fichier Google choisi.
+
+3 boutons sont présents
+- Sélectionner un autre fichier Google
+- Créer un nouveau fichier Google
+- Se déconnecter et utiliser les données locales
+
+#### Sélectionner un autre fichier Google
+
+- Une popup permet de sélectionner un fichier Google parmi ceux auxquels l'utilisateur a accès.
+- Si un fichier invalide est sélectionné, un message d'erreur s'affiche. Si un fichier valide est sélectionné, les données sont chargées.
+
+#### Créer un nouveau fichier Google
+
+- Une popin demande à l'utilisateur de renseigner le nom désiré pour le fichier. Un bouton permet de créer un fichier vide, un autre de créer un fichier avec les données actuelles. Un bouton annuler permet de fermer la popin
+- Au clic sur un des boutons de création, le fichier est créé dans le Google Drive de l'utilisateur, soit vide, soit avec les données actuelles, puis il est utilisé pour la gestion des données.
+
+#### Se déconnecter et utiliser les données locales
+- Les données locales sont rechargées et utilisées pour la gestion des données.
 
 ## Liste des écoles
 
 - Une liste déroulante permet de choisir l'année scolaire à afficher, ou toutes les années
 - Les écoles sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires, ainsi que le nombre d'élèves.
-- La liste des écoles est stockée et récupérée dans le local storage.
+- La liste des écoles est stockée et récupérée dans les données.
 - Pour chaque école, un bouton permet de la modifier, un autre d'ajouter une classe, et un autre de supprimer l'école
 - Pour chaque école, la liste des classes de l'année sélectionnée est affichée (ou toutes les années selon le choix)
 - Pour chaque classe, la liste des élèves suivis est affichée
@@ -311,13 +354,13 @@ Un formulaire permet d'ajouter ou modifier une école en saisissant son nom et d
 - Le nom est obligatoire.
 - Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, l'école est ajoutée au local storage (ou modifiée), et la popin est fermée.
+  - Si le formulaire est valide, l'école est ajoutée aux données (ou modifiée), et la popin est fermée.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
 
 ### Supprimer une école
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, l'école est supprimée du local storage, ainsi que toutes ses classes, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, l'école est supprimée des données, ainsi que toutes ses classes, et la liste est mise à jour.
 
 ### Ajouter ou modifier une classe
 
@@ -328,10 +371,10 @@ Un formulaire permet d'ajouter ou modifier une classe.
 - L'année scolaire, l'enseignant et le niveau sont obligatoires.
 - Si un champ est invalide après une modification, un message d'erreur apparaît en dessous. Il n'y a pas de message d'erreur à l'ouverture de la popin.
 - Le formulaire est validé lors du clic sur le bouton de validation, ou lors d'un appui sur la touche Entrée
-  - Si le formulaire est valide, la classe est ajoutée (ou modifiée) à l'école dans le local storage, et la popin est fermée.
+  - Si le formulaire est valide, la classe est ajoutée (ou modifiée) à l'école dans les données, et la popin est fermée.
   - Si un champ n'est pas valide, le bouton de validation est désactivé, et l'appui sur la touche Entrée n'a pas d'effet.
 - Un bouton d'annulation est présent. Au clic, la popin est fermée sans modification.
 
 ### Supprimer une classe
 
-Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la classe est supprimée du local storage, et la liste est mise à jour.
+Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la classe est supprimée des données, et la liste est mise à jour.
