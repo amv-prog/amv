@@ -1,7 +1,7 @@
 .page-content {
   gap: 1rem;
 
-  div {
+  div:not(.h-panel) {
     display: flex;
     flex-direction: column;
     justify-content: center;

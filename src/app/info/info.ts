@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NavigationService } from '../shared/services/navigation-service';
 
 @Component({
   selector: 'amv-info',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './info.html',
   styleUrl: './info.scss',
 })
