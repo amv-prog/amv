@@ -106,6 +106,15 @@ export class DataService {
     );
   }
 
+  reloadData$(): Observable<boolean> {
+    const settings = this.settingStore.settings();
+    if (!!settings.spreadsheetId) {
+      return this.loadLatestData$();
+    } else {
+      return of(true);
+    }
+  }
+
   saveAllData$(data: Map<string, any>): Observable<boolean> {
     const updates = Object.values(SaveType).map((type) => this.update$(type, data.get(type)));
     return combineLatest(updates).pipe(
