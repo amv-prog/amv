@@ -1,0 +1,18 @@
+<div
+  cdkOverlayOrigin
+  #centralOrigin="cdkOverlayOrigin"
+  style="position: fixed; top: 50%; left: 50%"
+></div>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="centralOrigin"
+  [cdkConnectedOverlayOpen]="isShowing()"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  cdkConnectedOverlayBackdropClass="loader-backdrop"
+  cdkConnectedOverlayPanelClass="loader-panel"
+>
+  <div class="loader-content">
+    <div class="loader-text">Chargement...</div>
+    <span class="material-symbols-outlined loader-icon"> refresh </span>
+  </div>
+</ng-template>

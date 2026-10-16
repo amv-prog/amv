@@ -1,47 +1,22 @@
-import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import * as packageJson from 'packageJson';
-import { LocalStorageService } from './services/local-storage-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VersionStore {
-  private readonly localStorage = inject(LocalStorageService);
   version: WritableSignal<string>;
 
   constructor() {
-    this.updateStorage(this.localStorage.getItem<string>('version'));
     this.version = signal<string>(packageJson.version);
-
-    effect(() => {
-      this.localStorage.setItem('version', this.version());
-    });
-  }
-
-  updateStorage(oldVersion: string | null) {
-    if (!oldVersion) {
-      this.localStorage.removeItem('members');
-    }
-    if (VersionStore.compare('0.1.2', oldVersion) > 0) {
-      const families = this.localStorage.getItem<any[]>('families');
-
-      if (!!families) {
-        for (const family of families) {
-          for (const member of family.members) {
-            member.schoolClassIds = [];
-          }
-        }
-      }
-      this.localStorage.setItem('families', families);
-    }
   }
 
   static compare(version1: string | null, version2: string | null) {
     if (version1 === version2) {
       return 0;
-    } else if (version1 === null) {
+    } else if (!version1) {
       return -1;
-    } else if (version2 === null) {
+    } else if (!version2) {
       return 1;
     } else {
       const parts1 = version1.replace('v', '').split('.');

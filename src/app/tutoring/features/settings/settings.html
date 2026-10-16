@@ -1,13 +1,49 @@
-<div class="page-center">
+<div class="page-center section">
   <h1>Gestion des données</h1>
-  <div class="h-panel">
-    <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
-      >Enregistrer les données</a
-    >
-    <button (click)="fileUpload.click()">Importer un fichier</button>
-    <button (click)="validateCleanData()">Supprimer les données</button>
-    <button (click)="validateExempleImport()">Importer les données d'exemple</button>
-  </div>
 
-  <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />
+  @if (settings().spreadsheetId) {
+    <div class="section">
+      <div class="highlight">Données Google : {{ spreadsheetName() }}</div>
+      @if (dataErrors(); as errors) {
+        @for (error of errors; track error) {
+          <div class="error bold h-panel">
+            <span class="material-symbols-outlined">warning</span>
+            <div>{{ error }}</div>
+          </div>
+        }
+      }
+    </div>
+
+    @if (isAuthenticationReady()) {
+      <div class="h-panel">
+        <amv-google-picker (fileSelected)="selectFile($event)">
+          Sélectionner un autre fichier Google
+        </amv-google-picker>
+        <button (click)="createGoogleSheet()">Créer un nouveau fichier Google</button>
+      </div>
+    }
+    <div class="h-panel">
+      <button (click)="switchToLocal()">Se déconnecter et utiliser les données locales</button>
+    </div>
+  } @else {
+    <div class="highlight">Données locales</div>
+    <div class="h-panel">
+      <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
+        >Enregistrer les données</a
+      >
+      <button (click)="fileUpload.click()">Importer un fichier</button>
+      <button (click)="validateCleanLocalData()">Supprimer les données</button>
+      <button (click)="validateExempleLocalImport()">Importer les données d'exemple</button>
+    </div>
+    @if (isAuthenticationReady()) {
+      <div class="h-panel">
+        <amv-google-picker (fileSelected)="selectFile($event)">
+          Utiliser un fichier Google
+        </amv-google-picker>
+        <button (click)="createGoogleSheet()">Créer et utiliser un nouveau fichier Google</button>
+      </div>
+    }
+
+    <input type="file" accept=".json" (change)="onFileSelected($event)" #fileUpload />
+  }
 </div>

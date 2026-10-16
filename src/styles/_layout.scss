@@ -43,3 +43,32 @@ hr {
   background-color: $c2;
   margin: 2rem 0;
 }
+
+.loader-icon {
+  font-size: 150px;
+  background: conic-gradient(from 90deg, $c2-darker, $c2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rotate 2s infinite linear;
+}
+
+.loader-text {
+  font-size: 2rem;
+  color: $c2-lighter;
+  text-shadow: 2px 2px 5px $c2-darker;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader-panel {
+  transform: translate(-50%, -50%);
+}
+
+.loader-backdrop {
+  background: rgb(63, 54, 73, 0.9);
+}

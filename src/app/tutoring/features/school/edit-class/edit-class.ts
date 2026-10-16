@@ -8,6 +8,7 @@ import {
   required,
   validate,
 } from '@angular/forms/signals';
+import { tap } from 'rxjs';
 import { School } from '../../../models/school';
 import { SchoolClass } from '../../../models/school-class';
 import { SchoolStore } from '../../../stores/school-store';
@@ -120,8 +121,9 @@ export class EditClass {
           formData.additionalInfo.trim(),
         );
       }
-      this.schoolStore.updateClass(this.school, current);
-      this.dialogRef.close(true);
+      this.schoolStore
+        .updateClass$(this.school, current)
+        .pipe(tap(() => this.dialogRef.close(true)));
     }
   }
 

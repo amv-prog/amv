@@ -1,7 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, effect, inject, Signal, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField, FormRoot } from '@angular/forms/signals';
-import { tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { Family } from '../../../models/family';
@@ -116,17 +117,11 @@ export class SchoolList {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeClass(school, schoolClass);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.schoolStore.removeClass$(school, schoolClass)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeClass(school: School, schoolClass: SchoolClass) {
-    this.schoolStore.removeClass(school, schoolClass);
   }
 
   public validateSchoolRemoval(school: School) {
@@ -139,17 +134,11 @@ export class SchoolList {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeSchool(school);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.schoolStore.removeSchool$(school)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeSchool(school: School) {
-    this.schoolStore.removeSchool(school);
   }
 
   private getSchoolClassDisplay(schoolClass: SchoolClass): SchoolClassDisplay {

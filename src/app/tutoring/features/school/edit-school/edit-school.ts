@@ -1,6 +1,7 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { tap } from 'rxjs';
 import { School } from '../../../models/school';
 import { SchoolStore } from '../../../stores/school-store';
 
@@ -48,12 +49,16 @@ export class EditSchool {
           name: formData.name,
           additionalInfo: formData.additionalInfo.trim(),
         };
-        this.schoolStore.updateSchool(current);
-        this.dialogRef.close(true);
+        this.schoolStore
+          .updateSchool$(current)
+          .pipe(tap(() => this.dialogRef.close(true)))
+          .subscribe();
       } else {
         current = new School(formData.name, formData.additionalInfo);
-        this.schoolStore.addSchool(current);
-        this.dialogRef.close(true);
+        this.schoolStore
+          .addSchool$(current)
+          .pipe(tap(() => this.dialogRef.close(true)))
+          .subscribe();
       }
     }
   }

@@ -1,0 +1,17 @@
+<div>
+  @if (settings().spreadsheetId) {
+    <div>Données Google</div>
+    <div class="bold">{{ spreadsheetName() }}</div>
+  } @else {
+    <div>Données locales</div>
+  }
+
+  @if (dataErrors(); as errors) {
+    @for (error of errors; track error) {
+      <div class="error bold h-panel">
+        <span class="material-symbols-outlined">warning</span>
+        <div>{{ error }}</div>
+      </div>
+    }
+  }
+</div>

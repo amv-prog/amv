@@ -14,21 +14,29 @@ import { VolunteerList } from './features/volunteer/volunteer-list/volunteer-lis
 import { familyMemberResolver } from './resolvers/family-member-resolver';
 import { familyResolver } from './resolvers/family-resolver';
 import { lessonResolver } from './resolvers/lesson-resolver';
+import { reloadResolver } from './resolvers/reload-resolver';
+import { savedDataResolver } from './resolvers/saved-data-resolver';
 import { volunteerResolver } from './resolvers/volunteer-resolver';
 import { Tutoring } from './tutoring';
 
 export const tutoringRoutes: Routes = [
   {
     path: '',
+    resolve: { data: savedDataResolver },
     component: Tutoring,
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'family/list' },
       { path: 'settings', component: Settings },
-      { path: 'family/add', resolve: { family: familyResolver }, component: EditFamily },
-      { path: 'family/list', component: FamilyList },
+      {
+        path: 'family/add',
+        resolve: { data: reloadResolver, family: familyResolver },
+        component: EditFamily,
+      },
+      { path: 'family/list', resolve: { data: reloadResolver }, component: FamilyList },
       {
         path: 'family/:familyId',
-        resolve: { family: familyResolver },
+        resolve: { data: reloadResolver, family: familyResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           { path: '', component: DisplayFamily },
           {
@@ -71,13 +79,14 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'volunteer/add',
-        resolve: { volunteer: volunteerResolver },
+        resolve: { data: reloadResolver, volunteer: volunteerResolver },
         component: EditVolunteer,
       },
-      { path: 'volunteer/list', component: VolunteerList },
+      { path: 'volunteer/list', resolve: { data: reloadResolver }, component: VolunteerList },
       {
         path: 'volunteer/:volunteerId',
-        resolve: { volunteer: volunteerResolver },
+        resolve: { data: reloadResolver, volunteer: volunteerResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           { path: '', component: DisplayVolunteer },
           {
@@ -105,6 +114,7 @@ export const tutoringRoutes: Routes = [
       {
         path: 'lesson/add',
         resolve: {
+          data: reloadResolver,
           lesson: lessonResolver,
           member: familyMemberResolver,
           volunteer: volunteerResolver,
@@ -113,11 +123,13 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'lesson/list',
+        resolve: { data: reloadResolver },
         component: LessonList,
       },
       {
         path: 'lesson/:lessonId/edit',
         resolve: {
+          data: reloadResolver,
           lesson: lessonResolver,
           member: familyMemberResolver,
           volunteer: volunteerResolver,
@@ -126,6 +138,7 @@ export const tutoringRoutes: Routes = [
       },
       {
         path: 'school/list',
+        resolve: { data: reloadResolver },
         component: SchoolList,
       },
     ],

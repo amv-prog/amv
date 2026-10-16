@@ -1,12 +1,11 @@
-import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { VolunteerMember } from '../models/volunteer-member';
+import { DataService, SaveType } from '../services/data-service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class VolunteerStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly dataService = inject(DataService);
 
   volunteers: WritableSignal<VolunteerMember[]>;
 
@@ -35,28 +34,26 @@ export class VolunteerStore {
   });
 
   constructor() {
-    this.volunteers = signal<VolunteerMember[]>(
-      this.localStorage.getItem<VolunteerMember[]>('volunteers') || [],
+    this.volunteers = linkedSignal<VolunteerMember[]>(() =>
+      this.dataService.getSignal<VolunteerMember[]>(SaveType.VOLUNTEERS, [])(),
     );
-
-    effect(() => {
-      this.localStorage.setItem('volunteers', this.volunteers());
-    });
   }
 
-  replaceVolunteers(volunteers: VolunteerMember[]) {
+  replaceVolunteers$(volunteers: VolunteerMember[]): Observable<boolean> {
     this.volunteers.set(volunteers);
+    return this.dataService.update$(SaveType.VOLUNTEERS, this.volunteers());
   }
 
   setSelectedVolunteerId(volunteerId: string | undefined) {
     this.selectedVolunteerId.set(volunteerId);
   }
 
-  addVolunteer(volunteer: VolunteerMember) {
+  addVolunteer$(volunteer: VolunteerMember): Observable<boolean> {
     this.volunteers.update((volunteers) => [...volunteers, volunteer]);
+    return this.dataService.update$(SaveType.VOLUNTEERS, this.volunteers());
   }
 
-  updateVolunteer(volunteer: VolunteerMember) {
+  updateVolunteer$(volunteer: VolunteerMember): Observable<boolean> {
     this.volunteers.update((volunteers) => {
       let index = volunteers.findIndex((v) => v.id === volunteer.id);
       if (index >= 0) {
@@ -64,9 +61,10 @@ export class VolunteerStore {
       }
       return [...volunteers];
     });
+    return this.dataService.update$(SaveType.VOLUNTEERS, this.volunteers());
   }
 
-  removeVolunteer(volunteer: VolunteerMember) {
+  removeVolunteer$(volunteer: VolunteerMember): Observable<boolean> {
     this.volunteers.update((volunteers) => {
       let index = volunteers.indexOf(volunteer);
       if (index >= 0) {
@@ -74,5 +72,6 @@ export class VolunteerStore {
       }
       return [...volunteers];
     });
+    return this.dataService.update$(SaveType.VOLUNTEERS, this.volunteers());
   }
 }

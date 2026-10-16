@@ -1,92 +1,59 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, computed, inject, Signal } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { tap } from 'rxjs';
+import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../shared/components/confirmation-dialog/confirmation-dialog';
-import { DateService } from '../../../shared/services/date-service';
+import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
+import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
+import { AuthenticationService } from '../../../shared/services/authentication-service';
 import { MessageService } from '../../../shared/services/message-service';
-import { VersionStore } from '../../../shared/version-store';
-import { Family } from '../../models/family';
-import { Lesson } from '../../models/lesson';
-import { School } from '../../models/school';
-import { VolunteerMember } from '../../models/volunteer-member';
-import { FamilyStore } from '../../stores/family-store';
-import { LessonStore } from '../../stores/lesson-store';
-import { SchoolStore } from '../../stores/school-store';
-import { VolunteerStore } from '../../stores/volunteer-store';
-import * as exempleJson from './settings-exemple.json';
+import { DataService } from '../../services/data-service';
+import { FileDataService } from '../../services/file-data-service';
+import { SettingsStore } from '../../stores/settings-store';
+import { CreateFile } from './create-file/create-file';
 
 @Component({
   selector: 'amv-settings',
-  imports: [],
+  imports: [GooglePicker],
   templateUrl: './settings.html',
 })
 export class Settings {
-  private readonly sanitizer = inject(DomSanitizer);
-  private readonly dateService = inject(DateService);
-  private readonly familyStore = inject(FamilyStore);
-  private readonly volunteerStore = inject(VolunteerStore);
-  private readonly lessonStore = inject(LessonStore);
-  private readonly schoolStore = inject(SchoolStore);
-  private readonly versionStore = inject(VersionStore);
+  private readonly settingsStore = inject(SettingsStore);
+  private readonly fileDataService = inject(FileDataService);
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly dataService = inject(DataService);
   private readonly messageService = inject(MessageService);
 
   private readonly dialog = inject(Dialog);
 
-  protected readonly sanitizedBlobUrl: Signal<SafeUrl>;
-  protected readonly fileName: string;
+  protected readonly isAuthenticationReady = this.authenticationService.isAuthenticationReady;
+  protected readonly accessToken = this.authenticationService.accessToken;
+  protected readonly settings = this.settingsStore.settings;
+  protected readonly spreadsheetName = this.dataService.spreadsheetName;
 
-  constructor() {
-    this.fileName = `settings-${this.dateService.formatDate(new Date(), 'yyyyMMdd')}.json`;
-    this.sanitizedBlobUrl = computed(() => {
-      const families = this.familyStore.families();
-      const volunteers = this.volunteerStore.volunteers();
-      const lessons = this.lessonStore.lessons();
-      const schools = this.schoolStore.schools();
-      const version = this.versionStore.version();
-      const settings = new SettingsModel(families, volunteers, lessons, version, schools);
-      const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
-      const blobUrl = window.URL.createObjectURL(blob);
-      return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
-    });
-  }
+  protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
+  protected readonly fileName = this.fileDataService.saveFileName();
+
+  protected readonly dataErrors = this.dataService.getLoadingErrors();
 
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
 
     if (!!input.files?.length) {
       const file = input.files![0];
-      const text = await file.text();
-      const settings = JSON.parse(text);
-      const version = settings.version;
-      const families = settings.families;
-      const volunteers = settings.volunteers;
-      const lessons = settings.lessons;
-      const schools = settings.schools || [];
-      if (!families || !volunteers || !lessons) {
+      const data = await this.fileDataService.fileData(file);
+      if (!!data) {
+        this.validateSettingsImport(data);
+      } else {
         this.messageService.displayError(
           "Le fichier chargé n'est pas valide, les données n'ont pas été modifiées.",
         );
-      } else {
-        const settings = new SettingsModel(families, volunteers, lessons, version, schools);
-        this.updateData(settings);
-        this.validateSettingsImport(settings);
       }
     }
     input.value = '';
   }
 
-  private updateData(settings: SettingsModel) {
-    if (VersionStore.compare('0.1.2', settings.version) > 0) {
-      for (const family of settings.families) {
-        for (const member of family.members) {
-          member.schoolClassIds = [];
-        }
-      }
-    }
-  }
-
-  private validateSettingsImport(settings: SettingsModel) {
+  private validateSettingsImport(data: Map<string, any>) {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
@@ -96,24 +63,19 @@ export class Settings {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.importSettings(settings);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.importSettings$(data)),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
 
-  private importSettings(settings: any) {
-    this.familyStore.replaceFamilies(settings.families);
-    this.volunteerStore.replaceVolunteers(settings.volunteers);
-    this.lessonStore.replaceLessons(settings.lessons);
-    this.schoolStore.replaceSchools(settings.schools || []);
-    this.messageService.displaySuccess('Les données ont bien été chargées.');
+  switchToLocal() {
+    this.authenticationService.handleGoogleSignOut();
+    this.settingsStore.updateSpreadsheet(undefined);
   }
 
-  validateCleanData() {
+  validateCleanLocalData() {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
@@ -123,49 +85,38 @@ export class Settings {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.cleanData();
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.cleanData$()),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
 
-  private cleanData() {
-    this.familyStore.replaceFamilies([]);
-    this.volunteerStore.replaceVolunteers([]);
-    this.lessonStore.replaceLessons([]);
-    this.schoolStore.replaceSchools([]);
-    this.messageService.displaySuccess('Les données ont bien été supprimées.');
-  }
-
-  validateExempleImport() {
+  validateExempleLocalImport() {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {
       panelClass: 'dialog',
       data: {
-        text: "Souhaitez-vous Importer les données d'exemple ? Les données actuelles seront supprimées.",
+        text: "Souhaitez-vous importer les données d'exemple ? Les données actuelles seront supprimées.",
       },
     });
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.importSettings(exempleJson);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.fileDataService.importExemple$()),
+        takeUntilDestroyed(),
       )
       .subscribe();
   }
-}
 
-class SettingsModel {
-  constructor(
-    public families: Family[],
-    public volunteers: VolunteerMember[],
-    public lessons: Lesson[],
-    public version: string,
-    public schools?: School[],
-  ) {}
+  selectFile(event: GoogleDocInfo) {
+    this.settingsStore.updateSpreadsheet(event.id);
+    this.dataService.setSpreadsheetName(event.name);
+  }
+
+  createGoogleSheet() {
+    this.dialog.open<boolean>(CreateFile, {
+      panelClass: 'dialog',
+    });
+  }
 }

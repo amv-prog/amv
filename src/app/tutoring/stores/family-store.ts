@@ -1,13 +1,12 @@
-import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
 import { Family } from '../models/family';
 import { RecipientMember } from '../models/recipient-member';
+import { DataService, SaveType } from '../services/data-service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class FamilyStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly dataService = inject(DataService);
 
   families: WritableSignal<Family[]>;
 
@@ -50,22 +49,22 @@ export class FamilyStore {
   });
 
   constructor() {
-    this.families = signal<Family[]>(this.localStorage.getItem<Family[]>('families') || []);
-
-    effect(() => {
-      this.localStorage.setItem('families', this.families());
-    });
+    this.families = linkedSignal<Family[]>(() =>
+      this.dataService.getSignal<Family[]>(SaveType.FAMILIES, [])(),
+    );
   }
 
-  replaceFamilies(families: Family[]) {
+  replaceFamilies$(families: Family[]): Observable<boolean> {
     this.families.set(families);
+    return this.dataService.update$(SaveType.FAMILIES, this.families());
   }
 
-  addFamily(family: Family) {
+  addFamily$(family: Family): Observable<boolean> {
     this.families.update((families) => [...families, family]);
+    return this.dataService.update$(SaveType.FAMILIES, this.families());
   }
 
-  updateFamily(family: Family) {
+  updateFamily$(family: Family): Observable<boolean> {
     this.families.update((families) => {
       let index = families.findIndex((f) => f.id === family.id);
       if (index >= 0) {
@@ -73,9 +72,10 @@ export class FamilyStore {
       }
       return [...families];
     });
+    return this.dataService.update$(SaveType.FAMILIES, this.families());
   }
 
-  removeFamily(family: Family) {
+  removeFamily$(family: Family): Observable<boolean> {
     this.families.update((families) => {
       let index = families.indexOf(family);
       if (index >= 0) {
@@ -83,13 +83,14 @@ export class FamilyStore {
       }
       return [...families];
     });
+    return this.dataService.update$(SaveType.FAMILIES, this.families());
   }
 
   setSelectedFamilyId(familyId: string | undefined) {
     this.selectedFamilyId.set(familyId);
   }
 
-  updateFamilyMember(member: RecipientMember) {
+  updateFamilyMember$(member: RecipientMember): Observable<boolean> {
     const family = this.selectedFamily();
     if (!!family) {
       let mIndex = family.members.findIndex((m) => m.id === member.id);
@@ -98,16 +99,22 @@ export class FamilyStore {
       } else {
         family?.members.push(member);
       }
-      this.updateFamily(family);
+      return this.updateFamily$(family);
+    } else {
+      return throwError(() => {
+        const error: any = new Error('Mise à jour impossible, aucune famille sélectionnée');
+        error.timestamp = Date.now();
+        return error;
+      });
     }
   }
 
-  removeFamilyMember(family: Family, member: RecipientMember) {
+  removeFamilyMember$(family: Family, member: RecipientMember): Observable<boolean> {
     let index = family.members.indexOf(member);
     if (index >= 0) {
       family.members.splice(index, 1);
     }
-    this.updateFamily(family);
+    return this.updateFamily$(family);
   }
 
   setSelectedFamilyMemberId(familyMemberId: string | undefined) {

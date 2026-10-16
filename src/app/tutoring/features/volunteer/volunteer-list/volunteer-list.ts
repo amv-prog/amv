@@ -1,7 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { VolunteerMember } from '../../../models/volunteer-member';
@@ -28,16 +29,10 @@ export class VolunteerList {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeVolunteer(volunteer);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.volunteerStore.removeVolunteer$(volunteer)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeVolunteer(volunteer: VolunteerMember) {
-    this.volunteerStore.removeVolunteer(volunteer);
   }
 }

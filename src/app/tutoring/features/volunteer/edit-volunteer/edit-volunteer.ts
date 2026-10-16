@@ -1,6 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { apply, email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 import { AddressForm } from '../../../../shared/components/address-form/address-form';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { Address } from '../../../../shared/models/address';
@@ -117,8 +118,10 @@ export class EditVolunteer {
           additionalInfo: formData.additionalInfo.trim(),
           address: this.getAddress(),
         };
-        this.volunteerStore.updateVolunteer(current);
-        this.navigationService.back(['tutoring', 'volunteer', 'list']);
+        this.volunteerStore
+          .updateVolunteer$(current)
+          .pipe(tap(() => this.navigationService.back(['tutoring', 'volunteer', 'list'])))
+          .subscribe();
       } else {
         current = new VolunteerMember(
           formData.tutor === 'LEFT',
@@ -130,8 +133,10 @@ export class EditVolunteer {
           formData.additionalInfo.trim(),
           this.getAddress(),
         );
-        this.volunteerStore.addVolunteer(current);
-        this.router.navigate(['tutoring', 'volunteer', 'list']);
+        this.volunteerStore
+          .addVolunteer$(current)
+          .pipe(tap(() => this.router.navigate(['tutoring', 'volunteer', 'list'])))
+          .subscribe();
       }
     }
   }

@@ -1,14 +1,15 @@
-import { computed, effect, inject, Service, signal, WritableSignal } from '@angular/core';
+import { computed, inject, linkedSignal, Service, signal, WritableSignal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DateService } from '../../shared/services/date-service';
-import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Family } from '../models/family';
 import { Lesson } from '../models/lesson';
 import { RecipientMember } from '../models/recipient-member';
 import { VolunteerMember } from '../models/volunteer-member';
+import { DataService, SaveType } from '../services/data-service';
 
 @Service()
 export class LessonStore {
-  private readonly localStorage = inject(LocalStorageService);
+  private readonly dataService = inject(DataService);
 
   lessons: WritableSignal<Lesson[]>;
 
@@ -24,22 +25,22 @@ export class LessonStore {
   });
 
   constructor() {
-    this.lessons = signal<Lesson[]>(this.localStorage.getItem<Lesson[]>('lessons') || []);
-
-    effect(() => {
-      this.localStorage.setItem('lessons', this.lessons());
-    });
+    this.lessons = linkedSignal<Lesson[]>(() =>
+      this.dataService.getSignal<Lesson[]>(SaveType.LESSONS, [])(),
+    );
   }
 
-  replaceLessons(lessons: Lesson[]) {
+  replaceLessons$(lessons: Lesson[]): Observable<boolean> {
     this.lessons.set(lessons);
+    return this.dataService.update$(SaveType.LESSONS, this.lessons());
   }
 
-  addLesson(lesson: Lesson) {
+  addLesson$(lesson: Lesson): Observable<boolean> {
     this.lessons.update((lessons) => [...lessons, lesson]);
+    return this.dataService.update$(SaveType.LESSONS, this.lessons());
   }
 
-  updateLesson(lesson: Lesson) {
+  updateLesson$(lesson: Lesson): Observable<boolean> {
     this.lessons.update((lessons) => {
       let index = lessons.findIndex((l) => l.id === lesson.id);
       if (index >= 0) {
@@ -47,6 +48,7 @@ export class LessonStore {
       }
       return [...lessons];
     });
+    return this.dataService.update$(SaveType.LESSONS, this.lessons());
   }
 
   public static displayStudentName(student: { member: RecipientMember; family: Family }): string {
@@ -63,7 +65,7 @@ export class LessonStore {
     this.selectedLessonId.set(lessonId);
   }
 
-  removeLesson(lesson: Lesson) {
+  removeLesson$(lesson: Lesson): Observable<boolean> {
     this.lessons.update((lessons) => {
       let index = lessons.indexOf(lesson);
       if (index >= 0) {
@@ -71,6 +73,7 @@ export class LessonStore {
       }
       return [...lessons];
     });
+    return this.dataService.update$(SaveType.LESSONS, this.lessons());
   }
 
   static compareLessonsDays(l1: Lesson, l2: Lesson): number {

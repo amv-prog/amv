@@ -1,8 +1,9 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../shared/services/date-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
@@ -39,17 +40,11 @@ export class FamilyList {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeFamilyMember(family, member);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.familyStore.removeFamilyMember$(family, member)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeFamilyMember(family: Family, member: RecipientMember) {
-    this.familyStore.removeFamilyMember(family, member);
   }
 
   public switchExpanded(familyDisplay: FamilyDisplay) {
@@ -67,17 +62,11 @@ export class FamilyList {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeFamily(family);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.familyStore.removeFamily$(family)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeFamily(family: Family) {
-    this.familyStore.removeFamily(family);
   }
 
   public sortedFamilyMembers(members: RecipientMember[]): RecipientMember[] {

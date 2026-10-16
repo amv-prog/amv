@@ -2,6 +2,7 @@ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
@@ -107,14 +108,20 @@ export class EditFamilyMember {
           languages: formData.languages.filter((v) => !!v),
           additionalInfo: formData.additionalInfo.trim(),
         };
-        this.familyStore.updateFamilyMember(current);
-        this.navigationService.back([
-          'tutoring',
-          'family',
-          this.family()?.id,
-          'member',
-          current.id,
-        ]);
+        this.familyStore
+          .updateFamilyMember$(current)
+          .pipe(
+            tap(() => {
+              this.navigationService.back([
+                'tutoring',
+                'family',
+                this.family()?.id,
+                'member',
+                current!.id,
+              ]);
+            }),
+          )
+          .subscribe();
       } else {
         current = new RecipientMember(
           formData.parent === 'RIGHT',
@@ -126,8 +133,20 @@ export class EditFamilyMember {
           birthDate,
           formData.additionalInfo.trim(),
         );
-        this.familyStore.updateFamilyMember(current);
-        this.router.navigate(['tutoring', 'family', this.family()?.id, 'member', current.id]);
+        this.familyStore
+          .updateFamilyMember$(current)
+          .pipe(
+            tap(() => {
+              this.router.navigate([
+                'tutoring',
+                'family',
+                this.family()?.id,
+                'member',
+                current!.id,
+              ]);
+            }),
+          )
+          .subscribe();
       }
     }
   }

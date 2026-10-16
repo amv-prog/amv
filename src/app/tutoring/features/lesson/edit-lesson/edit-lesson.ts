@@ -13,6 +13,7 @@ import {
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { tap } from 'rxjs';
 import { Toggle } from '../../../../shared/components/toggle/toggle';
 import { DateService } from '../../../../shared/services/date-service';
 import { NavigationService } from '../../../../shared/services/navigation-service';
@@ -173,7 +174,10 @@ export class EditLesson {
           startDate: startDate!,
           endDate: endDate,
         };
-        this.lessonStore.updateLesson(current);
+        this.lessonStore
+          .updateLesson$(current)
+          .pipe(tap(() => this.navigationService.back(['tutoring', 'lesson', 'list'])))
+          .subscribe();
       } else {
         current = new Lesson(
           formData.student,
@@ -184,10 +188,11 @@ export class EditLesson {
           startDate!,
           endDate,
         );
-        this.lessonStore.addLesson(current);
+        this.lessonStore
+          .addLesson$(current)
+          .pipe(tap(() => this.navigationService.back(['tutoring', 'lesson', 'list'])))
+          .subscribe();
       }
-
-      this.navigationService.back(['tutoring', 'lesson', 'list']);
     }
   }
 }

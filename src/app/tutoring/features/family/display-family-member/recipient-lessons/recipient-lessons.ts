@@ -1,8 +1,9 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { DateService } from '../../../../../shared/services/date-service';
 import { Lesson } from '../../../../models/lesson';
@@ -95,11 +96,13 @@ export class RecipientLessons {
   stopLesson(lesson: Lesson) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    this.lessonStore.updateLesson({ ...lesson, endDate: this.dateService.formatDate(today) });
+    this.lessonStore
+      .updateLesson$({ ...lesson, endDate: this.dateService.formatDate(today) })
+      .subscribe();
   }
 
   reactivateLesson(lesson: Lesson) {
-    this.lessonStore.updateLesson({ ...lesson, endDate: undefined });
+    this.lessonStore.updateLesson$({ ...lesson, endDate: undefined }).subscribe();
   }
 
   canStopLesson(lesson: Lesson) {
@@ -116,16 +119,10 @@ export class RecipientLessons {
 
     dialogRef.closed
       .pipe(
-        tap((result) => {
-          if (!!result) {
-            this.removeLesson(lesson);
-          }
-        }),
+        filter((result) => !!result),
+        switchMap(() => this.lessonStore.removeLesson$(lesson)),
+        takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  private removeLesson(lesson: Lesson) {
-    this.lessonStore.removeLesson(lesson);
   }
 }
