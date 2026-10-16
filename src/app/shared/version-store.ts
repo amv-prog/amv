@@ -14,9 +14,9 @@ export class VersionStore {
   static compare(version1: string | null, version2: string | null) {
     if (version1 === version2) {
       return 0;
-    } else if (version1 === null) {
+    } else if (!version1) {
       return -1;
-    } else if (version2 === null) {
+    } else if (!version2) {
       return 1;
     } else {
       const parts1 = version1.replace('v', '').split('.');

@@ -29,6 +29,7 @@ export class Settings {
   protected readonly isAuthenticationReady = this.authenticationService.isAuthenticationReady;
   protected readonly accessToken = this.authenticationService.accessToken;
   protected readonly settings = this.settingsStore.settings;
+  protected readonly spreadsheetName = this.dataService.spreadsheetName;
 
   protected readonly sanitizedBlobUrl = this.fileDataService.sanitizedSettingsBlobUrl();
   protected readonly fileName = this.fileDataService.saveFileName();
@@ -109,7 +110,8 @@ export class Settings {
   }
 
   selectFile(event: GoogleDocInfo) {
-    this.settingsStore.updateSpreadsheet(event);
+    this.settingsStore.updateSpreadsheet(event.id);
+    this.dataService.setSpreadsheetName(event.name);
   }
 
   createGoogleSheet() {

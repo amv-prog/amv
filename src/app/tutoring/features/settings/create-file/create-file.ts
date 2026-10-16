@@ -38,10 +38,8 @@ export class CreateFile {
         .createEmptyFile$(name)
         .pipe(
           tap((spreadsheet) => {
-            this.settingsStore.updateSpreadsheet({
-              id: spreadsheet.spreadsheetId,
-              name: spreadsheet.properties.title,
-            });
+            this.settingsStore.updateSpreadsheet(spreadsheet.spreadsheetId);
+            this.dataService.setSpreadsheetName(spreadsheet.properties.title);
             this.messageService.displaySuccess('Fichier créé avec succès');
             this.dialogRef.close();
           }),
@@ -61,10 +59,8 @@ export class CreateFile {
         .createCurrentDataGoogle$(name)
         .pipe(
           tap((spreadsheet) => {
-            this.settingsStore.updateSpreadsheet({
-              id: spreadsheet.spreadsheetId,
-              name: spreadsheet.properties.title,
-            });
+            this.settingsStore.updateSpreadsheet(spreadsheet.spreadsheetId);
+            this.dataService.setSpreadsheetName(spreadsheet.properties.title);
             this.messageService.displaySuccess('Fichier créé avec succès');
             this.dialogRef.close();
           }),

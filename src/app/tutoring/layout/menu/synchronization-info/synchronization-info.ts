@@ -13,4 +13,5 @@ export class SynchronizationInfo {
 
   protected readonly settings = this.settingsStore.settings;
   protected readonly dataErrors = this.dataService.getLoadingErrors();
+  protected readonly spreadsheetName = this.dataService.spreadsheetName;
 }

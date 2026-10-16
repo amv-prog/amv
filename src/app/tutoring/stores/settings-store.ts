@@ -1,5 +1,4 @@
 import { effect, inject, Service, signal, WritableSignal } from '@angular/core';
-import { GoogleDocInfo } from '../../shared/models/google-doc-info';
 import { LocalStorageService } from '../../shared/services/local-storage-service';
 import { Settings } from '../models/settings';
 
@@ -21,9 +20,9 @@ export class SettingsStore {
     this.settings.set({ ...settings });
   }
 
-  updateSpreadsheet(spreadsheet: GoogleDocInfo | undefined) {
+  updateSpreadsheet(spreadsheetId: string | undefined) {
     this.settings.update((settings) => {
-      return { ...settings, spreadsheet };
+      return { ...settings, spreadsheetId };
     });
   }
 }

@@ -1,4 +1,4 @@
-import { computed, inject, Service, Signal, signal } from '@angular/core';
+import { computed, inject, Service, Signal, signal, WritableSignal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { Spreadsheet } from '../../shared/models/google-sheet/spreadsheet';
@@ -19,6 +19,12 @@ export class DataService {
 
   private latestLoadedData = signal<Map<string, any>>(new Map<string, any>());
 
+  spreadsheetName: WritableSignal<string | undefined> = signal(undefined);
+
+  setSpreadsheetName(spreadsheetName: string | undefined) {
+    this.spreadsheetName.set(spreadsheetName);
+  }
+
   reload$(): Observable<boolean> {
     return toObservable(this.settingStore.settings).pipe(
       switchMap(() => {
@@ -29,7 +35,7 @@ export class DataService {
 
   update$(type: SaveType, data: any): Observable<boolean> {
     const settings = this.settingStore.settings();
-    if (!!settings.spreadsheet) {
+    if (!!settings.spreadsheetId) {
       return this.googleDataService.saveData$(type, data).pipe(
         catchError((e) => {
           this.messageService.displayError(
@@ -58,7 +64,7 @@ export class DataService {
 
   removeData$(type: SaveType): Observable<boolean> {
     const settings = this.settingStore.settings();
-    if (!settings.spreadsheet) {
+    if (!settings.spreadsheetId) {
       localStorage.removeItem(type);
       return of(true);
     } else {
@@ -76,6 +82,12 @@ export class DataService {
   loadLatestData$(): Observable<boolean> {
     return this.loadLatestDataMap$().pipe(
       switchMap((data) => {
+        // Vérification des erreurs
+        const errors: string[] = data.get(this.ERROR_DATA) || [];
+        if (errors.length > 0) {
+          // Le fichier a des erreurs, on ne le met pas à jour
+          return of(data);
+        }
         // Mise à jour des données en fonction de la version
         const dataVersion: string | undefined = data.get(SaveType.VERSION);
         const currentVersion = this.versionStore.version();
@@ -106,8 +118,8 @@ export class DataService {
 
   private loadLatestDataMap$(): Observable<Map<string, any>> {
     const settings = this.settingStore.settings();
-    if (!!settings.spreadsheet) {
-      const spreadsheetId = settings.spreadsheet.id;
+    if (!!settings.spreadsheetId) {
+      const spreadsheetId = settings.spreadsheetId;
       return this.googleDataService.getAllData$(spreadsheetId).pipe(
         map((data) => {
           const map = new Map<string, any>();
@@ -162,6 +174,21 @@ export class DataService {
         return combineLatest(requests).pipe(map(() => spreadsheet));
       }),
     );
+  }
+
+  loadSpreadsheetName$(): Observable<boolean> {
+    const settings = this.settingStore.settings();
+    if (!!settings.spreadsheetId) {
+      return this.googleDataService.loadSpreadsheetName$(settings.spreadsheetId).pipe(
+        map((name) => {
+          this.spreadsheetName.set(name);
+          return true;
+        }),
+      );
+    } else {
+      this.spreadsheetName.set(undefined);
+      return of(true);
+    }
   }
 
   static updateData(data: Map<string, any>, currentVersion: string) {

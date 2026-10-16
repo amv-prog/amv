@@ -1,9 +1,9 @@
 <div class="page-center section">
   <h1>Gestion des données</h1>
 
-  @if (settings().spreadsheet; as spreadsheet) {
+  @if (settings().spreadsheetId) {
     <div class="section">
-      <div class="highlight">Données Google : {{ spreadsheet.name }}</div>
+      <div class="highlight">Données Google : {{ spreadsheetName() }}</div>
       @if (dataErrors(); as errors) {
         @for (error of errors; track error) {
           <div class="error bold h-panel">

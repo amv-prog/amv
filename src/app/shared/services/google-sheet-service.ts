@@ -21,6 +21,10 @@ export class GoogleSheetService {
     });
   }
 
+  getGoogleSheet(spreadsheetId: string): Observable<Spreadsheet> {
+    return this.http.get<Spreadsheet>(`${this.baseUrl}/${spreadsheetId}`);
+  }
+
   writeCell(
     spreadsheetId: string,
     sheetId: string,

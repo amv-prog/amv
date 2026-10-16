@@ -14,7 +14,7 @@ export class GoogleDataService {
   saveData$(
     type: SaveType,
     data: any,
-    spreadsheetId = this.settingStore.settings().spreadsheet?.id,
+    spreadsheetId = this.settingStore.settings().spreadsheetId,
   ): Observable<boolean> {
     if (!!spreadsheetId) {
       const index = this.getIndex(type);
@@ -39,7 +39,7 @@ export class GoogleDataService {
   }
 
   removeData$(type: SaveType): Observable<boolean> {
-    const spreadsheetId = this.settingStore.settings().spreadsheet?.id;
+    const spreadsheetId = this.settingStore.settings().spreadsheetId;
     if (!!spreadsheetId) {
       const index = this.getIndex(type);
       if (!!index) {
@@ -68,6 +68,14 @@ export class GoogleDataService {
               return spreadsheet;
             }),
           );
+      }),
+    );
+  }
+
+  loadSpreadsheetName$(spreadsheetId: string): Observable<string> {
+    return this.googleSheetService.getGoogleSheet(spreadsheetId).pipe(
+      map((spreadsheet) => {
+        return spreadsheet.properties.title;
       }),
     );
   }

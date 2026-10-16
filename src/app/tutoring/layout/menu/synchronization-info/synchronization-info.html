@@ -1,7 +1,7 @@
 <div>
-  @if (settings().spreadsheet; as spreadsheet) {
+  @if (settings().spreadsheetId) {
     <div>Données Google</div>
-    <div class="bold">{{ spreadsheet.name }}</div>
+    <div class="bold">{{ spreadsheetName() }}</div>
   } @else {
     <div>Données locales</div>
   }
