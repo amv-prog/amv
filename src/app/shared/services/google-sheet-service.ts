@@ -3,6 +3,7 @@ import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BatchUpdateResponse } from '../models/google-sheet/batch-update-response';
 import { ClearValuesResponse } from '../models/google-sheet/clear-values-response';
+import { SheetProperties } from '../models/google-sheet/sheet-properties';
 import { Spreadsheet } from '../models/google-sheet/spreadsheet';
 import { UpdateValuesResponse } from '../models/google-sheet/update-values-response';
 import { ValueRange } from '../models/google-sheet/value-range';
@@ -51,6 +52,23 @@ export class GoogleSheetService {
     };
     return this.http.put<UpdateValuesResponse>(
       `${this.baseUrl}/${spreadsheetId}/values/${sheetId}!${range}?valueInputOption=RAW`,
+      body,
+    );
+  }
+
+  addSheet$(spreadsheetId: string, title: string): Observable<BatchUpdateResponse> {
+    const addSheetProperties: SheetProperties = { title, index: 0 };
+    const body = {
+      requests: [
+        {
+          addSheet: {
+            properties: addSheetProperties,
+          },
+        },
+      ],
+    };
+    return this.http.post<BatchUpdateResponse>(
+      `${this.baseUrl}/${spreadsheetId}:batchUpdate`,
       body,
     );
   }

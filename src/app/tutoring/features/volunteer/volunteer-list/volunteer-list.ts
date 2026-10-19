@@ -7,6 +7,7 @@ import { ConfirmationDialog } from '../../../../shared/components/confirmation-d
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { VolunteerMember } from '../../../models/volunteer-member';
 import { VolunteerStore } from '../../../stores/volunteer-store';
+import { ExportVolunteers } from '../export-volunteers/export-volunteers';
 @Component({
   selector: 'amv-volunteer-list',
   imports: [TruncatePipe, RouterLink],
@@ -34,5 +35,11 @@ export class VolunteerList {
         takeUntilDestroyed(),
       )
       .subscribe();
+  }
+
+  export() {
+    this.dialog.open<boolean>(ExportVolunteers, {
+      panelClass: 'dialog',
+    });
   }
 }

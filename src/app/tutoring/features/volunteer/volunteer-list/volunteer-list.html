@@ -1,6 +1,7 @@
 <div class="page-center">
   <h1>Liste des bénévoles</h1>
   @if (volunteers().length) {
+    <button (click)="export()">Exporter les bénévoles</button>
     <table class="amv-table">
       <thead>
         <tr>
