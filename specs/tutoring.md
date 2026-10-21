@@ -152,6 +152,7 @@ Un formulaire permet de modifier un membre en saisissant son type (parent ou enf
 - Les bénévoles sont affichés, avec l'info d'encadrant, leur nom et prénom, numéros de téléphones, email, langues parlées, les informations supplémentaires, et des boutons permettent de modifier ou supprimer le bénévole.
 - La liste des bénévoles est stockée et récupérée dans les données.
 - Un bouton permet d'ajouter un bénévole.
+- Si l'tilisateur utilise les données Google, un bouton permet d'exporter les bénévoles
 
 ### Modifier un bénévole
 
@@ -164,6 +165,10 @@ Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de v
 ### Ajout d'un bénévole
 
 Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'un bénévole.
+
+### Exporter les bénévoles
+
+Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export, un autre d'annuler. Le bouton annuler ferme la popin sans autre action. Le bouton d'export crée une nouvelle feuille en première position dans le fichier Google, avec les infos des bénévoles. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, une message d'erreur apparaît.
 
 ## Ajout d'un bénévole
 
@@ -271,12 +276,14 @@ Un formulaire permet d'ajouter un cours en saisissant l'élève et l'encadrant, 
 ### Données locales
 
 Lorsque l'application est en mode données locales, les données sont récupérées et sauvegardées dans le local storage. 4 boutons permettent de gérer les données :
+
 - Enregistrer les données
 - Importer un fichier
 - Supprimer les données
 - Importer les données d'exemple
 
 2 autres boutons permettent de passer en mode fichier Google
+
 - Utiliser un fichier Google
 - Créer et utiliser un nouveau fichier Google
 
@@ -318,6 +325,7 @@ L'utilisateur peut sélectionner un fichier
 Lorsque l'application est en mode données Google, les données sont récupérées et sauvegardées dans le fichier Google choisi.
 
 3 boutons sont présents
+
 - Sélectionner un autre fichier Google
 - Créer un nouveau fichier Google
 - Se déconnecter et utiliser les données locales
@@ -333,6 +341,7 @@ Lorsque l'application est en mode données Google, les données sont récupéré
 - Au clic sur un des boutons de création, le fichier est créé dans le Google Drive de l'utilisateur, soit vide, soit avec les données actuelles, puis il est utilisé pour la gestion des données.
 
 #### Se déconnecter et utiliser les données locales
+
 - Les données locales sont rechargées et utilisées pour la gestion des données.
 
 ## Liste des écoles
