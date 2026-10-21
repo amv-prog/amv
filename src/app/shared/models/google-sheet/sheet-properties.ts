@@ -1,4 +1,5 @@
 export interface SheetProperties {
-  title: string;
-  index: number;
+  sheetId?: number;
+  title?: string;
+  index?: number;
 }

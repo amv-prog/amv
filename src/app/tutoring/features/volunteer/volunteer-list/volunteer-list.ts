@@ -6,6 +6,7 @@ import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { VolunteerMember } from '../../../models/volunteer-member';
+import { SettingsStore } from '../../../stores/settings-store';
 import { VolunteerStore } from '../../../stores/volunteer-store';
 import { ExportVolunteers } from '../export-volunteers/export-volunteers';
 @Component({
@@ -15,6 +16,7 @@ import { ExportVolunteers } from '../export-volunteers/export-volunteers';
 })
 export class VolunteerList {
   protected readonly volunteerStore = inject(VolunteerStore);
+  protected readonly settingsStore = inject(SettingsStore);
 
   protected readonly volunteers = this.volunteerStore.sortedVolunteers;
 
