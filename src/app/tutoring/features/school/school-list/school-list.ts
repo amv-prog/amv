@@ -55,7 +55,7 @@ export class SchoolList {
   constructor() {
     effect(() => {
       const year = this.yearFormData().year;
-      if (!!year && this.years().indexOf(Number(this.yearFormData().year)) < 0) {
+      if (!!year && this.years().indexOf(Number(year)) < 0) {
         this.yearFormData.set({
           year: this.schoolYear.toString(),
         });

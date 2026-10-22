@@ -13,20 +13,20 @@ import { SettingsStore } from '../stores/settings-store';
 import { VolunteerStore } from '../stores/volunteer-store';
 
 @Service()
-export class VolunteerService {
+export class VolunteerExportService {
   private readonly cellBuffer = '     ';
   private readonly volunteerStore = inject(VolunteerStore);
   private readonly googleSheetService = inject(GoogleSheetService);
-  private readonly settingStore = inject(SettingsStore);
+  private readonly settingsStore = inject(SettingsStore);
   private readonly dateService = inject(DateService);
 
   addVolunteerSheet$(sheetName: string, title?: string): Observable<boolean> {
-    const spreadsheetId = this.settingStore.settings().spreadsheetId;
+    const spreadsheetId = this.settingsStore.settings().spreadsheetId;
     if (!spreadsheetId) {
       throw new Error('Création impossible, pas de fichier saisi');
     }
 
-    const volunteers = this.volunteerStore.volunteers();
+    const volunteers = this.volunteerStore.sortedVolunteers();
 
     return this.googleSheetService.addSheet$(spreadsheetId, sheetName).pipe(
       switchMap((response) => {
@@ -98,9 +98,7 @@ export class VolunteerService {
     const requests$: Observable<UpdateValuesResponse>[] = [];
 
     const date = this.dateService.formatDate(new Date(), 'yyyy-MM-dd h:mm:ss') || '';
-    requests$.push(
-      this.googleSheetService.writeCell(spreadsheetId, sheetName, 'G1', date + this.cellBuffer),
-    );
+    requests$.push(this.googleSheetService.writeCell(spreadsheetId, sheetName, 'G1', date));
 
     requests$.push(
       this.googleSheetService.writeCell(
@@ -136,7 +134,7 @@ export class VolunteerService {
       },
     };
 
-    const centerDateRequest: BatchUpdateRequest = {
+    const alignDateRequest: BatchUpdateRequest = {
       repeatCell: {
         range: {
           sheetId,
@@ -151,6 +149,39 @@ export class VolunteerService {
           },
         },
         fields: 'userEnteredFormat.horizontalAlignment',
+      },
+    };
+
+    const mergeCellsRequest: BatchUpdateRequest = {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          endRowIndex: 6,
+          startColumnIndex: 0,
+          endColumnIndex: 7,
+        },
+        mergeType: 'MERGE_ROWS',
+      },
+    };
+
+    const boldRequest: BatchUpdateRequest = {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 5,
+          endRowIndex: 6,
+          startColumnIndex: 0,
+          endColumnIndex: 1,
+        },
+        cell: {
+          userEnteredFormat: {
+            textFormat: {
+              bold: true,
+            },
+          },
+        },
+        fields: 'userEnteredFormat.textFormat',
       },
     };
 
@@ -196,7 +227,7 @@ export class VolunteerService {
       },
     };
 
-    const centerheaderRequest: BatchUpdateRequest = {
+    const centerHeaderRequest: BatchUpdateRequest = {
       repeatCell: {
         range: headerRange,
         cell: {
@@ -237,36 +268,17 @@ export class VolunteerService {
       },
     };
 
-    const boldRequest: BatchUpdateRequest = {
-      repeatCell: {
-        range: {
-          sheetId,
-          startRowIndex: 5,
-          endRowIndex: 6,
-          startColumnIndex: 0,
-          endColumnIndex: 1,
-        },
-        cell: {
-          userEnteredFormat: {
-            textFormat: {
-              bold: true,
-            },
-          },
-        },
-        fields: 'userEnteredFormat.textFormat',
-      },
-    };
-
     return this.googleSheetService
       .batchUpdate$(spreadsheetId, [
         centerVerticalRequest,
-        centerDateRequest,
+        alignDateRequest,
+        mergeCellsRequest,
+        boldRequest,
         headerBorderRequest,
-        centerheaderRequest,
+        centerHeaderRequest,
         tableBorderRequest,
         resizeColRequest,
         warpRequest,
-        boldRequest,
       ])
       .pipe(map(() => sheetId));
   }
@@ -284,12 +296,6 @@ export class VolunteerService {
       startColumnIndex: 0,
       endColumnIndex: 7,
     };
-    const mergeTitleCellsRequest: BatchUpdateRequest = {
-      mergeCells: {
-        range: titleRange,
-        mergeType: 'MERGE_ALL',
-      },
-    };
     const centerTitleRequest: BatchUpdateRequest = {
       repeatCell: {
         range: titleRange,
@@ -302,13 +308,11 @@ export class VolunteerService {
       },
     };
 
-    return this.googleSheetService
-      .batchUpdate$(spreadsheetId, [mergeTitleCellsRequest, centerTitleRequest])
-      .pipe(
-        switchMap(() => {
-          return this.googleSheetService.writeCell(spreadsheetId, sheetName, 'A4', title);
-        }),
-        map(() => true),
-      );
+    return this.googleSheetService.batchUpdate$(spreadsheetId, [centerTitleRequest]).pipe(
+      switchMap(() => {
+        return this.googleSheetService.writeCell(spreadsheetId, sheetName, 'A4', title);
+      }),
+      map(() => true),
+    );
   }
 }

@@ -4,7 +4,7 @@ import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { catchError, tap } from 'rxjs';
 import { DateService } from '../../../../shared/services/date-service';
 import { MessageService } from '../../../../shared/services/message-service';
-import { VolunteerService } from '../../../services/volunteer-service';
+import { VolunteerExportService } from '../../../services/volunteer-export-service';
 
 @Component({
   imports: [FormRoot, FormField],
@@ -14,7 +14,7 @@ import { VolunteerService } from '../../../services/volunteer-service';
 export class ExportVolunteers {
   protected readonly dialogRef = inject<DialogRef<boolean>>(DialogRef);
   private readonly dateService = inject(DateService);
-  private readonly volunteerService = inject(VolunteerService);
+  private readonly volunteerExportService = inject(VolunteerExportService);
   private readonly messageService = inject(MessageService);
 
   protected readonly newSheetFormData: WritableSignal<{
@@ -37,7 +37,7 @@ export class ExportVolunteers {
 
   exportVolunteers() {
     if (this.newSheetForm().valid()) {
-      this.volunteerService
+      this.volunteerExportService
         .addVolunteerSheet$(this.newSheetFormData().name, this.newSheetFormData().title)
         .pipe(
           tap(() => {
