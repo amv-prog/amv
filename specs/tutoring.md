@@ -32,6 +32,7 @@ Le menu contient des liens vers certaines pages :
 - La liste des familles et de leurs membres est stockée et récupérée selon l'accès aux données choisi dans les paramètres.
 - Un clic sur la ligne d'une famille permet d'afficher ou de cacher la liste des membre.
 - Un bouton permet d'ajouter une famille
+- Si l'tilisateur utilise les données Google, un bouton permet d'exporter les familles
 
 ### Détail d'une famille
 
@@ -56,6 +57,10 @@ Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de v
 ### Ajout d'une famille
 
 Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'une famille.
+
+### Exporter les familles
+
+Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export des familles avec un suivi en cours ou prévu, un autre l'export de toutes les familles, et un dernier d'annuler. Le bouton annuler ferme la popin sans autre action. Les boutons d'export créent une nouvelle feuille en première position dans le fichier Google, avec les infos des familles choisies. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, une message d'erreur apparaît.
 
 ## Ajout d'une famille
 

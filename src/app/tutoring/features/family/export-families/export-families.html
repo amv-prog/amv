@@ -1,0 +1,46 @@
+<div class="subtitle">Exporter les familles</div>
+<div class="content">
+  <div class="section">
+    <div>
+      Les familles seront exportés dans une nouvelle feuille Google du fichier actuellement utilisé.
+    </div>
+    <div>
+      Vous pouvez choisir d'exporter les familles dont un membre a un suivi en cours ou prévu, ou
+      exporter toutes les familles.
+    </div>
+    <div>
+      Veuillez saisir le nom souhaité pour la feuille. Le nom ne doit pas être déjà utilisé par une
+      autre feuille.
+    </div>
+    <div>Vous pouvez également saisir un titre qui sera affiché au-dessus tableau.</div>
+  </div>
+
+  <form class="simple-form" [formRoot]="newSheetForm">
+    @let name = newSheetForm.name;
+    <div class="field">
+      <label for="name">Nom de la feuille *</label>
+      <input id="name" type="text" [formField]="name" />
+    </div>
+    @if (name().dirty() && name().invalid()) {
+      @for (error of name().errors(); track error.kind) {
+        <div class="field-error">{{ error.message }}</div>
+      }
+    }
+    <div class="field">
+      <label for="title">Title</label>
+      <input id="title" type="text" [formField]="newSheetForm.title" />
+    </div>
+  </form>
+  @if (error(); as message) {
+    <div class="error">{{ message }}</div>
+  }
+</div>
+<div class="buttons">
+  <button type="button" [disabled]="newSheetForm().invalid()" (click)="exportFamilies(false)">
+    Exporter les familles suivies
+  </button>
+  <button type="button" [disabled]="newSheetForm().invalid()" (click)="exportFamilies(true)">
+    Exporter toutes les familles
+  </button>
+  <button class="secondary" type="button" (click)="cancel()">Annuler</button>
+</div>

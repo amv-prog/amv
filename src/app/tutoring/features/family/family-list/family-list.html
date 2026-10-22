@@ -1,6 +1,9 @@
 <div class="page-center">
   <h1>Liste des familles adhérentes</h1>
   @if (familiesToDisplay().length) {
+    @if (!!settingsStore.settings().spreadsheetId) {
+      <button (click)="export()">Exporter les familles</button>
+    }
     <table class="amv-table">
       <thead>
         <tr>

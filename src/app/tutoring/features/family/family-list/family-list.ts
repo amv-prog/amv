@@ -10,6 +10,8 @@ import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { Family } from '../../../models/family';
 import { RecipientMember } from '../../../models/recipient-member';
 import { FamilyStore } from '../../../stores/family-store';
+import { SettingsStore } from '../../../stores/settings-store';
+import { ExportFamilies } from '../export-families/export-families';
 @Component({
   selector: 'amv-family-list',
   imports: [RouterLink, DatePipe, TruncatePipe],
@@ -19,6 +21,7 @@ export class FamilyList {
   private readonly router = inject(Router);
 
   protected readonly familyStore = inject(FamilyStore);
+  protected readonly settingsStore = inject(SettingsStore);
 
   private readonly dialog = inject(Dialog);
 
@@ -75,6 +78,12 @@ export class FamilyList {
 
   public isContributionValid(family: Family) {
     return DateService.compareDays(family.contributionValidity, new Date()) >= 0;
+  }
+
+  export() {
+    this.dialog.open<boolean>(ExportFamilies, {
+      panelClass: 'dialog',
+    });
   }
 }
 
