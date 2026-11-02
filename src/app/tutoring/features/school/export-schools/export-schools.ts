@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, computed, inject, linkedSignal, signal, WritableSignal } from '@angular/core';
+import { Component, inject, linkedSignal, signal, WritableSignal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { catchError, tap } from 'rxjs';
 import { DateService } from '../../../../shared/services/date-service';
@@ -19,28 +19,14 @@ export class ExportSchools {
   private readonly messageService = inject(MessageService);
   protected readonly schoolStore = inject(SchoolStore);
 
-  private readonly schoolYear = SchoolStore.currentSchoolYear();
-
-  protected readonly years = computed(() => {
-    const classYears = this.schoolStore
-      .schools()
-      .flatMap((school) => school.classes)
-      .map((schoolClass) => schoolClass.year);
-
-    const minYear = Math.min(this.schoolYear, ...classYears);
-    const maxYear = Math.max(this.schoolYear, ...classYears);
-
-    return Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear);
-  });
+  private readonly schoolYear = SchoolStore.currentSchoolYear(8);
 
   protected readonly newSheetFormData: WritableSignal<{
     name: string;
     title: string;
-    year: string;
   }> = signal({
     name: `Écoles_${this.dateService.formatDate(new Date())}`,
-    title: 'Liste des écoles',
-    year: this.schoolYear.toString(),
+    title: `Soutien scolaire ${this.schoolYear}-${this.schoolYear + 1}`,
   });
 
   protected readonly newSheetForm = form(this.newSheetFormData, (form) => {
@@ -56,11 +42,7 @@ export class ExportSchools {
   exportSchools() {
     if (this.newSheetForm().valid()) {
       this.schoolExportService
-        .addSchoolSheet$(
-          this.newSheetFormData().name,
-          Number(this.newSheetFormData().year),
-          this.newSheetFormData().title,
-        )
+        .addSchoolSheet$(this.newSheetFormData().name, this.newSheetFormData().title)
         .pipe(
           tap(() => {
             this.messageService.displaySuccess('Écoles exportées avec succès');

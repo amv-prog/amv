@@ -89,11 +89,11 @@ export class SchoolStore {
     });
   }
 
-  // Année scolaire en cours. L'année suivante est remontée à partir de juillet.
-  static currentSchoolYear(): number {
+  // Année scolaire en cours. L'année suivante est remontée à partir de juillet par défaut.
+  static currentSchoolYear(breakingMonth = 6): number {
     const date = new Date();
     const year = date.getFullYear();
-    if (date.getMonth() >= 6) {
+    if (date.getMonth() >= breakingMonth) {
       return year;
     } else {
       return year - 1;

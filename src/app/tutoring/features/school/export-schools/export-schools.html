@@ -5,21 +5,13 @@
       Les écoles seront exportées dans une nouvelle feuille Google du fichier actuellement utilisé.
     </div>
     <div>
-      Vous devez choisir l'année scolaire à exporter et le nom souhaité pour la feuille. <br />
+      Vous devez choisir le nom souhaité pour la feuille. <br />
       Le nom ne doit pas être déjà utilisé par une autre feuille.
     </div>
-    <div>Vous pouvez également saisir un titre qui sera affiché au-dessus tableau.</div>
+    <div>Vous pouvez également saisir un titre qui sera affiché au-dessus du tableau.</div>
   </div>
 
   <form class="simple-form" [formRoot]="newSheetForm">
-    <div class="field">
-      <label for="year">Année scolaire</label>
-      <select id="year" [formField]="newSheetForm.year">
-        @for (year of years(); track year) {
-          <option [value]="year">{{ year }} - {{ year + 1 }}</option>
-        }
-      </select>
-    </div>
     @let name = newSheetForm.name;
     <div class="field">
       <label for="name">Nom de la feuille *</label>
