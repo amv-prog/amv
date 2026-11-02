@@ -123,7 +123,8 @@ export class EditClass {
       }
       this.schoolStore
         .updateClass$(this.school, current)
-        .pipe(tap(() => this.dialogRef.close(true)));
+        .pipe(tap(() => this.dialogRef.close(true)))
+        .subscribe();
     }
   }
 
