@@ -1,5 +1,8 @@
 import { computed, inject, linkedSignal, Service, Signal, WritableSignal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SchoolClassDisplay } from '../models/display/school-class-display';
+import { SchoolDisplay } from '../models/display/school-display';
+import { Family } from '../models/family';
 import { School } from '../models/school';
 import { SchoolClass } from '../models/school-class';
 import { DataService, SaveType } from '../services/data-service';
@@ -111,5 +114,30 @@ export class SchoolStore {
   static classSortWeight(schoolClass: SchoolClass): number {
     const gradeindex = Math.min(...schoolClass.grades.map((g) => this.standardGrades.indexOf(g)));
     return schoolClass.year * -100 + gradeindex * 10 + schoolClass.grades.length;
+  }
+
+  private static getSchoolClassDisplay(
+    schoolClass: SchoolClass,
+    families: Family[],
+  ): SchoolClassDisplay {
+    const classMembers = families
+      .flatMap((f) =>
+        f.members.map((m) => {
+          return { member: m, family: f };
+        }),
+      )
+      .filter((m) => m.member.schoolClassIds.includes(schoolClass.id));
+    return new SchoolClassDisplay(schoolClass, classMembers);
+  }
+
+  private static getSchoolDisplay(school: School, families: Family[]): SchoolDisplay {
+    const classes = SchoolStore.sortedClasses(school.classes).map((c) =>
+      SchoolStore.getSchoolClassDisplay(c, families),
+    );
+    return new SchoolDisplay(school, classes);
+  }
+
+  static getSchoolDisplays(schools: School[], families: Family[]): SchoolDisplay[] {
+    return schools.map((s) => SchoolStore.getSchoolDisplay(s, families));
   }
 }

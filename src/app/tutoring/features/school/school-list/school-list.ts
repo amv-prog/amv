@@ -5,6 +5,7 @@ import { form, FormField, FormRoot } from '@angular/forms/signals';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
+import { SchoolClassDisplay } from '../../../models/display/school-class-display';
 import { Family } from '../../../models/family';
 import { RecipientMember } from '../../../models/recipient-member';
 import { School } from '../../../models/school';
@@ -12,8 +13,10 @@ import { SchoolClass } from '../../../models/school-class';
 import { FamilyStore } from '../../../stores/family-store';
 import { LessonStore } from '../../../stores/lesson-store';
 import { SchoolStore } from '../../../stores/school-store';
+import { SettingsStore } from '../../../stores/settings-store';
 import { EditClass } from '../edit-class/edit-class';
 import { EditSchool } from '../edit-school/edit-school';
+import { ExportSchools } from '../export-schools/export-schools';
 
 @Component({
   selector: 'amv-school-list',
@@ -25,11 +28,13 @@ export class SchoolList {
 
   protected readonly schoolStore = inject(SchoolStore);
   protected readonly familyStore = inject(FamilyStore);
+  protected readonly settingsStore = inject(SettingsStore);
 
   protected readonly schoolDisplays = computed(() => {
     const schools = this.schoolStore.sortedSchools();
+    const families = this.familyStore.families();
 
-    return schools.map((s) => this.getSchoolDisplay(s));
+    return SchoolStore.getSchoolDisplays(schools, families);
   });
 
   private readonly schoolYear = SchoolStore.currentSchoolYear();
@@ -53,6 +58,7 @@ export class SchoolList {
   protected readonly yearForm = form(this.yearFormData);
 
   constructor() {
+    // Si tous les enfants d'une année sont supprimés, on revient à l'année en cours
     effect(() => {
       const year = this.yearFormData().year;
       if (!!year && this.years().indexOf(Number(year)) < 0) {
@@ -141,42 +147,15 @@ export class SchoolList {
       .subscribe();
   }
 
-  private getSchoolClassDisplay(schoolClass: SchoolClass): SchoolClassDisplay {
-    const classMembers = this.familyStore
-      .families()
-      .flatMap((f) =>
-        f.members.map((m) => {
-          return { member: m, family: f };
-        }),
-      )
-      .filter((o) => o.member.schoolClassIds.includes(schoolClass.id));
-    return new SchoolClassDisplay(schoolClass, classMembers);
-  }
-
-  private getSchoolDisplay(school: School): SchoolDisplay {
-    const classes = SchoolStore.sortedClasses(school.classes).map((c) =>
-      this.getSchoolClassDisplay(c),
-    );
-    return new SchoolDisplay(school, classes);
-  }
-
   public displayStudentName(
     student: { member: RecipientMember; family: Family } | undefined,
   ): string {
     return !!student ? LessonStore.displayStudentName(student) : 'Inconnu';
   }
-}
 
-class SchoolDisplay {
-  constructor(
-    public school: School,
-    public classes: SchoolClassDisplay[],
-  ) {}
-}
-
-class SchoolClassDisplay {
-  constructor(
-    public schoolClass: SchoolClass,
-    public members: { member: RecipientMember; family: Family }[],
-  ) {}
+  export() {
+    this.dialog.open<boolean>(ExportSchools, {
+      panelClass: 'dialog',
+    });
+  }
 }

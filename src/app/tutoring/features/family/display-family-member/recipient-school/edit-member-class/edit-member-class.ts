@@ -120,7 +120,7 @@ export class EditMemberClass {
         } else {
           member.schoolClassIds.push(formData.classId);
         }
-      } else {
+      } else if (!member.schoolClassIds.includes(formData.classId)) {
         member.schoolClassIds.push(formData.classId);
       }
 

@@ -41,7 +41,7 @@ export class ExportFamilies {
         .addFamilySheet$(this.newSheetFormData().name, includeAll, this.newSheetFormData().title)
         .pipe(
           tap(() => {
-            this.messageService.displaySuccess('Familles exportés avec succès');
+            this.messageService.displaySuccess('Familles exportées avec succès');
             this.dialogRef.close();
           }),
           catchError((e) => {

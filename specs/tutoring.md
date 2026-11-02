@@ -60,7 +60,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ### Exporter les familles
 
-Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export des familles avec un suivi en cours ou prévu, un autre l'export de toutes les familles, et un dernier d'annuler. Le bouton annuler ferme la popin sans autre action. Les boutons d'export créent une nouvelle feuille en première position dans le fichier Google, avec les infos des familles choisies. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, une message d'erreur apparaît.
+Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export des familles avec un suivi en cours ou prévu, un autre l'export de toutes les familles, et un dernier d'annuler. Le bouton annuler ferme la popin sans autre action. Les boutons d'export créent une nouvelle feuille en première position dans le fichier Google, avec les infos des familles choisies. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, un message d'erreur apparaît.
 
 ## Ajout d'une famille
 
@@ -173,7 +173,7 @@ Lors du clic sur le bouton, l'utilisateur est redirigé vers la page d'ajout d'u
 
 ### Exporter les bénévoles
 
-Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export, un autre d'annuler. Le bouton annuler ferme la popin sans autre action. Le bouton d'export crée une nouvelle feuille en première position dans le fichier Google, avec les infos des bénévoles. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, une message d'erreur apparaît.
+Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut entrer le nom de la feuille qui sera créée, et le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export, un autre d'annuler. Le bouton annuler ferme la popin sans autre action. Le bouton d'export crée une nouvelle feuille en première position dans le fichier Google, avec les infos des bénévoles. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, un message d'erreur apparaît.
 
 ## Ajout d'un bénévole
 
@@ -352,6 +352,7 @@ Lorsque l'application est en mode données Google, les données sont récupéré
 ## Liste des écoles
 
 - Une liste déroulante permet de choisir l'année scolaire à afficher, ou toutes les années
+- Si l'tilisateur utilise les données Google, un bouton permet d'exporter les écoles
 - Les écoles sont affichées par ordre alphabétique, avec leur nom et informations supplémentaires, ainsi que le nombre d'élèves.
 - La liste des écoles est stockée et récupérée dans les données.
 - Pour chaque école, un bouton permet de la modifier, un autre d'ajouter une classe, et un autre de supprimer l'école
@@ -392,3 +393,7 @@ Un formulaire permet d'ajouter ou modifier une classe.
 ### Supprimer une classe
 
 Lors du clic sur le bouton, une popin de confirmation est affichée. En cas de validation, la classe est supprimée des données, et la liste est mise à jour.
+
+### Exporter les écoles
+
+Lors du clic sur le bouton, une popin s'ouvre. L'utilisateur peut saisir l'année scolaire souhaitée, et entrer le nom de la feuille qui sera créée ainsi que le titre affiché. Le nom de la feuille est obligatoire, mais pas le titre. Un bouton permet de lancer l'export des écoles, et un autre d'annuler. Le bouton annuler ferme la popin sans autre action. Le boutons d'export crée une nouvelle feuille en première position dans le fichier Google, avec les infos des écoles de l'année scolaire choisie. En cas d'erreur, notamment si une feuille avec le même nom existe déjà, un message d'erreur apparaît.
