@@ -1,3 +1,4 @@
 export interface TextFormat {
-  bold: boolean;
+  bold?: boolean;
+  underline?: boolean;
 }
