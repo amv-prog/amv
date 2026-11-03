@@ -114,13 +114,13 @@ export class EditMemberClass {
     if (!!member && this.schoolClassForm().valid()) {
       const formData = this.schoolClassFormData();
       if (!!this.classId) {
-        let index = member.schoolClassIds.findIndex((c) => c === this.classId) || -1;
+        let index = member.schoolClassIds.findIndex((c) => c === this.classId) ?? -1;
         if (index >= 0) {
           member.schoolClassIds.splice(index, 1, formData.classId);
         } else {
           member.schoolClassIds.push(formData.classId);
         }
-      } else {
+      } else if (!member.schoolClassIds.includes(formData.classId)) {
         member.schoolClassIds.push(formData.classId);
       }
 

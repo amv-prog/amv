@@ -1,6 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
@@ -34,7 +33,6 @@ export class VolunteerList {
       .pipe(
         filter((result) => !!result),
         switchMap(() => this.volunteerStore.removeVolunteer$(volunteer)),
-        takeUntilDestroyed(),
       )
       .subscribe();
   }

@@ -1,17 +1,23 @@
 <div class="page-center">
   <h1>Liste des écoles</h1>
 
-  <form class="simple-form" [formRoot]="yearForm">
-    <div class="field">
-      <label for="year">Année scolaire</label>
-      <select id="year" [formField]="yearForm.year">
-        <option value="">Toutes les années</option>
-        @for (year of years(); track year) {
-          <option [value]="year">{{ year }} - {{ year + 1 }}</option>
-        }
-      </select>
-    </div>
-  </form>
+  <div class="h-panel-large">
+    <form class="simple-form" [formRoot]="yearForm">
+      <div class="field">
+        <label for="year">Année scolaire</label>
+        <select id="year" [formField]="yearForm.year">
+          <option value="">Toutes les années</option>
+          @for (year of years(); track year) {
+            <option [value]="year">{{ year }} - {{ year + 1 }}</option>
+          }
+        </select>
+      </div>
+    </form>
+
+    @if (!!settingsStore.settings().spreadsheetId) {
+      <button type="button" (click)="export()">Exporter les écoles</button>
+    }
+  </div>
 
   @if (schoolDisplays().length) {
     <table class="amv-table">
@@ -19,7 +25,7 @@
         <tr>
           <th scope="col">Enfants concernés</th>
           <th scope="col">École</th>
-          <th scope="col">Enseignant(s)</th>
+          <th scope="col">Enseignant.e(s)</th>
           <th scope="col">Niveau(x)</th>
           <th scope="col">Informations supplémentaires</th>
           <th scope="col">Année scolaire</th>
@@ -40,7 +46,11 @@
             </button>
           </td>
           <td>
-            <button class="invisible" title="modifier" (click)="openAddClassDialog(school)">
+            <button
+              class="invisible"
+              title="ajouter une classe"
+              (click)="openAddClassDialog(school)"
+            >
               <span class="material-symbols-outlined">group_add</span>
             </button>
           </td>
