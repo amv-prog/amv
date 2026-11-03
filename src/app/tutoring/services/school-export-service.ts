@@ -1,6 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { combineLatest, map, Observable, switchMap, throwError } from 'rxjs';
 import { BatchUpdateRequest } from '../../shared/models/google-sheet/batch-update-request';
+import { Dimension } from '../../shared/models/google-sheet/dimension';
 import { GridRange } from '../../shared/models/google-sheet/grid-range';
 import { UpdateValuesResponse } from '../../shared/models/google-sheet/update-values-response';
 import { DateService } from '../../shared/services/date-service';
@@ -52,7 +53,14 @@ export class SchoolExportService {
           });
         }
 
-        return this.updateSchoolSheet$(spreadsheetId, sheetName, sheetId!, schoolDisplays, 3);
+        return this.updateSchoolSheet$(
+          spreadsheetId,
+          sheetName,
+          sheetId!,
+          schoolDisplays,
+          4,
+          title,
+        );
       }),
     );
   }
@@ -63,9 +71,13 @@ export class SchoolExportService {
     sheetId: number,
     schoolDisplays: SchoolDisplay[],
     firstIndex: number,
+    title?: string,
   ): Observable<boolean> {
     const requests$: Observable<UpdateValuesResponse>[] = [];
     const formatRequests: BatchUpdateRequest[] = [];
+
+    const students = new Set<string>();
+    const tutors = new Set<string>();
 
     let nextIndex = firstIndex;
     for (let schoolDisplay of schoolDisplays) {
@@ -73,11 +85,25 @@ export class SchoolExportService {
         dataRequests$: classDataRequests$,
         formatRequests: classFormatRequests,
         nextIndex: nextAvailableIndex,
-      } = this.writeSchool$(spreadsheetId, sheetName, sheetId, schoolDisplay, nextIndex);
+      } = this.writeSchool$(
+        spreadsheetId,
+        sheetName,
+        sheetId,
+        schoolDisplay,
+        nextIndex,
+        students,
+        tutors,
+      );
       requests$.push(...classDataRequests$);
       formatRequests.push(...classFormatRequests);
       nextIndex = nextAvailableIndex;
     }
+
+    // Ajout des en-têtes
+    const { dataRequests$: headersDataRequests$, formatRequests: headersFormatRequests } =
+      this.writeHeaders$(spreadsheetId, sheetName, sheetId, students, tutors, title);
+    requests$.push(...headersDataRequests$);
+    formatRequests.push(...headersFormatRequests);
 
     return combineLatest(requests$).pipe(
       switchMap(() => this.googleSheetService.batchUpdate$(spreadsheetId, formatRequests)),
@@ -93,6 +119,8 @@ export class SchoolExportService {
     sheetId: number,
     schoolDisplay: SchoolDisplay,
     firstIndex: number,
+    students: Set<string>,
+    tutors: Set<string>,
   ): {
     dataRequests$: Observable<UpdateValuesResponse>[];
     formatRequests: BatchUpdateRequest[];
@@ -115,7 +143,15 @@ export class SchoolExportService {
           dataRequests$: classDataRequests$,
           formatRequests: classFormatRequests,
           nextIndex: nextAvailableIndex,
-        } = this.writeClassData$(spreadsheetId, sheetName, sheetId, classDisplay, nextIndex);
+        } = this.writeClassData$(
+          spreadsheetId,
+          sheetName,
+          sheetId,
+          classDisplay,
+          nextIndex,
+          students,
+          tutors,
+        );
         dataRequests$.push(...classDataRequests$);
         formatRequests.push(...classFormatRequests);
         nextIndex = nextAvailableIndex;
@@ -216,6 +252,8 @@ export class SchoolExportService {
     sheetId: number,
     classDisplay: SchoolClassDisplay,
     firstIndex: number,
+    students: Set<string>,
+    tutors: Set<string>,
   ): {
     dataRequests$: Observable<UpdateValuesResponse>[];
     formatRequests: BatchUpdateRequest[];
@@ -227,7 +265,7 @@ export class SchoolExportService {
     let nextIndex = firstIndex + 1;
     for (let student of classDisplay.members) {
       const { requests$: studentDataRequests$, nextIndex: nextAvailableIndex } =
-        this.writeClassMemberData$(spreadsheetId, sheetName, student, nextIndex);
+        this.writeClassMemberData$(spreadsheetId, sheetName, student, nextIndex, students, tutors);
       dataRequests$.push(...studentDataRequests$);
       nextIndex = nextAvailableIndex;
     }
@@ -303,6 +341,8 @@ export class SchoolExportService {
     sheetName: string,
     student: { member: RecipientMember; family: Family },
     firstIndex: number,
+    students: Set<string>,
+    tutors: Set<string>,
   ): { requests$: Observable<UpdateValuesResponse>[]; nextIndex: number } {
     const requests$: Observable<UpdateValuesResponse>[] = [];
 
@@ -321,11 +361,13 @@ export class SchoolExportService {
         this.displayStudentName(student) + this.cellBuffer,
       ),
     );
+    students.add(student.member.id);
 
     // Lessons
     const values: string[][] = [];
     let lastTutorId: string = '';
     for (let { lesson, tutor } of tutorLessons) {
+      tutors.add(lesson.tutorId);
       const lessonValues: string[] = [];
 
       // Nom du tuteur
@@ -337,9 +379,9 @@ export class SchoolExportService {
       }
 
       // Jour et heure
-      lessonValues.push(`${this.daysMap.get(lesson.dayOfWeek)} ${lesson.time}`);
+      lessonValues.push(`${this.daysMap.get(lesson.dayOfWeek)} ${lesson.time} ${this.cellBuffer}`);
       // Lieu
-      lessonValues.push(lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile');
+      lessonValues.push((lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile') + this.cellBuffer);
 
       values.push(lessonValues);
     }
@@ -395,5 +437,169 @@ export class SchoolExportService {
   private static sortingTutorName(tutor: VolunteerMember | undefined): string {
     // Pour trier les tuteurs on ajoute l'ID, au cas où plusieurs tuteurs aient le même nom
     return !!tutor ? `${tutor.firstName} ${tutor.lastName} ${tutor.id}` : 'ZZZ';
+  }
+
+  private writeHeaders$(
+    spreadsheetId: string,
+    sheetName: string,
+    sheetId: number,
+    students: Set<string>,
+    tutors: Set<string>,
+    title?: string,
+  ): {
+    dataRequests$: Observable<UpdateValuesResponse>[];
+    formatRequests: BatchUpdateRequest[];
+  } {
+    const requests$: Observable<UpdateValuesResponse>[] = [];
+    const formatRequests: BatchUpdateRequest[] = [];
+
+    // Global format
+    const mergeHeadersCellsRequest: BatchUpdateRequest = {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          endRowIndex: 5,
+          startColumnIndex: 0,
+          endColumnIndex: 4,
+        },
+        mergeType: 'MERGE_ROWS',
+      },
+    };
+    formatRequests.push(mergeHeadersCellsRequest);
+
+    const centerHeadersRequest: BatchUpdateRequest = {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 1,
+          endRowIndex: 5,
+          startColumnIndex: 0,
+          endColumnIndex: 4,
+        },
+        cell: {
+          userEnteredFormat: {
+            horizontalAlignment: 'CENTER',
+          },
+        },
+        fields: 'userEnteredFormat.horizontalAlignment',
+      },
+    };
+    formatRequests.push(centerHeadersRequest);
+
+    const boldRequest: BatchUpdateRequest = {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 1,
+          endRowIndex: 4,
+          startColumnIndex: 0,
+          endColumnIndex: 4,
+        },
+        cell: {
+          userEnteredFormat: {
+            textFormat: {
+              bold: true,
+            },
+          },
+        },
+        fields: 'userEnteredFormat.textFormat',
+      },
+    };
+    formatRequests.push(boldRequest);
+
+    // Date
+    const { request$: dateRequest$, formatRequest: dateFormatRequest } = this.writeDate$(
+      spreadsheetId,
+      sheetName,
+      sheetId,
+    );
+    requests$.push(dateRequest$);
+    formatRequests.push(dateFormatRequest);
+
+    // Title
+    if (!!title) {
+      requests$.push(this.googleSheetService.writeCell(spreadsheetId, sheetName, 'A3', title));
+    }
+
+    // Compteurs
+    requests$.push(
+      this.googleSheetService.writeCell(
+        spreadsheetId,
+        sheetName,
+        'A4',
+        `${students.size} enfants ${tutors.size} accompagnateurs·trices`,
+      ),
+    );
+
+    // Resize and wrap after everything else
+    const resizeColRequest: BatchUpdateRequest = {
+      autoResizeDimensions: {
+        dimensions: {
+          sheetId,
+          dimension: Dimension.COLUMNS,
+          startIndex: 0,
+          endIndex: 4,
+        },
+      },
+    };
+    formatRequests.push(resizeColRequest);
+
+    const warpRequest: BatchUpdateRequest = {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          startColumnIndex: 0,
+          endColumnIndex: 4,
+        },
+        cell: {
+          userEnteredFormat: {
+            wrapStrategy: 'WRAP',
+          },
+        },
+        fields: 'userEnteredFormat.wrapStrategy',
+      },
+    };
+    formatRequests.push(warpRequest);
+
+    return {
+      dataRequests$: requests$,
+      formatRequests,
+    };
+  }
+
+  private writeDate$(
+    spreadsheetId: string,
+    sheetName: string,
+    sheetId: number,
+  ): {
+    request$: Observable<UpdateValuesResponse>;
+    formatRequest: BatchUpdateRequest;
+  } {
+    const date = this.dateService.formatDate(new Date(), 'yyyy-MM-dd h:mm:ss') || '';
+
+    const alignDateRequest: BatchUpdateRequest = {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          endRowIndex: 1,
+          startColumnIndex: 0,
+          endColumnIndex: 4,
+        },
+        cell: {
+          userEnteredFormat: {
+            horizontalAlignment: 'RIGHT',
+          },
+        },
+        fields: 'userEnteredFormat.horizontalAlignment',
+      },
+    };
+
+    return {
+      request$: this.googleSheetService.writeCell(spreadsheetId, sheetName, 'D1', date),
+      formatRequest: alignDateRequest,
+    };
   }
 }
