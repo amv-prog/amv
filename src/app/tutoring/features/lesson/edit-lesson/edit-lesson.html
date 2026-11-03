@@ -26,9 +26,9 @@
     }
 
     <div class="field">
-      <label for="tutor">Encadrant *</label>
+      <label for="tutor">Accompagnateur·trice *</label>
       <select id="tutor" [formField]="lessonForm.tutor">
-        <option value="">-- Sélectionner un encadrant --</option>
+        <option value="">-- Sélectionner un·e accompagnateur·trice --</option>
         @for (tutor of sortedTutors(); track tutor.id) {
           <option [value]="tutor.id">
             {{ tutor.displayName }}
