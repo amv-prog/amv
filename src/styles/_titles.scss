@@ -12,6 +12,10 @@ h1 {
   .material-symbols-outlined {
     font-size: 2rem;
   }
+
+  @media screen and (max-width: 960px) {
+    font: var(--mat-sys-display-medium);
+  }
 }
 
 .subtitle {
@@ -19,6 +23,10 @@ h1 {
   margin-bottom: 2rem;
   color: $c2;
   text-align: center;
+
+  @media screen and (max-width: 960px) {
+    font: var(--mat-sys-headline-medium);
+  }
 }
 
 .highlight {

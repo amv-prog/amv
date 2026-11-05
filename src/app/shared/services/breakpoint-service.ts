@@ -10,4 +10,10 @@ export class BreakpointService {
   readonly isXSmall = toSignal(
     this.breakpointObserver.observe([Breakpoints.XSmall]).pipe(map((result) => result.matches)),
   );
+
+  readonly isSmall = toSignal(
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(map((result) => result.matches)),
+  );
 }

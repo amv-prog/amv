@@ -10,4 +10,5 @@ import { SynchronizationInfo } from './synchronization-info/synchronization-info
 })
 export class Menu {
   protected readonly isXSmall = inject(BreakpointService).isXSmall;
+  protected readonly isSmall = inject(BreakpointService).isSmall;
 }

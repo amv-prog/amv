@@ -13,7 +13,7 @@ import { DataService } from './services/data-service';
 export class Tutoring {
   private readonly dataService = inject(DataService);
 
-  protected readonly isXSmall = inject(BreakpointService).isXSmall;
+  protected readonly isSmall = inject(BreakpointService).isSmall;
 
   constructor() {
     this.dataService.reload$().pipe(takeUntilDestroyed()).subscribe();

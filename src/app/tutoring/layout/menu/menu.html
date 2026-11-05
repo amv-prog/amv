@@ -1,27 +1,28 @@
-@let smallScreen = isXSmall();
+@let xsmallScreen = isXSmall();
+@let smallScreen = isSmall();
 <div class="menu" [class.small-screen]="smallScreen">
   <div>
     <a routerLink="/tutoring/family/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">family_group</span>
-      @if (!smallScreen) {
+      @if (!xsmallScreen) {
         <span>Familles</span>
       }
     </a>
     <a routerLink="/tutoring/volunteer/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">accessibility_new</span>
-      @if (!smallScreen) {
+      @if (!xsmallScreen) {
         <span>Bénévoles</span>
       }
     </a>
     <a routerLink="/tutoring/lesson/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">book_ribbon</span>
-      @if (!smallScreen) {
+      @if (!xsmallScreen) {
         <span>Cours</span>
       }
     </a>
     <a routerLink="/tutoring/school/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">gite</span>
-      @if (!smallScreen) {
+      @if (!xsmallScreen) {
         <span>Écoles</span>
       }
     </a>
