@@ -1,6 +1,17 @@
-<div class="footer">
-  <a routerLink="/">Accueil</a>
-  <a href="mailto:amv.prog@gmail.com">Contact</a>
+@let smallScreen = isXSmall();
+<div class="footer" [class.smallScreen]="smallScreen">
+  <a routerLink="/">
+    <span class="material-symbols-outlined">home</span>
+    @if (!smallScreen) {
+      <span>Accueil</span>
+    }
+  </a>
+  <a href="mailto:amv.prog@gmail.com">
+    <span class="material-symbols-outlined">mail</span>
+    @if (!smallScreen) {
+      <span>Contact</span>
+    }
+  </a>
   <div class="version-infos">
     <div>v{{ appVersion() }}</div>
     <a routerLink="/info" title="infos">
