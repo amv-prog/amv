@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { BreakpointService } from '../../../shared/services/breakpoint-service';
 import { SynchronizationInfo } from './synchronization-info/synchronization-info';
 
 @Component({
@@ -7,4 +8,6 @@ import { SynchronizationInfo } from './synchronization-info/synchronization-info
   imports: [RouterLink, RouterLinkActive, SynchronizationInfo],
   templateUrl: './menu.html',
 })
-export class Menu {}
+export class Menu {
+  protected readonly isXSmall = inject(BreakpointService).isXSmall;
+}

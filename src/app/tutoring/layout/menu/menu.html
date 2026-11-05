@@ -1,27 +1,40 @@
-<div class="menu">
+@let smallScreen = isXSmall();
+<div class="menu" [class.small-screen]="smallScreen">
   <div>
     <a routerLink="/tutoring/family/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">family_group</span>
-      <span>Familles</span>
+      @if (!smallScreen) {
+        <span>Familles</span>
+      }
     </a>
     <a routerLink="/tutoring/volunteer/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">accessibility_new</span>
-      <span>Bénévoles</span>
+      @if (!smallScreen) {
+        <span>Bénévoles</span>
+      }
     </a>
     <a routerLink="/tutoring/lesson/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">book_ribbon</span>
-      <span>Cours</span>
+      @if (!smallScreen) {
+        <span>Cours</span>
+      }
     </a>
     <a routerLink="/tutoring/school/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">gite</span>
-      <span>Écoles</span>
+      @if (!smallScreen) {
+        <span>Écoles</span>
+      }
     </a>
   </div>
   <div>
-    <amv-synchronization-info></amv-synchronization-info>
+    @if (!smallScreen) {
+      <amv-synchronization-info></amv-synchronization-info>
+    }
     <a routerLink="/tutoring/settings" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">settings</span>
-      <span>Paramètres</span>
+      @if (!smallScreen) {
+        <span>Paramètres</span>
+      }
     </a>
   </div>
 </div>

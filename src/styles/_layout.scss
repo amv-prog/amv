@@ -23,6 +23,18 @@
     color: $c2-lighter;
     font-weight: bold;
   }
+
+  &.small-screen {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+    overflow-x: scroll;
+
+    & > * {
+      flex-direction: row;
+    }
+  }
 }
 
 .footer {
@@ -35,7 +47,7 @@
   border-top: 1px solid $c1-dark;
   padding: 1rem;
 
-  &.smallScreen {
+  &.small-screen {
     padding: 0.5rem;
   }
 }
