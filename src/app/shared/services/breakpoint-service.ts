@@ -1,19 +1,38 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { inject, Service } from '@angular/core';
+import { computed, inject, Service } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
 
 @Service()
 export class BreakpointService {
   private readonly breakpointObserver = inject(BreakpointObserver);
 
-  readonly isXSmall = toSignal(
-    this.breakpointObserver.observe([Breakpoints.XSmall]).pipe(map((result) => result.matches)),
+  private breakpointState = toSignal(
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]),
   );
 
-  readonly isSmall = toSignal(
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(map((result) => result.matches)),
-  );
+  readonly isXSmall = computed(() => {
+    return !!this.breakpointState()?.breakpoints[Breakpoints.XSmall];
+  });
+
+  readonly isSmall = computed(() => {
+    return !!this.breakpointState()?.breakpoints[Breakpoints.Small];
+  });
+
+  readonly isMedium = computed(() => {
+    return !!this.breakpointState()?.breakpoints[Breakpoints.Medium];
+  });
+
+  readonly isMaxSmall = computed(() => {
+    return this.isXSmall() || this.isSmall();
+  });
+
+  readonly isMaxMedium = computed(() => {
+    return this.isMaxSmall() || this.isMedium();
+  });
 }

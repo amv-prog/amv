@@ -3,7 +3,7 @@
   flex-direction: row;
   height: 100%;
 
-  &.small-screen {
+  .is-max-small & {
     flex-direction: column;
   }
 }
@@ -15,6 +15,10 @@
   padding: 5rem;
   min-height: 100%;
   overflow-x: auto;
+
+  .is-max-small & {
+    padding: 1rem;
+  }
 }
 
 .page-center {

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './layout/footer/footer';
 import { Loader } from './shared/components/loader/loader';
+import { BreakpointService } from './shared/services/breakpoint-service';
 import { NavigationService } from './shared/services/navigation-service';
 
 @Component({
@@ -12,6 +13,7 @@ import { NavigationService } from './shared/services/navigation-service';
 })
 export class App {
   private readonly navigationService = inject(NavigationService);
+  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
   constructor() {
     this.navigationService.historyManagement$().subscribe();
   }

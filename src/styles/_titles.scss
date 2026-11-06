@@ -13,7 +13,7 @@ h1 {
     font-size: 2rem;
   }
 
-  @media screen and (max-width: 960px) {
+  .is-max-small & {
     font: var(--mat-sys-display-medium);
   }
 }
@@ -24,7 +24,7 @@ h1 {
   color: $c2;
   text-align: center;
 
-  @media screen and (max-width: 960px) {
+  .is-max-small & {
     font: var(--mat-sys-headline-medium);
   }
 }

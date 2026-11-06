@@ -24,7 +24,7 @@
     font-weight: bold;
   }
 
-  &.small-screen {
+  .is-max-small & {
     flex-direction: row;
     width: 100%;
     height: auto;
@@ -47,7 +47,7 @@
   border-top: 1px solid $c1-dark;
   padding: 1rem;
 
-  &.small-screen {
+  .is-max-small & {
     padding: 0.5rem;
   }
 }

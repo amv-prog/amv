@@ -1,6 +1,6 @@
 @let xsmallScreen = isXSmall();
-@let smallScreen = isSmall();
-<div class="menu" [class.small-screen]="smallScreen">
+@let smallScreen = isMaxSmall();
+<div class="menu">
   <div>
     <a routerLink="/tutoring/family/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">family_group</span>
