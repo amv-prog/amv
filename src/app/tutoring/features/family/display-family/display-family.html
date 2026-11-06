@@ -6,7 +6,7 @@
   @if (family(); as familyValue) {
     <h1>Famille {{ familyValue.name }}</h1>
 
-    <div class="h-panel-large">
+    <div [class.h-panel-large]="!maxMedium" [class.v-panel-large]="maxMedium">
       <div class="section">
         @if (isContributionValid()) {
           <div class="h-panel">

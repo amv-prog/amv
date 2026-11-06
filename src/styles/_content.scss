@@ -13,6 +13,20 @@
   gap: 2rem;
 }
 
+.v-panel-large {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+
+  .section {
+    align-items: center;
+    button {
+      width: fit-content;
+    }
+  }
+}
+
 .section {
   display: flex;
   flex-direction: column;

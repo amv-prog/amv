@@ -1,3 +1,5 @@
+@let maxMedium = isMaxMedium();
+@let maxSmall = isMaxSmall();
 <div class="page-center">
   @if (currentLessonsToDisplay().length) {
     <div class="highlight">Cours actuels</div>
@@ -7,19 +9,28 @@
           <th scope="col">Accompagnateur·trice</th>
           <th scope="col">Jour et heure</th>
           <th scope="col">Lieu</th>
-          <th scope="col">Date de début</th>
-          <th scope="col">Date de fin</th>
+          @if (!maxSmall) {
+            <th scope="col">Date de début</th>
+            <th scope="col">Date de fin</th>
+          }
         </tr>
       </thead>
       @for (lessonDisplay of currentLessonsToDisplay(); track lessonDisplay.lesson.id) {
         @let lesson = lessonDisplay.lesson;
         @let tutor = lessonDisplay.tutor;
         <tr [class.even]="$even">
-          <td>{{ displayTutorName(tutor) }}</td>
+          @let tutorName = displayTutorName(tutor);
+          @if (maxSmall) {
+            <td [title]="tutorName">{{ tutorName | truncate: 20 }}</td>
+          } @else {
+            <td>{{ tutorName }}</td>
+          }
           <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
           <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-          <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          @if (!maxSmall) {
+            <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          }
           <td>
             <a
               class="a-button invisible"
@@ -57,7 +68,7 @@
 
   @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
     <hr />
-    <div class="h-panel-large">
+    <div [class.h-panel-large]="!maxMedium" [class.v-panel-large]="maxMedium">
       @if (!!futureLessonsToDisplay().length) {
         <div class="section">
           <div class="highlight">Futurs cours prévus</div>
@@ -67,19 +78,28 @@
                 <th scope="col">Accompagnateur·trice</th>
                 <th scope="col">Jour et heure</th>
                 <th scope="col">Lieu</th>
-                <th scope="col">Date de début</th>
-                <th scope="col">Date de fin</th>
+                @if (!maxSmall) {
+                  <th scope="col">Date de début</th>
+                  <th scope="col">Date de fin</th>
+                }
               </tr>
             </thead>
             @for (lessonDisplay of futureLessonsToDisplay(); track lessonDisplay.lesson.id) {
               @let lesson = lessonDisplay.lesson;
               @let tutor = lessonDisplay.tutor;
               <tr [class.even]="$even">
-                <td>{{ displayTutorName(tutor) }}</td>
+                @let tutorName = displayTutorName(tutor);
+                @if (maxSmall) {
+                  <td [title]="tutorName">{{ tutorName | truncate: 20 }}</td>
+                } @else {
+                  <td>{{ tutorName }}</td>
+                }
                 <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
                 <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                @if (!maxSmall) {
+                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                }
                 <td>
                   <a
                     class="a-button invisible"
@@ -112,19 +132,28 @@
                 <th scope="col">Accompagnateur·trice</th>
                 <th scope="col">Jour et heure</th>
                 <th scope="col">Lieu</th>
-                <th scope="col">Date de début</th>
-                <th scope="col">Date de fin</th>
+                @if (!maxSmall) {
+                  <th scope="col">Date de début</th>
+                  <th scope="col">Date de fin</th>
+                }
               </tr>
             </thead>
             @for (lessonDisplay of pastLessonsToDisplay(); track lessonDisplay.lesson.id) {
               @let lesson = lessonDisplay.lesson;
               @let tutor = lessonDisplay.tutor;
               <tr [class.even]="$even">
-                <td>{{ displayTutorName(tutor) }}</td>
+                @let tutorName = displayTutorName(tutor);
+                @if (maxSmall) {
+                  <td [title]="tutorName">{{ tutorName | truncate: 20 }}</td>
+                } @else {
+                  <td>{{ tutorName }}</td>
+                }
                 <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
                 <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                @if (!maxSmall) {
+                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                }
                 <td>
                   <a
                     class="a-button invisible"

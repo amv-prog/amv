@@ -4,7 +4,9 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../../shared/services/date-service';
+import { TruncatePipe } from '../../../../../shared/truncate-pipe';
 import { Lesson } from '../../../../models/lesson';
 import { VolunteerMember } from '../../../../models/volunteer-member';
 import { FamilyStore } from '../../../../stores/family-store';
@@ -13,7 +15,7 @@ import { VolunteerStore } from '../../../../stores/volunteer-store';
 
 @Component({
   selector: 'amv-recipient-lessons',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, TruncatePipe],
   templateUrl: './recipient-lessons.html',
 })
 export class RecipientLessons {
@@ -25,6 +27,9 @@ export class RecipientLessons {
   private readonly dateService = inject(DateService);
 
   private readonly dialog = inject(Dialog);
+
+  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
+  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
 
   protected readonly daysMap = this.dateService.daysMap;
 

@@ -1,19 +1,22 @@
+@let maxMedium = isMaxMedium();
 <div class="page-center">
   @if (member(); as memberValue) {
     <h1>
       <div>{{ memberValue?.firstName }} {{ memberValue?.lastName }}</div>
-      <a class="a-button invisible" [routerLink]="['edit']" title="modifier">
-        <span class="material-symbols-outlined">edit</span>
-      </a>
-      <button class="invisible" title="supprimer" (click)="validateMemberRemoval()">
-        <span class="material-symbols-outlined"> delete </span>
-      </button>
-      <button class="invisible" title="famille" (click)="goToFamily()">
-        <span class="material-symbols-outlined"> family_group </span>
-      </button>
+      <div class="action">
+        <a class="a-button invisible" [routerLink]="['edit']" title="modifier">
+          <span class="material-symbols-outlined">edit</span>
+        </a>
+        <button class="invisible" title="supprimer" (click)="validateMemberRemoval()">
+          <span class="material-symbols-outlined"> delete </span>
+        </button>
+        <button class="invisible" title="famille" (click)="goToFamily()">
+          <span class="material-symbols-outlined"> family_group </span>
+        </button>
+      </div>
     </h1>
 
-    <div class="h-panel-large">
+    <div [class.h-panel-large]="!maxMedium" [class.v-panel-large]="maxMedium">
       <div class="section">
         @if (memberValue.isParent) {
           <div class="h-panel">
