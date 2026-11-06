@@ -28,11 +28,19 @@ export class BreakpointService {
     return !!this.breakpointState()?.breakpoints[Breakpoints.Medium];
   });
 
+  readonly isLarge = computed(() => {
+    return !!this.breakpointState()?.breakpoints[Breakpoints.Large];
+  });
+
   readonly isMaxSmall = computed(() => {
     return this.isXSmall() || this.isSmall();
   });
 
   readonly isMaxMedium = computed(() => {
     return this.isMaxSmall() || this.isMedium();
+  });
+
+  readonly isMaxLarge = computed(() => {
+    return this.isMaxMedium() || this.isLarge();
   });
 }

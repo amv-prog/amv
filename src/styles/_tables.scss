@@ -56,6 +56,10 @@
     &:has(.a-button) {
       padding: 0;
     }
+
+    .is-max-small & {
+      padding: 0.5rem;
+    }
   }
 
   .even {

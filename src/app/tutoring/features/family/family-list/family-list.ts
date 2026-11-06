@@ -4,6 +4,7 @@ import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../shared/services/date-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { Family } from '../../../models/family';
@@ -21,6 +22,11 @@ export class FamilyList {
 
   protected readonly familyStore = inject(FamilyStore);
   protected readonly settingsStore = inject(SettingsStore);
+
+  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
+  protected readonly isMaxLarge = inject(BreakpointService).isMaxLarge;
+  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
+  protected readonly isXSmall = inject(BreakpointService).isXSmall;
 
   private readonly dialog = inject(Dialog);
 
