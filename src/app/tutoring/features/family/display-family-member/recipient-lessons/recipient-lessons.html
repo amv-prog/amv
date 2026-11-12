@@ -1,4 +1,4 @@
-@let maxMedium = isMaxMedium();
+@let maxLarge = isMaxLarge();
 @let maxSmall = isMaxSmall();
 <div class="page-center">
   @if (currentLessonsToDisplay().length) {
@@ -68,7 +68,7 @@
 
   @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
     <hr />
-    <div [class.h-panel-large]="!maxMedium" [class.v-panel-large]="maxMedium">
+    <div [class.h-panel-large]="!maxLarge" [class.v-panel-large]="maxLarge">
       @if (!!futureLessonsToDisplay().length) {
         <div class="section">
           <div class="highlight">Futurs cours prévus</div>

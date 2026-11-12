@@ -4,6 +4,7 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
 import { Lesson } from '../../../models/lesson';
@@ -23,6 +24,11 @@ export class LessonList {
   private readonly volunteerStore = inject(VolunteerStore);
   private readonly lessonStore = inject(LessonStore);
   private readonly dateService = inject(DateService);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isXSmall = this.breakpointService.isXSmall;
+  protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
+  protected readonly isMaxMedium = this.breakpointService.isMaxMedium;
 
   protected readonly daysMap = this.dateService.daysMap;
 

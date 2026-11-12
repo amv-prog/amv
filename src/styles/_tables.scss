@@ -52,6 +52,7 @@
     text-align: center;
     vertical-align: middle;
     justify-items: center;
+
     &:has(button),
     &:has(.a-button) {
       padding: 0;
@@ -59,6 +60,11 @@
 
     .is-max-small & {
       padding: 0.5rem;
+
+      &:has(button),
+      &:has(.a-button) {
+        padding: 0;
+      }
     }
   }
 

@@ -28,8 +28,9 @@ export class RecipientLessons {
 
   private readonly dialog = inject(Dialog);
 
-  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
-  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
+  protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
 
   protected readonly daysMap = this.dateService.daysMap;
 
