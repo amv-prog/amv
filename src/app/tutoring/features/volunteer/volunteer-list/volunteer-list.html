@@ -1,3 +1,5 @@
+@let maxMedium = isMaxMedium();
+@let xSmall = isXSmall();
 <div class="page-center">
   <h1>Liste des bénévoles</h1>
   @if (volunteers().length) {
@@ -7,32 +9,44 @@
     <table class="amv-table">
       <thead>
         <tr>
-          <th scope="col"></th>
+          @if (!xSmall) {
+            <th scope="col"></th>
+          }
           <th scope="col">Prénom</th>
           <th scope="col">Nom de famille</th>
-          <th scope="col">Téléphone</th>
-          <th scope="col">Email</th>
-          <th scope="col">Langues parlées</th>
-          <th scope="col">Informations supplémentaires</th>
+          @if (!xSmall) {
+            <th scope="col">Téléphone</th>
+            <th scope="col">Email</th>
+          }
+          @if (!maxMedium) {
+            <th scope="col">Langues parlées</th>
+            <th scope="col">Informations supplémentaires</th>
+          }
         </tr>
       </thead>
       @for (volunteer of volunteers(); track volunteer.id) {
         <tr class="trackable" [class.even]="$even">
-          <td>
-            @if (volunteer.isTutor) {
-              <span class="material-symbols-outlined" title="Accompagnateur·trice">
-                person_text
-              </span>
-            } @else {
-              <span class="material-symbols-outlined" title="Bénévole">person</span>
-            }
-          </td>
+          @if (!xSmall) {
+            <td>
+              @if (volunteer.isTutor) {
+                <span class="material-symbols-outlined" title="Accompagnateur·trice">
+                  person_text
+                </span>
+              } @else {
+                <span class="material-symbols-outlined" title="Bénévole">person</span>
+              }
+            </td>
+          }
           <td>{{ volunteer.firstName }}</td>
           <td>{{ volunteer.lastName }}</td>
-          <td>{{ volunteer.phoneNumbers.join(', ') }}</td>
-          <td>{{ volunteer.email }}</td>
-          <td>{{ volunteer.languages.join(', ') }}</td>
-          <td [title]="volunteer.additionalInfo">{{ volunteer.additionalInfo | truncate }}</td>
+          @if (!xSmall) {
+            <td>{{ volunteer.phoneNumbers.join(', ') }}</td>
+            <td>{{ volunteer.email }}</td>
+          }
+          @if (!maxMedium) {
+            <td>{{ volunteer.languages.join(', ') }}</td>
+            <td [title]="volunteer.additionalInfo">{{ volunteer.additionalInfo | truncate }}</td>
+          }
           <td>
             <a
               class="a-button invisible"
@@ -41,23 +55,25 @@
               ><span class="material-symbols-outlined">visibility</span></a
             >
           </td>
-          <td>
-            <a
-              class="a-button invisible"
-              [routerLink]="['/tutoring/volunteer', volunteer.id, 'edit']"
-              title="modifier"
-              ><span class="material-symbols-outlined">edit</span></a
-            >
-          </td>
-          <td>
-            <button
-              class="invisible"
-              title="supprimer"
-              (click)="validateVolunteerRemoval(volunteer)"
-            >
-              <span class="material-symbols-outlined"> delete </span>
-            </button>
-          </td>
+          @if (!xSmall) {
+            <td>
+              <a
+                class="a-button invisible"
+                [routerLink]="['/tutoring/volunteer', volunteer.id, 'edit']"
+                title="modifier"
+                ><span class="material-symbols-outlined">edit</span></a
+              >
+            </td>
+            <td>
+              <button
+                class="invisible"
+                title="supprimer"
+                (click)="validateVolunteerRemoval(volunteer)"
+              >
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </td>
+          }
         </tr>
       }
     </table>

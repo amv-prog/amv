@@ -23,10 +23,11 @@ export class FamilyList {
   protected readonly familyStore = inject(FamilyStore);
   protected readonly settingsStore = inject(SettingsStore);
 
-  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
-  protected readonly isMaxLarge = inject(BreakpointService).isMaxLarge;
-  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
-  protected readonly isXSmall = inject(BreakpointService).isXSmall;
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isMaxMedium = this.breakpointService.isMaxMedium;
+  protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
+  protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   private readonly dialog = inject(Dialog);
 
