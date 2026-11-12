@@ -31,6 +31,7 @@ export class RecipientLessons {
   private readonly breakpointService = inject(BreakpointService);
   protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
   protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   protected readonly daysMap = this.dateService.daysMap;
 

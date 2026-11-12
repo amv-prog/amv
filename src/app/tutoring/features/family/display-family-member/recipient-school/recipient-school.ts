@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, inject } from '@angular/core';
+import { BreakpointService } from '../../../../../shared/services/breakpoint-service';
 import { TruncatePipe } from '../../../../../shared/truncate-pipe';
 import { School } from '../../../../models/school';
 import { SchoolClass } from '../../../../models/school-class';
@@ -15,6 +16,10 @@ import { EditMemberClass } from './edit-member-class/edit-member-class';
 export class RecipientSchool {
   private readonly familyStore = inject(FamilyStore);
   private readonly schoolStore = inject(SchoolStore);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isXSmall = this.breakpointService.isXSmall;
+
   protected readonly member = this.familyStore.selectedFamilyMember;
 
   protected readonly sortedSchoolClassesDisplay = computed(() => {

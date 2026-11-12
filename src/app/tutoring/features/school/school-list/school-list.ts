@@ -3,6 +3,7 @@ import { Component, computed, effect, inject, Signal, signal } from '@angular/co
 import { form, FormField, FormRoot } from '@angular/forms/signals';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { SchoolClassDisplay } from '../../../models/display/school-class-display';
 import { Family } from '../../../models/family';
@@ -28,6 +29,11 @@ export class SchoolList {
   protected readonly schoolStore = inject(SchoolStore);
   protected readonly familyStore = inject(FamilyStore);
   protected readonly settingsStore = inject(SettingsStore);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isMaxMedium = this.breakpointService.isMaxMedium;
+  protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   protected readonly schoolDisplays = computed(() => {
     const schools = this.schoolStore.sortedSchools();

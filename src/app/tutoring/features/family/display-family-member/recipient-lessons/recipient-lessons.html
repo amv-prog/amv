@@ -1,12 +1,17 @@
 @let maxLarge = isMaxLarge();
 @let maxSmall = isMaxSmall();
+@let xSmall = isXSmall();
 <div class="page-center">
   @if (currentLessonsToDisplay().length) {
     <div class="highlight">Cours actuels</div>
     <table class="amv-table">
       <thead>
         <tr>
-          <th scope="col">Accompagnateur·trice</th>
+          @if (xSmall) {
+            <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+          } @else {
+            <th scope="col">Accompagnateur·trice</th>
+          }
           <th scope="col">Jour et heure</th>
           <th scope="col">Lieu</th>
           @if (!maxSmall) {
@@ -75,7 +80,11 @@
           <table class="amv-table">
             <thead>
               <tr>
-                <th scope="col">Accompagnateur·trice</th>
+                @if (xSmall) {
+                  <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+                } @else {
+                  <th scope="col">Accompagnateur·trice</th>
+                }
                 <th scope="col">Jour et heure</th>
                 <th scope="col">Lieu</th>
                 @if (!maxSmall) {
@@ -129,7 +138,11 @@
           <table class="amv-table">
             <thead>
               <tr>
-                <th scope="col">Accompagnateur·trice</th>
+                @if (xSmall) {
+                  <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+                } @else {
+                  <th scope="col">Accompagnateur·trice</th>
+                }
                 <th scope="col">Jour et heure</th>
                 <th scope="col">Lieu</th>
                 @if (!maxSmall) {

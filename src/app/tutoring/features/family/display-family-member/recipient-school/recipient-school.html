@@ -1,3 +1,4 @@
+@let xSmall = isXSmall();
 @let schoolClassesValue = sortedSchoolClassesDisplay();
 <div class="page-center">
   <div class="highlight">Classes</div>
@@ -16,7 +17,9 @@
             <td>
               {{ class.grades.join(' / ') }}
             </td>
-            <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
+            @if (!xSmall) {
+              <td [title]="class.additionalInfo">{{ class.additionalInfo | truncate }}</td>
+            }
           } @else {
             <td colspan="5">Classe non trouvée</td>
           }
