@@ -13,6 +13,7 @@ import { NavigationService } from './shared/services/navigation-service';
 })
 export class App {
   private readonly navigationService = inject(NavigationService);
+  protected readonly isXSmall = inject(BreakpointService).isXSmall;
   protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
   protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
   constructor() {
