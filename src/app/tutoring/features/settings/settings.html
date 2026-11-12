@@ -1,3 +1,4 @@
+@let xSmall = isXSmall();
 <div class="page-center section">
   <h1>Gestion des données</h1>
 
@@ -27,7 +28,7 @@
     </div>
   } @else {
     <div class="highlight">Données locales</div>
-    <div class="h-panel">
+    <div [class.h-panel]="!xSmall" [class.v-panel-large]="xSmall">
       <a class="a-button" [href]="sanitizedBlobUrl()" [download]="fileName"
         >Enregistrer les données</a
       >
