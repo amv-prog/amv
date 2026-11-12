@@ -76,7 +76,7 @@ export class SchoolList {
 
   public openEditSchoolDialog(school?: School) {
     this.dialog.open(EditSchool, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
       data: {
         school,
       },
@@ -85,7 +85,7 @@ export class SchoolList {
 
   public openAddClassDialog(school: School) {
     this.dialog.open(EditClass, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
       data: {
         school,
       },
@@ -94,7 +94,7 @@ export class SchoolList {
 
   public openEditClassDialog(school: School, schoolClass: SchoolClass) {
     this.dialog.open(EditClass, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
       data: {
         school,
         class: schoolClass,
@@ -158,7 +158,15 @@ export class SchoolList {
 
   export() {
     this.dialog.open<boolean>(ExportSchools, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
     });
+  }
+
+  private dialogPanelClass(): string[] {
+    const panelClass = ['dialog'];
+    if (this.isXSmall()) {
+      panelClass.push('is-x-small');
+    }
+    return panelClass;
   }
 }
