@@ -21,7 +21,7 @@ export class SchoolStore {
 
   constructor() {
     this.schools = linkedSignal<School[]>(() =>
-      this.dataService.getSignal<School[]>(SaveType.SCHOOLS, [])(),
+      this.dataService.getSignal<School>(SaveType.SCHOOLS)(),
     );
   }
 

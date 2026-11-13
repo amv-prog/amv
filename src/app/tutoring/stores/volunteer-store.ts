@@ -35,7 +35,7 @@ export class VolunteerStore {
 
   constructor() {
     this.volunteers = linkedSignal<VolunteerMember[]>(() =>
-      this.dataService.getSignal<VolunteerMember[]>(SaveType.VOLUNTEERS, [])(),
+      this.dataService.getSignal<VolunteerMember>(SaveType.VOLUNTEERS)(),
     );
   }
 

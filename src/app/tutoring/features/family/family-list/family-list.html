@@ -173,5 +173,10 @@
   } @else {
     <div class="table-message">Aucune famille enregistrée</div>
   }
-  <a class="a-button" routerLink="/tutoring/family/add"> Ajouter une famille </a>
+  <div class="h-panel">
+    <a class="a-button" routerLink="/tutoring/family/add"> Ajouter une famille </a>
+    @if (!familiesToDisplay().length && !settingsStore.settings().spreadsheetId) {
+      <button (click)="importExample()">Utiliser les données d'exemple</button>
+    }
+  </div>
 </div>
