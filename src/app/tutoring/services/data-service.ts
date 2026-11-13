@@ -45,14 +45,14 @@ export class DataService {
         }),
       );
     } else {
-      this.localStorageService.setItem(type, data);
+      this.localStorageService.setItem(type, data ?? null);
       return of(true);
     }
   }
 
-  getSignal<T>(type: SaveType, empty: T): Signal<T> {
+  getSignal<T>(type: SaveType): Signal<T[]> {
     return computed(() => {
-      return this.latestLoadedData().get(type) || empty;
+      return this.latestLoadedData().get(type) || [];
     });
   }
 
@@ -92,7 +92,6 @@ export class DataService {
         const dataVersion: string | undefined = data.get(SaveType.VERSION);
         const currentVersion = this.versionStore.version();
         if (dataVersion !== currentVersion) {
-          console.log('update data ' + dataVersion + ' to ' + currentVersion);
           DataService.updateData(data, this.versionStore.version());
           return this.saveAllData$(data).pipe(map(() => data));
         } else {

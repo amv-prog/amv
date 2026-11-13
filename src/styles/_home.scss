@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: row;
   height: 100%;
+
+  .is-max-small & {
+    flex-direction: column;
+  }
 }
 
 .page-content {
@@ -9,8 +13,11 @@
   flex-direction: column;
   flex: 1 1 auto;
   padding: 5rem;
-  min-height: 100%;
   overflow-x: auto;
+
+  .is-max-small & {
+    padding: 1rem;
+  }
 }
 
 .page-center {

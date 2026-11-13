@@ -4,6 +4,7 @@ import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../shared/services/date-service';
 import { Family } from '../../../models/family';
 import { Lesson } from '../../../models/lesson';
@@ -23,6 +24,11 @@ export class DisplayVolunteer {
   private readonly familyStore = inject(FamilyStore);
   private readonly dateService = inject(DateService);
   private readonly router = inject(Router);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isXSmall = this.breakpointService.isXSmall;
+  protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
+  protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
 
   private readonly dialog = inject(Dialog);
 

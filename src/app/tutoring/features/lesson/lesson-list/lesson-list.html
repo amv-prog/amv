@@ -1,3 +1,6 @@
+@let maxLarge = isMaxLarge();
+@let maxMedium = isMaxMedium();
+@let xSmall = isXSmall();
 <div class="page-center">
   <h1>Liste des cours</h1>
   @if (!!currentLessonsToDisplay().length) {
@@ -6,11 +9,19 @@
       <thead>
         <tr>
           <th scope="col">Élève</th>
-          <th scope="col">Encadrant</th>
+          @if (xSmall) {
+            <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+          } @else {
+            <th scope="col">Accompagnateur·trice</th>
+          }
           <th scope="col">Jour et heure</th>
-          <th scope="col">Lieu</th>
-          <th scope="col">Date de début</th>
-          <th scope="col">Date de fin</th>
+          @if (!xSmall) {
+            <th scope="col">Lieu</th>
+          }
+          @if (!maxMedium) {
+            <th scope="col">Date de début</th>
+            <th scope="col">Date de fin</th>
+          }
         </tr>
       </thead>
       @for (lessonDisplay of currentLessonsToDisplay(); track lessonDisplay.lesson.id) {
@@ -21,9 +32,13 @@
           <td>{{ displayStudentName(student) }}</td>
           <td>{{ displayTutorName(tutor) }}</td>
           <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-          <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-          <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          @if (!xSmall) {
+            <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
+          }
+          @if (!maxMedium) {
+            <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+          }
           <td>
             <a
               class="a-button invisible"
@@ -32,17 +47,19 @@
               ><span class="material-symbols-outlined">edit</span></a
             >
           </td>
-          <td>
-            @if (canStopLesson(lesson)) {
-              <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
-                <span class="material-symbols-outlined"> stop_circle </span>
-              </button>
-            } @else {
-              <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
-                <span class="material-symbols-outlined"> play_circle </span>
-              </button>
-            }
-          </td>
+          @if (!xSmall) {
+            <td>
+              @if (canStopLesson(lesson)) {
+                <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
+                  <span class="material-symbols-outlined"> stop_circle </span>
+                </button>
+              } @else {
+                <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
+                  <span class="material-symbols-outlined"> play_circle </span>
+                </button>
+              }
+            </td>
+          }
           <td>
             <button class="invisible" title="supprimer" (click)="validateLessonRemoval(lesson)">
               <span class="material-symbols-outlined"> delete </span>
@@ -58,7 +75,7 @@
 
   @if (!!futureLessonsToDisplay().length || !!pastLessonsToDisplay().length) {
     <hr />
-    <div class="h-panel-large">
+    <div [class.h-panel-large]="!maxLarge" [class.v-panel-large]="maxLarge">
       @if (!!futureLessonsToDisplay().length) {
         <div class="section">
           <div class="highlight">Futurs cours prévus</div>
@@ -66,11 +83,19 @@
             <thead>
               <tr>
                 <th scope="col">Élève</th>
-                <th scope="col">Encadrant</th>
+                @if (xSmall) {
+                  <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+                } @else {
+                  <th scope="col">Accompagnateur·trice</th>
+                }
                 <th scope="col">Jour et heure</th>
-                <th scope="col">Lieu</th>
-                <th scope="col">Date de début</th>
-                <th scope="col">Date de fin</th>
+                @if (!xSmall) {
+                  <th scope="col">Lieu</th>
+                }
+                @if (!maxMedium) {
+                  <th scope="col">Date de début</th>
+                  <th scope="col">Date de fin</th>
+                }
               </tr>
             </thead>
             @for (lessonDisplay of futureLessonsToDisplay(); track lessonDisplay.lesson.id) {
@@ -81,9 +106,13 @@
                 <td>{{ displayStudentName(student) }}</td>
                 <td>{{ displayTutorName(tutor) }}</td>
                 <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-                <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                @if (!xSmall) {
+                  <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
+                }
+                @if (!maxMedium) {
+                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                }
                 <td>
                   <a
                     class="a-button invisible"
@@ -114,11 +143,19 @@
             <thead>
               <tr>
                 <th scope="col">Élève</th>
-                <th scope="col">Encadrant</th>
+                @if (xSmall) {
+                  <th scope="col" title="Accompagnateur·trice">Accomp...</th>
+                } @else {
+                  <th scope="col">Accompagnateur·trice</th>
+                }
                 <th scope="col">Jour et heure</th>
-                <th scope="col">Lieu</th>
-                <th scope="col">Date de début</th>
-                <th scope="col">Date de fin</th>
+                @if (!xSmall) {
+                  <th scope="col">Lieu</th>
+                }
+                @if (!maxMedium) {
+                  <th scope="col">Date de début</th>
+                  <th scope="col">Date de fin</th>
+                }
               </tr>
             </thead>
             @for (lessonDisplay of pastLessonsToDisplay(); track lessonDisplay.lesson.id) {
@@ -129,9 +166,13 @@
                 <td>{{ displayStudentName(student) }}</td>
                 <td>{{ displayTutorName(tutor) }}</td>
                 <td>{{ `${daysMap.get(lesson.dayOfWeek)} ${lesson.time}` }}</td>
-                <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
-                <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                @if (!xSmall) {
+                  <td>{{ lesson.place === 'ASSOCIATION' ? 'Local' : 'Domicile' }}</td>
+                }
+                @if (!maxMedium) {
+                  <td>{{ lesson.startDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ lesson.endDate | date: 'dd/MM/yyyy' }}</td>
+                }
                 <td>
                   <a
                     class="a-button invisible"
@@ -140,17 +181,23 @@
                     ><span class="material-symbols-outlined">edit</span></a
                   >
                 </td>
-                <td>
-                  @if (canStopLesson(lesson)) {
-                    <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
-                      <span class="material-symbols-outlined"> stop_circle </span>
-                    </button>
-                  } @else {
-                    <button class="invisible" title="reprendre" (click)="reactivateLesson(lesson)">
-                      <span class="material-symbols-outlined"> play_circle </span>
-                    </button>
-                  }
-                </td>
+                @if (!xSmall) {
+                  <td>
+                    @if (canStopLesson(lesson)) {
+                      <button class="invisible" title="arrêter" (click)="stopLesson(lesson)">
+                        <span class="material-symbols-outlined"> stop_circle </span>
+                      </button>
+                    } @else {
+                      <button
+                        class="invisible"
+                        title="reprendre"
+                        (click)="reactivateLesson(lesson)"
+                      >
+                        <span class="material-symbols-outlined"> play_circle </span>
+                      </button>
+                    }
+                  </td>
+                }
                 <td>
                   <button
                     class="invisible"

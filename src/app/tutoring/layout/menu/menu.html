@@ -1,27 +1,41 @@
+@let xsmallScreen = isXSmall();
+@let smallScreen = isMaxSmall();
 <div class="menu">
   <div>
     <a routerLink="/tutoring/family/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">family_group</span>
-      <span>Familles</span>
+      @if (!xsmallScreen) {
+        <span>Familles</span>
+      }
     </a>
     <a routerLink="/tutoring/volunteer/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">accessibility_new</span>
-      <span>Bénévoles</span>
+      @if (!xsmallScreen) {
+        <span>Bénévoles</span>
+      }
     </a>
     <a routerLink="/tutoring/lesson/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">book_ribbon</span>
-      <span>Cours</span>
+      @if (!xsmallScreen) {
+        <span>Cours</span>
+      }
     </a>
     <a routerLink="/tutoring/school/list" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">gite</span>
-      <span>Écoles</span>
+      @if (!xsmallScreen) {
+        <span>Écoles</span>
+      }
     </a>
   </div>
   <div>
-    <amv-synchronization-info></amv-synchronization-info>
+    @if (!smallScreen) {
+      <amv-synchronization-info></amv-synchronization-info>
+    }
     <a routerLink="/tutoring/settings" routerLinkActive="selected-menu">
       <span class="material-symbols-outlined">settings</span>
-      <span>Paramètres</span>
+      @if (!smallScreen) {
+        <span>Paramètres</span>
+      }
     </a>
   </div>
 </div>

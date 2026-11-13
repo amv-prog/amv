@@ -10,13 +10,22 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    .is-x-small & {
+      flex-direction: column;
+    }
   }
 
   label,
   .label {
     display: flex;
-    width: 10rem;
+    width: 12rem;
     align-items: center;
+
+    .is-x-small & {
+      width: auto;
+      text-align: center;
+    }
   }
 
   input,

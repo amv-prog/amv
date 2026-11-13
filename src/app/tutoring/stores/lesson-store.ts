@@ -26,7 +26,7 @@ export class LessonStore {
 
   constructor() {
     this.lessons = linkedSignal<Lesson[]>(() =>
-      this.dataService.getSignal<Lesson[]>(SaveType.LESSONS, [])(),
+      this.dataService.getSignal<Lesson>(SaveType.LESSONS)(),
     );
   }
 

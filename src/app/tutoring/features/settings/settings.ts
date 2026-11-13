@@ -5,6 +5,7 @@ import { ConfirmationDialog } from '../../../shared/components/confirmation-dial
 import { GooglePicker } from '../../../shared/components/google-picker/google-picker';
 import { GoogleDocInfo } from '../../../shared/models/google-doc-info';
 import { AuthenticationService } from '../../../shared/services/authentication-service';
+import { BreakpointService } from '../../../shared/services/breakpoint-service';
 import { MessageService } from '../../../shared/services/message-service';
 import { DataService } from '../../services/data-service';
 import { FileDataService } from '../../services/file-data-service';
@@ -22,6 +23,9 @@ export class Settings {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly dataService = inject(DataService);
   private readonly messageService = inject(MessageService);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   private readonly dialog = inject(Dialog);
 
@@ -112,7 +116,15 @@ export class Settings {
 
   createGoogleSheet() {
     this.dialog.open<boolean>(CreateFile, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
     });
+  }
+
+  private dialogPanelClass(): string[] {
+    const panelClass = ['dialog'];
+    if (this.isXSmall()) {
+      panelClass.push('is-x-small');
+    }
+    return panelClass;
   }
 }

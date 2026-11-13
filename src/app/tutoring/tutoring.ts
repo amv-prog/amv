@@ -11,6 +11,7 @@ import { DataService } from './services/data-service';
 })
 export class Tutoring {
   private readonly dataService = inject(DataService);
+
   constructor() {
     this.dataService.reload$().pipe(takeUntilDestroyed()).subscribe();
   }

@@ -23,6 +23,18 @@
     color: $c2-lighter;
     font-weight: bold;
   }
+
+  .is-max-small & {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+    overflow-x: scroll;
+
+    & > * {
+      flex-direction: row;
+    }
+  }
 }
 
 .footer {
@@ -34,6 +46,10 @@
   width: 100%;
   border-top: 1px solid $c1-dark;
   padding: 1rem;
+
+  .is-max-small & {
+    padding: 0.5rem;
+  }
 }
 
 hr {

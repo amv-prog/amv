@@ -107,7 +107,7 @@ export class EditLesson {
       this.lessonFormData,
       (form) => {
         (required(form.student, { message: "Veuillez sélectionner l'élève" }),
-          required(form.tutor, { message: "Veuillez sélectionner l'encadrant" }),
+          required(form.tutor, { message: "Veuillez sélectionner l'accompagnateur·trice" }),
           required(form.dayOfWeek, { message: 'Veuillez sélectionner le jour de la semaine' }),
           required(form.time, { message: "Veuillez sélectionner l'heure" }),
           required(form.startDate, { message: 'Veuillez sélectionner la date de début' }),

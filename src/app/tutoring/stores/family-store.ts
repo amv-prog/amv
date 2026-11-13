@@ -50,7 +50,7 @@ export class FamilyStore {
 
   constructor() {
     this.families = linkedSignal<Family[]>(() =>
-      this.dataService.getSignal<Family[]>(SaveType.FAMILIES, [])(),
+      this.dataService.getSignal<Family>(SaveType.FAMILIES)(),
     );
   }
 

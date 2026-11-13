@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { VolunteerMember } from '../../../models/volunteer-member';
 import { SettingsStore } from '../../../stores/settings-store';
@@ -16,6 +17,10 @@ import { ExportVolunteers } from '../export-volunteers/export-volunteers';
 export class VolunteerList {
   protected readonly volunteerStore = inject(VolunteerStore);
   protected readonly settingsStore = inject(SettingsStore);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isMaxMedium = this.breakpointService.isMaxMedium;
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   protected readonly volunteers = this.volunteerStore.sortedVolunteers;
 
@@ -39,7 +44,15 @@ export class VolunteerList {
 
   export() {
     this.dialog.open<boolean>(ExportVolunteers, {
-      panelClass: 'dialog',
+      panelClass: this.dialogPanelClass(),
     });
+  }
+
+  private dialogPanelClass(): string[] {
+    const panelClass = ['dialog'];
+    if (this.isXSmall()) {
+      panelClass.push('is-x-small');
+    }
+    return panelClass;
   }
 }

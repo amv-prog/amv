@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../shared/services/date-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { RecipientMember } from '../../../models/recipient-member';
@@ -14,6 +15,7 @@ import { EditContribution } from '../edit-family/edit-contribution/edit-contribu
   selector: 'amv-display-family',
   imports: [RouterLink, DatePipe, TruncatePipe, DialogModule],
   templateUrl: './display-family.html',
+  styleUrl: './display-family.scss',
 })
 export class DisplayFamily {
   private readonly router = inject(Router);
@@ -22,6 +24,11 @@ export class DisplayFamily {
   protected readonly family = this.familyStore.selectedFamily;
 
   private readonly dialog = inject(Dialog);
+
+  protected readonly isMaxLarge = inject(BreakpointService).isMaxLarge;
+  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
+  protected readonly isMaxSmall = inject(BreakpointService).isMaxSmall;
+  protected readonly isXSmall = inject(BreakpointService).isXSmall;
 
   public validateFamilyMemberRemoval(member: RecipientMember) {
     const dialogRef = this.dialog.open<boolean>(ConfirmationDialog, {

@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { FamilyStore } from '../../../stores/family-store';
 import { RecipientLessons } from './recipient-lessons/recipient-lessons';
 import { RecipientSchool } from './recipient-school/recipient-school';
@@ -21,6 +22,8 @@ export class DisplayFamilyMember {
 
   protected readonly member = this.familyStore.selectedFamilyMember;
   protected readonly family = this.familyStore.selectedFamily;
+
+  protected readonly isMaxMedium = inject(BreakpointService).isMaxMedium;
 
   goToFamily() {
     this.router.navigate(['tutoring', 'family', this.family()?.id]);

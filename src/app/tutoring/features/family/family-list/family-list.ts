@@ -4,10 +4,12 @@ import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialog } from '../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { BreakpointService } from '../../../../shared/services/breakpoint-service';
 import { DateService } from '../../../../shared/services/date-service';
 import { TruncatePipe } from '../../../../shared/truncate-pipe';
 import { Family } from '../../../models/family';
 import { RecipientMember } from '../../../models/recipient-member';
+import { FileDataService } from '../../../services/file-data-service';
 import { FamilyStore } from '../../../stores/family-store';
 import { SettingsStore } from '../../../stores/settings-store';
 import { ExportFamilies } from '../export-families/export-families';
@@ -21,6 +23,13 @@ export class FamilyList {
 
   protected readonly familyStore = inject(FamilyStore);
   protected readonly settingsStore = inject(SettingsStore);
+  private readonly fileDataService = inject(FileDataService);
+
+  private readonly breakpointService = inject(BreakpointService);
+  protected readonly isMaxMedium = this.breakpointService.isMaxMedium;
+  protected readonly isMaxLarge = this.breakpointService.isMaxLarge;
+  protected readonly isMaxSmall = this.breakpointService.isMaxSmall;
+  protected readonly isXSmall = this.breakpointService.isXSmall;
 
   private readonly dialog = inject(Dialog);
 
@@ -81,6 +90,10 @@ export class FamilyList {
     this.dialog.open<boolean>(ExportFamilies, {
       panelClass: 'dialog',
     });
+  }
+
+  importExample() {
+    this.fileDataService.importExemple$().subscribe();
   }
 }
 

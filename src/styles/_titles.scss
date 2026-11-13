@@ -8,9 +8,31 @@ h1 {
   flex-direction: row;
   align-items: center;
   gap: 1rem;
+  text-align: center;
 
   .material-symbols-outlined {
     font-size: 2rem;
+  }
+
+  .action {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .is-max-medium & {
+    font: var(--mat-sys-display-medium);
+    margin-bottom: 2rem;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    .material-symbols-outlined {
+      font-size: 1.5rem;
+    }
+  }
+
+  .is-max-small & {
+    font: var(--mat-sys-display-small);
   }
 }
 
@@ -19,6 +41,10 @@ h1 {
   margin-bottom: 2rem;
   color: $c2;
   text-align: center;
+
+  .is-max-small & {
+    font: var(--mat-sys-headline-medium);
+  }
 }
 
 .highlight {
